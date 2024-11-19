@@ -1,5 +1,7 @@
+import { InfoSlide } from "@/models/Quiz";
+
 interface InfoViewProps {
-  slide: any;
+  slide: InfoSlide;
 }
 
 export default function InfoView({ slide }: InfoViewProps) {

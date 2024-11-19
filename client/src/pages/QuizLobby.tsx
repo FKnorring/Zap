@@ -3,8 +3,6 @@ import Participant from "@/models/Participant";
 import "tw-elements"; // Import Tailwind Elements JS
 import "tailwindcss/tailwind.css"; // Tailwind CSS
 import Avatar, { genConfig } from "react-nice-avatar";
-import { useOngoingQuiz } from "@/services/host";
-import { Button } from "@/components/ui/button";
 import QRCode from "react-qr-code";
 
 
@@ -17,7 +15,6 @@ interface LobbyProps {
 
 export default function QuizLobby({ quizCode, participants }: LobbyProps) {
   const [participantList, setParticipantList] = useState<Participant[]>([]);
-  const { incrementSlide } = useOngoingQuiz();
   const participantsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,10 +39,6 @@ export default function QuizLobby({ quizCode, participants }: LobbyProps) {
       }, 0);
     }
   }, [participantList]); 
-
-  const startGame = async () => {
-    await incrementSlide(quizCode);
-  };
 
   return (
     <div className="lobby-container">
@@ -74,9 +67,6 @@ export default function QuizLobby({ quizCode, participants }: LobbyProps) {
           </div>
         ))}
       </div>
-      <Button onClick={startGame} className="m-5">
-        Start Game
-      </Button>
     </div>
   );
 }

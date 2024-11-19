@@ -10,7 +10,6 @@ import QuizEdit from "../pages/QuizEdit";
 import ParticipantLogic from "@/pages/participantQuizView/ParticipantLogic";
 import FastAnswer from "../pages/hostQuestions/FastAnswer";
 import Profile from "@/pages/User/Profile";
-import RankView from "@/components/quiz-phone-view/rankView"
 import ScoreBoard from "@/pages/host/Scoreboard";
 import HostLogic from "@/pages/HostLogic";
 
@@ -59,23 +58,6 @@ export function AppRoutes() {
               { name: "Charlie", points: 70, newPoints: 75 },
               { name: "Diana", points: 60, newPoints: 90 },
               { name: "Eve", points: 50, newPoints: 55 },
-            ]}
-          />
-        }
-      />
-      <Route
-        path="rankview"
-        element={
-          <RankView
-            ranking={[
-              { name: "Tyskland", score: 1 },
-              { name: "Tyskland", score: 1 },
-              { name: "Tyskland", score: 1 },
-              { name: "Tyskland", score: 1 },
-              { name: "Frankrike", score: 2 },
-              { name: "Grekland", score: 4 },
-              { name: "Holland", score: 5 },
-              { name: "Sverige", score: 3 },
             ]}
           />
         }
