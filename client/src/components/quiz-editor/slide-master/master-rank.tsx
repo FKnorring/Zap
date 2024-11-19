@@ -1,22 +1,19 @@
-import { BaseSlide } from "@/models/Quiz";
+import { RankSlide } from "@/models/Quiz";
 import { SlideOption } from "../SlideOption";
 import { ListOrdered } from "lucide-react";
 import React, { useState } from "react";
-import { SlideType } from "@/models/Quiz";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { SlideType, QuestionType } from "@/models/Quiz";
 
 // Interface for the ranking slide
-export interface RankSlide extends BaseSlide {
-  ranking: { name: string; score: number }[]; // List of items with name and score
-  type: "rank";
-  timeLimit: number; // Time limit for the rank slide
-}
+
 
 // Props for adding rank slide
 interface MasterRankOptionProps {
-  handleAddSlide: (type: SlideType) => void; // Handles adding the slide
+  handleAddSlide: (type: SlideType, questionType?: QuestionType) => void; // Handles adding the slide with optional question type
 }
+
 
 // MasterRankOption: Renders the button to add a rank slide
 export function MasterRankOption({ handleAddSlide }: MasterRankOptionProps) {
@@ -26,7 +23,7 @@ export function MasterRankOption({ handleAddSlide }: MasterRankOptionProps) {
       icon={ListOrdered}
       onClick={() => {
         console.log("Rank Slide clicked!"); // Log when the button is clicked
-        handleAddSlide("rank"); // Call the passed function to add the "rank" slide
+        handleAddSlide("question", "rank"); // Call the passed function to add the "rank" slide
       }}
     />
   );

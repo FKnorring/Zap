@@ -93,17 +93,7 @@ export function useQuizEditor(quizId: string | undefined) {
                 };
                 break;
             
-            case 'rank':
-                newSlide = {
-                    ...baseSlide,
-                    type: 'rank',
-                    timeLimit: 0,
-                    ranking: []
-
-                };
-                break;    
-
-
+            
             case 'question':
                 if (!questionType) throw new Error('Question type is required');
 
@@ -143,6 +133,18 @@ export function useQuizEditor(quizId: string | undefined) {
                             correctAnswer: '',
                         };
                         break;
+
+                    case 'rank':
+                        newSlide = {
+                            ...baseSlide,
+                            type: 'question',
+                            questionType: "rank",
+                            timeLimit: 0,
+                            ranking: []
+            
+                        };
+                        break;    
+            
                     default:
                         throw new Error('Invalid question type');
                 }
@@ -156,6 +158,7 @@ export function useQuizEditor(quizId: string | undefined) {
     };
 
     const handleSlideUpdate = (updatedSlide: Slide) => {
+        
         setQuiz(prev => prev ? { ...prev, slides: prev.slides.map(slide =>
             slide.id === updatedSlide.id ? updatedSlide : slide
         ) } : null);

@@ -21,8 +21,8 @@ interface QuestionCreated {
 export default Quiz;
 export type { QuestionCreated };
 
-export type SlideType = "info" | "score" | "question" | "rank";
-export type QuestionType = "MCQSA" | "MCQMA" | "FA";
+export type SlideType = "info" | "score" | "question";
+export type QuestionType = "MCQSA" | "MCQMA" | "FA"| "rank";
 
 export interface BaseSlide {
     id: string;
@@ -42,12 +42,7 @@ export interface ScoreSlideInterface extends BaseSlide {
     mockScores?: { name: string; points: number; newPoints: number }[];
   }
 
-interface RankSlide extends BaseSlide {
-    ranking: { name: string; score: number }[]; // List of items with name and score// Sort order: true for ascending, false for descending
-    type: "rank";
-    timeLimit: number;
-  }
-  
+
 export interface ScoreSlide extends BaseSlide {
     type: "score";
     mockScores?: { name: string; points: number; newPoints: number }[];
@@ -59,6 +54,12 @@ interface QuestionSlideBase extends BaseSlide {
     questionType: QuestionType;
     timeLimit: number; // in seconds, 0 means no limit
 }
+
+export interface RankSlide extends QuestionSlideBase {
+    ranking: { name: string; score: number }[]; 
+    questionType: "rank";
+    timeLimit: number;
+  }
 
 interface MCQSASlide extends QuestionSlideBase {
     questionType: "MCQSA";
@@ -103,6 +104,8 @@ interface Participant {
     score: number;
 }
 
-export type Slide = InfoSlide | ScoreSlide | MCQSASlide | MCQMASlide | FASlide | RankSlide; 
+export type Slide = InfoSlide | ScoreSlide | Question;
+
+export type Question = MCQSASlide | MCQMASlide | FASlide | RankSlide;
 
 export type { OngoingQuiz, Participant };

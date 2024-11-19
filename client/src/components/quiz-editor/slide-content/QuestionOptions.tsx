@@ -9,11 +9,12 @@ interface Option {
 
 interface QuestionOptionsProps {
     options: Option[];
-    type: "MCQSA" | "MCQMA";
+    type: "MCQSA" | "MCQMA" |"rank";
 }
 
 export function QuestionOptions({ options, type }: QuestionOptionsProps) {
     return (
+        // if type "MCQSA" | "MCQMA"
         <div className="grid grid-cols-2 gap-8 w-full">
             {options.map((option) => (
                 <div 
@@ -35,5 +36,6 @@ export function QuestionOptions({ options, type }: QuestionOptionsProps) {
                 </div>
             ))}
         </div>
+        // If typ rank 
     );
 } 

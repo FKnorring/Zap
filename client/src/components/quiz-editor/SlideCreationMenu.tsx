@@ -5,14 +5,15 @@ import {
   CircleDotIcon,
   CheckSquareIcon,
   TypeIcon,
-  
 } from "lucide-react";
 import type { SlideType, QuestionType } from "@/models/Quiz";
 import { SlideOption } from "./SlideOption";
 import { MasterScoreOption } from "./slide-master/master-score";
 import { MasterRankOption } from "./slide-master/master-rank";
 
-const slideOptions = [MasterScoreOption, MasterRankOption];
+const slides = [MasterScoreOption];
+
+const questions = [MasterRankOption];
 
 interface SlideCreationMenuProps {
   onAddSlide: (type: SlideType, questionType?: QuestionType) => void;
@@ -33,19 +34,21 @@ export function SlideCreationMenu({ onAddSlide }: SlideCreationMenuProps) {
           onClick={() => handleAddSlide("info")}
         />
 
-        {slideOptions.map((slideOption) => {
-          const renderedOption = slideOption({ handleAddSlide });
+        {slides.map((slides) => {
+          const renderedOption = slides({ handleAddSlide });
           return renderedOption;
         })}
 
-      
         <Separator className="my-2" />
+
         <h4 className="font-medium leading-none mb-2">Question Types</h4>
+
         <SlideOption
           label="Single Answer MCQ"
           icon={CircleDotIcon}
           onClick={() => handleAddSlide("question", "MCQSA")}
         />
+
         <SlideOption
           label="Multiple Answer MCQ"
           icon={CheckSquareIcon}
@@ -57,6 +60,11 @@ export function SlideCreationMenu({ onAddSlide }: SlideCreationMenuProps) {
           icon={TypeIcon}
           onClick={() => handleAddSlide("question", "FA")}
         />
+
+        {questions.map((question) => {
+          const renderedOption = question({ handleAddSlide });
+          return renderedOption;
+        })}
       </div>
     </PopoverContent>
   );

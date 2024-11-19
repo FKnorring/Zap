@@ -34,7 +34,7 @@ const slideTypeInfo = {
   "question:MCQSA": { icon: CircleDotIcon, label: "Single Answer MCQ" },
   "question:MCQMA": { icon: CheckSquareIcon, label: "Multiple Answer MCQ" },
   "question:FA": { icon: TypeIcon, label: "Free Answer Question" },
-  rank: { icon: ListOrdered, label: "Rank Answers" },
+  "question:rank":{ icon: ListOrdered, label: "Rank Answers" },
 } as const;
 
 interface ToolbarProps {
@@ -164,7 +164,7 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
 
   const handleSlideTypeChange = (value: string) => {
     const [type, questionType] = value.split(":") as [SlideType, QuestionType?];
-
+  
     let updatedSlide: Slide;
     const baseSlide = {
       id: slide.id,
@@ -172,8 +172,9 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
       content: slide.content,
       imageUrl: slide.imageUrl,
     };
-
+  
     switch (type) {
+      
       case "info":
         updatedSlide = {
           ...baseSlide,
@@ -187,18 +188,10 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
           mockScores: [],
         };
         break;
-      case "rank":
-        updatedSlide = {
-          ...baseSlide,
-          type: "rank",
-          ranking: [],
-          timeLimit: 0,
-        };
-        break;
-
+       
       case "question":
         if (!questionType) throw new Error("Question type is required");
-
+        
         switch (questionType) {
           case "MCQSA":
             updatedSlide = {
@@ -227,26 +220,40 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
             };
             break;
           case "FA":
+            {console.log("hej nils")}
             updatedSlide = {
               ...baseSlide,
               type: "question",
               questionType: "FA",
               correctAnswer: "",
               timeLimit: 0,
+              
             };
             break;
-
+          case "rank":
+            {console.log("hej 222")}
+            updatedSlide = {
+              ...baseSlide,
+              type: "question",
+              questionType: "rank",
+              ranking: [],  // Initialize with an empty ranking array or your logic
+              timeLimit: 0,
+             
+            
+            };
+            break;
           default:
             throw new Error("Invalid question type");
         }
         break;
+  
       default:
+        {console.log(type)}
         throw new Error("Invalid slide type");
     }
-
+  
     onSlideUpdate(updatedSlide);
   };
-
   const slideTypeKey = getSlideTypeKey(slide);
   const SlideTypeIcon = slideTypeInfo[slideTypeKey].icon;
 
@@ -276,7 +283,7 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
             <SelectItem value="question:MCQSA">Single Answer MCQ</SelectItem>
             <SelectItem value="question:MCQMA">Multiple Answer MCQ</SelectItem>
             <SelectItem value="question:FA">Free Answer Question</SelectItem>
-            <SelectItem value="rank">Rank Answers</SelectItem>
+            <SelectItem value="question:rank">Rank Answers</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -459,7 +466,7 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
         />
       )}
 
-      {slide.type === "rank" && (
+      {slide.type === "question" && slide.questionType === "rank" && (
         <MasterToolbarRank
           initialSlide={slide}
           onSlideUpdate={(updatedSlide) => {
@@ -468,8 +475,8 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
         />
       )}
 
-      {slide.type === "question" ||
-        (slide.type === "rank" && (
+      {slide.type === "question" 
+         && (
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>Time Limit</Label>
@@ -509,7 +516,7 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
               Set to 0 for no time limit. Maximum 300 seconds (5 minutes).
             </p>
           </div>
-        ))}
+        )}
     </div>
   );
 }

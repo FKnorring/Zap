@@ -7,7 +7,7 @@ import { SlideContent } from "./slide-content/SlideContent";
 import { QuestionOptions } from "./slide-content/QuestionOptions";
 
 import ScoreBoard from "@/pages/host/Scoreboard";
-import { SlideRank } from "./slide-content/SlideRank";
+
 interface SlideRenderProps {
   slide: Slide & { titleWiggle?: boolean; contentWiggle?: boolean };
   className?: string;
@@ -53,6 +53,8 @@ export function SlideRender({
       return <SlideTitle title={slide.title} size="small" />;
     }
 
+    let questionContent = null;  // Declare questionContent outside the switch
+
     switch (slide.type) {
       case "info":
         return (
@@ -84,21 +86,39 @@ export function SlideRender({
         return (
           <div className="space-y-12 w-full">
             <SlideTitle title={slide.title} wiggle={slide.titleWiggle} />
-            <ScoreBoard
-              scoreboard={slide.mockScores || []}
-            />
-          </div>
-        );
-
-      case "rank":
-        return (
-          <div className="space-y-12 w-full">
-            <SlideTitle title={slide.title} wiggle={slide.titleWiggle} />
-            <SlideRank ranking={slide.ranking} />
+            <ScoreBoard scoreboard={slide.mockScores || []} />
           </div>
         );
 
       case "question":
+        // Handle question type logic
+        switch (slide.questionType) {
+          case "MCQSA":
+          case "MCQMA":
+            questionContent = (
+              <QuestionOptions
+                options={slide.options}
+                type={slide.questionType}
+              />
+            );
+            break;
+
+          case "rank":
+            questionContent = (
+              <div className="text-[40px] text-center italic text-muted-foreground">
+                rank question
+              </div>
+            );
+            break;
+
+          default:
+            questionContent = (
+              <div className="text-[40px] text-center italic text-muted-foreground">
+                Unknown question type
+              </div>
+            );
+        }
+
         return (
           <div className="space-y-12 w-full">
             <div className="space-y-8">
@@ -124,18 +144,13 @@ export function SlideRender({
               />
             </div>
 
-            {"options" in slide ? (
-              <QuestionOptions
-                options={slide.options}
-                type={slide.questionType}
-              />
-            ) : (
-              <div className="text-[40px] text-center italic text-muted-foreground">
-                Free text answer
-              </div>
-            )}
+            {/* Render the question content */}
+            {questionContent}
           </div>
         );
+
+      default:
+        return null;
     }
   };
 
