@@ -1,14 +1,8 @@
 import { useState, useEffect } from "react";
 
-// Define a type for the ranking items
-type RankItem = {
-  name: string;
-  score: number;
-};
-
 // Main SlideRank component
-export function SlideRank({ ranking }: { ranking: RankItem[] }) {
-  const [currentRanking, setCurrentRanking] = useState<RankItem[]>(ranking || []);
+export function SlideRank({ ranking }: { ranking: string[] }) {
+  const [currentRanking, setCurrentRanking] = useState<string[]>(ranking || []);
 
   // Randomize the ranking on the first render
   useEffect(() => {
@@ -17,18 +11,16 @@ export function SlideRank({ ranking }: { ranking: RankItem[] }) {
   }, [ranking]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center">
-      <div className="flex flex-wrap justify-center w-full max-w-xl">
-        {/* Display ranking names horizontally */}
-        {currentRanking.map((rank, index) => (
+    <div className="flex  w-full items-center justify-center">
+      <div className="w-full max-w-xl flex flex-col items-center space-y-4">
+        {/* Display ranking names vertically with numbers */}
+        {currentRanking.map((name, index) => (
           <div
             key={index}
-            className="m-3 p-5 text-5xl font-bold text-center rounded-lg shadow-md"
-            style={{
-              width: "calc(25% - 12px)", // Adjust item width with some space for margin
-            }}
+            className="text-textonwbg-grayonw bg-component-background p-5 text-5xl font-bold text-center rounded-lg shadow-md w-full flex items-center"
           >
-            {rank.name}
+            <span className="mr-4 text-5xl">{index + 1}.</span>
+            {name}
           </div>
         ))}
       </div>

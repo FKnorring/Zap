@@ -4,19 +4,17 @@ import { BaseQuestionToolbar } from "../base/QuestionToolbar";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 type RankToolbarProps = ToolbarProps & {
     slide: RankSlide;
     onSlideUpdate: (slide: RankSlide) => void;
-}
+};
 
 export function Toolbar({ slide, onSlideUpdate }: RankToolbarProps) {
-    const [newRank, setNewRank] = useState<{ name: string; score: number }>({
-        name: "",
-        score: 0,
-    });
+    const [newRank, setNewRank] = useState<string>("");
 
-    const updateSlide = (updatedRanking: { name: string; score: number }[]) => {
+    const updateSlide = (updatedRanking: string[]) => {
         onSlideUpdate({
             ...slide,
             ranking: updatedRanking,
@@ -32,13 +30,10 @@ export function Toolbar({ slide, onSlideUpdate }: RankToolbarProps) {
                         <span className="p-2">{index + 1}</span>
                         <Input
                             type="text"
-                            value={rankItem.name}
+                            value={rankItem}
                             onChange={(e) => {
                                 const updatedRanking = [...slide.ranking];
-                                updatedRanking[index] = {
-                                    ...updatedRanking[index],
-                                    name: e.target.value,
-                                };
+                                updatedRanking[index] = e.target.value;
                                 updateSlide(updatedRanking);
                             }}
                             placeholder="New answer"
@@ -49,28 +44,25 @@ export function Toolbar({ slide, onSlideUpdate }: RankToolbarProps) {
                 <div className="flex space-x-2">
                     <Input
                         type="text"
-                        value={newRank.name}
-                        onChange={(e) =>
-                            setNewRank({
-                                ...newRank,
-                                name: e.target.value,
-                            })
-                        }
+                        value={newRank}
+                        onChange={(e) => setNewRank(e.target.value)}
                         placeholder="Answer"
                         className="p-2 border border-gray-300 rounded"
                     />
-                    <button
+                    <Button
                         onClick={() => {
-                            const updatedRanking = [...slide.ranking, newRank];
-                            updateSlide(updatedRanking);
-                            setNewRank({ name: "", score: 0 });
+                            if (newRank.trim() !== "") {
+                                const updatedRanking = [...slide.ranking, newRank];
+                                updateSlide(updatedRanking);
+                                setNewRank("");
+                            }
                         }}
                         className="p-1 bg-blue-500 text-white rounded"
                     >
                         Add
-                    </button>
+                    </Button>
                 </div>
             </div>
         </BaseQuestionToolbar>
     );
-} 
+}

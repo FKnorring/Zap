@@ -12,14 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { RankSlide } from "@/models/Quiz";
 
-// Define a type for the ranking items
-type RankItem = {
-  name: string;
-  score: number;
-};
-
 // Shuffle function to randomize the order
-const shuffleArray = (array: RankItem[]): RankItem[] => {
+const shuffleArray = (array: string[]): string[] => {
   return array
     .map((a) => ({ sort: Math.random(), value: a }))
     .sort((a, b) => a.sort - b.sort)
@@ -28,11 +22,11 @@ const shuffleArray = (array: RankItem[]): RankItem[] => {
 
 // Draggable-Droppable item component
 function DraggableDroppableItem({
-  rank,
+  name,
   index,
   originalIndex,
 }: {
-  rank: RankItem;
+  name: string;
   index: number;
   originalIndex: number;
 }) {
@@ -61,7 +55,7 @@ function DraggableDroppableItem({
   return (
     <div className="flex items-center w-full">
       {/* Rank number column (fixed outside of the draggable component) */}
-      <div className=" m-4 rounded-full text-4xl font-bold">{`${
+      <div className="m-4 rounded-full text-4xl font-bold">{`${
         originalIndex + 1
       }`}</div>
 
@@ -80,7 +74,7 @@ function DraggableDroppableItem({
         }`}
       >
         <span className="text-3xl font-bold text-textonwbg-grayonw">
-          {rank.name}
+          {name}
         </span>
       </div>
     </div>
@@ -94,11 +88,11 @@ interface RankViewProps {
 
 // Main SlideRank component
 export default function RankView({ question, answerQuestion }: RankViewProps) {
-  const ranking = question.ranking;
-  const [currentRanking, setCurrentRanking] = useState<RankItem[]>(ranking);
+  const ranking = question.ranking; // Assume ranking is now a list of strings
+  const [currentRanking, setCurrentRanking] = useState<string[]>(ranking);
 
   function handleAnswerQuestion() {
-    const answer = currentRanking.map((item) => item.name).join(",");
+    const answer = currentRanking.join(","); // Combine the strings into a single answer
     answerQuestion(answer);
   }
 
@@ -141,17 +135,17 @@ export default function RankView({ question, answerQuestion }: RankViewProps) {
           <h3 className="text-3xl font-display text-center">
             {question.title}
           </h3>
-          {topRanking.map((rank, index) => (
+          {topRanking.map((name, index) => (
             <DraggableDroppableItem
               key={index}
-              rank={rank}
+              name={name}
               index={index}
-              originalIndex={currentRanking.indexOf(rank)} // Keep original index for rank number
+              originalIndex={currentRanking.indexOf(name)} // Keep original index for rank number
             />
           ))}
           <Button
             onClick={handleAnswerQuestion}
-            className="py-8 px-12 font-display  text-3xl "
+            className="py-8 px-12 font-display text-3xl"
           >
             Submit Answers
           </Button>
