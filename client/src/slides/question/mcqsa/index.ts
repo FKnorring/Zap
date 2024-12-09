@@ -3,6 +3,7 @@ export * from './Participant';
 export * from './ParticipantAnswer';
 export * from './Host';
 export * from './HostAnswer';
+export * from './CalculateScore';
 
 import { QuestionTypes, SlideTypes, AnswerTypes } from '@/models/Quiz';
 import { CircleDotIcon } from "lucide-react";
@@ -12,7 +13,7 @@ import { nanoid } from 'nanoid'
 export const Info: SlideInfo = {
     value: "question:MCQSA",
     icon: CircleDotIcon,
-    label: "Single Answer MCQ",
+    label: "Single Answer",
     slideType: SlideTypes.question,
     questionType: QuestionTypes.MCQSA,
     defaults: {

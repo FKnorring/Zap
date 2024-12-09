@@ -9,7 +9,7 @@ import {
   Rank,
   Matching,
   FA,
-  LocateIt,
+  LocateIt, Bomb,
 } from "./";
 import { toolbarConfigs } from "./toolbar";
 
@@ -47,7 +47,11 @@ export function getSlideComponentsFromType(
           return Matching;
         case "LOCATEIT":
           return LocateIt;
+        case "BOMB":
+          return Bomb;
         default:
+        
+        
           throw new Error(`Unknown question type: ${questionType}`);
       }
     default:
@@ -57,7 +61,7 @@ export function getSlideComponentsFromType(
 
 export function getToolbarConfig(slide: Slide) {
   if ("questionType" in slide) {
-    return toolbarConfigs[slide.questionType];
+    return toolbarConfigs[slide.questionType];  
   }
   return toolbarConfigs[slide.type];
 }

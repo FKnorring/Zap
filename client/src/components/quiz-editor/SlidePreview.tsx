@@ -92,7 +92,7 @@ export function SlidePreview({
           transform: `scale(${scale})`,
         }}
       >
-        <div className="w-full h-full flex items-center justify-center p-16">
+        <div className="w-full h-full flex items-center justify-center">
           {Slide && <Slide slide={slide} onSlideUpdate={onSlideUpdate} />}
         </div>
       </div>

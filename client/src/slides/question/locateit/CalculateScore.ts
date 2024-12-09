@@ -1,9 +1,10 @@
-import { LocateItSlide, Participant } from "@/models/Quiz";
-import { QuestionSlide } from "@/models/Quiz";
+import { LocateItSlide } from "@/models/Quiz";
+import { CalculateScoreProps } from "@/slides";
+
 
 interface CalculateDistanceProps {
-  coords1: { lat: number; lng: number };
-  coords2: { lat: number; lng: number };
+    coords1: {lat: number, lng: number};
+    coords2: {lat: number, lng: number};
 }
 
 function CalculateDistance({ coords1, coords2 }: CalculateDistanceProps) {
@@ -27,9 +28,9 @@ function CalculateDistance({ coords1, coords2 }: CalculateDistanceProps) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(toRad(lat1)) *
-      Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
 
@@ -38,25 +39,15 @@ function CalculateDistance({ coords1, coords2 }: CalculateDistanceProps) {
   return distance;
 }
 
-interface CalculateScoreProps {
-  slide: LocateItSlide;
-  participants: Participant[];
-  handleAddPoints: (
-    pointsData: { participantId: string; awardPoints: number }[],
-    slide: QuestionSlide,
-    changeSlide: boolean
-  ) => void;
-}
-export async function CalculateScore({
+export function CalculateScore({
   slide,
   participants,
-  handleAddPoints,
-}: CalculateScoreProps) {
-  console.log(slide, participants, handleAddPoints);
+}: CalculateScoreProps<LocateItSlide>): number[] {
+  console.log(slide, participants);
 
   const correctLocation = slide.location;
 
-  const participantsWithDistance = participants.map((participant) => {
+  const distances = participants.map((participant) => {
     const latestAnswer =
       participant.answers.length > 0
         ? participant.answers[participant.answers.length - 1].answer
@@ -69,62 +60,29 @@ export async function CalculateScore({
       coords1: { lat, lng },
       coords2: correctLocation,
     });
-    return { participantId: participant.participantId, distance: distance };
+    return distance;
   });
 
-  console.log(participantsWithDistance);
+  console.log(distances);
 
   if (slide.awardPointsLocation === "DISTANCE") {
-    const participantsWithPoints = participantsWithDistance.map(
-      (participant) => {
-        const distance = participant.distance;
-        if (distance <= slide.radius) {
-          const points = Math.floor(
-            slide.points * (1 - distance / slide.radius)
-          );
-          return {
-            participantId: participant.participantId,
-            awardPoints: points,
-          };
-        } else {
-          return { participantId: participant.participantId, awardPoints: 0 };
-        }
-      }
+    return distances.map(
+      (distance) =>
+        distance <= slide.radius
+          ? Math.floor(slide.points * (1 - distance / slide.radius))
+          : 0
     );
-    handleAddPoints(participantsWithPoints, slide, false);
-  } else if (slide.awardPointsLocation === "RADIUS") {
-    const participantsWithPoints = participantsWithDistance.map(
-      (participant) => {
-        if (participant.distance <= slide.radius) {
-          return {
-            participantId: participant.participantId,
-            awardPoints: slide.points,
-          };
-        } else {
-          return { participantId: participant.participantId, awardPoints: 0 };
-        }
-      }
-    );
-    handleAddPoints(participantsWithPoints, slide, false);
-  } else if (slide.awardPointsLocation === "CLOSEST") {
-    console.log("Closest based points");
-    const closestParticipant = participantsWithDistance.reduce(
-      (prev, current) => {
-        return prev.distance < current.distance ? prev : current;
-      }
-    );
-    const participantsWithPoints = participantsWithDistance.map(
-      (participant) => {
-        if (participant.participantId === closestParticipant.participantId) {
-          return {
-            participantId: participant.participantId,
-            awardPoints: slide.points,
-          };
-        } else {
-          return { participantId: participant.participantId, awardPoints: 0 };
-        }
-      }
-    );
-    handleAddPoints(participantsWithPoints, slide, false);
   }
+
+  if (slide.awardPointsLocation === "RADIUS") {
+    return distances.map((distance) =>
+      distance <= slide.radius ? slide.points : 0
+    );
+  }
+
+
+  console.log("Closest based points");
+  return distances.map(
+    (distance) => (distance === Math.min(...distances) ? slide.points : 0)
+  );
 }

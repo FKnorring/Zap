@@ -1,6 +1,6 @@
-# GameShack
+# Zap!
 
-**GameShack** is a web application that allows users to create and host interactive quiz and game nights. Designed for versatility and engagement, it combines the functionality of presentation tools with dynamic game mechanics. Hosts can create customized slides, manage game sessions, and provide players with a seamless, engaging experience.
+**Zap!** is a web application that allows users to create and host interactive quiz and game nights. Designed for versatility and engagement, it combines the functionality of presentation tools with dynamic game mechanics. Hosts can create customized slides, manage game sessions, and provide players with a seamless, engaging experience.
 
 ---
 
@@ -20,7 +20,7 @@
 
 ### Slide Types
 
-GameShack supports the creation of quizzes with the following slide types:
+Zap! supports the creation of quizzes with the following slide types:
 
 1. **Information Slide**
    - Presents information to players without interaction.
@@ -39,7 +39,7 @@ GameShack supports the creation of quizzes with the following slide types:
 
 ## Technologies
 
-GameShack is built using modern technologies for optimal performance and maintainability:
+Zap! is built using modern technologies for optimal performance and maintainability:
 - **Figma**: For prototyping and design.
 - **TypeScript**: Primary programming language.
 - **shadcn**: UI component library.
@@ -49,6 +49,7 @@ GameShack is built using modern technologies for optimal performance and maintai
 ---
 
 ## Getting Started
+*Note: the repository name is outdated due to a rebranding of the project. It will be updated in the future.*
 
 1. Clone the repository:
    ```bash
@@ -69,6 +70,8 @@ For more details, visit the [Developer Documentation](#developer-documentation).
 ---
 
 ## Code Structure
+*Note: the repository name (and root directory by extension) is outdated due to a rebranding of the project. It will be updated in the future.*
+
 The project is organized into the following directories:
 
 ```plaintext

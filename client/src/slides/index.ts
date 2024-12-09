@@ -1,4 +1,4 @@
-import { QuestionType, Slide, SlideType } from "@/models/Quiz";
+import { Participant, QuestionSlide, QuestionType, Slide, SlideType } from "@/models/Quiz";
 import { LucideIcon } from "lucide-react";
 import * as Info from "./info";
 import * as Score from "./score";
@@ -10,6 +10,7 @@ import * as FA from "./question/fa";
 import * as Rank from "./question/rank";
 import * as Matching from "./question/matching";
 import * as LocateIt from "./question/locateit";
+import * as Bomb from "./question/bomb";
 
 interface SlideInfo {
   value: string;
@@ -22,6 +23,17 @@ interface SlideInfo {
   interactivePreview?: boolean;
 }
 
-export type { SlideInfo };
+interface CalculateScoreProps<T extends QuestionSlide> {
+  slide: T;
+  participants: Participant[];
+}
 
-export { Info, Score, Lobby, MCQSA, MCQMA, FTA, Rank, FA, Matching, LocateIt };
+interface QuestionSlideInfo<T extends QuestionSlide> extends SlideInfo {
+  calculateScore: (slide: T, answer: string[]) => number;
+}
+
+
+
+export type { SlideInfo, QuestionSlideInfo, CalculateScoreProps };
+
+export { Info, Score, Lobby, MCQSA, MCQMA, FTA, Rank, FA, Matching, LocateIt, Bomb };

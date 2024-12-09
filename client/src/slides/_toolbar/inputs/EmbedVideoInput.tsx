@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { MinusIcon } from "lucide-react";
+import { Link, MinusIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { EmbedVideoInputProps } from "../../info/Toolbar";
@@ -8,11 +8,11 @@ import { getYoutubeThumbnailUrl, validateYoutubeUrl } from "../../info/utils";
 
 function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
   const [embedVideoUrl, setEmbedVideoUrl] = React.useState<string>(
-    slide.embedVideoUrl || ""
+    slide.embedVideoUrl || "",
   );
   const [error, setError] = React.useState<string | null>(null);
   const [debouncedValue, setDebouncedValue] = React.useState<string>(
-    embedVideoUrl || ""
+    embedVideoUrl || "",
   );
 
   React.useEffect(() => {
@@ -44,7 +44,7 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmbedVideoUrl(e.target.value);
     },
-    []
+    [],
   );
 
   const handleRemoveEmbeddedVideo = useCallback(() => {
@@ -53,7 +53,10 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
 
   return (
     <div className="space-y-1 w-full">
-      <Label>Embed YouTube Video</Label>
+      <div className="flex flex-row items-center space-x-1">
+        <Link size={16} />
+        <Label>Embed YouTube Video</Label>
+      </div>
       <div className="flex w-full max-w-sm items-center justify-between">
         {slide.embedVideoUrl && (
           <img

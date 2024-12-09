@@ -12,7 +12,7 @@ import { SlideInfo } from "../..";
 export const Info: SlideInfo = {
   value: "question:LOCATEIT",
   icon: MapPinnedIcon,
-  label: "Location Question",
+  label: "LocateIt",
   slideType: SlideTypes.question,
   questionType: QuestionTypes.LOCATEIT,
   interactivePreview: true,

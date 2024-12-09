@@ -16,15 +16,23 @@ const optionGroups = [
   {
     label: "Slides",
     options: Object.values(Slides)
-      .filter((slide) => slide.Info.slideType !== SlideTypes.question && !slide.Info.uneditable)
-      .map((slide) => slide.Info)
+      .filter(
+        (slide) =>
+          slide.Info.slideType !== SlideTypes.question &&
+          !slide.Info.uneditable,
+      )
+      .map((slide) => slide.Info),
   },
   {
     label: "Question Types",
     options: Object.values(Slides)
-      .filter((slide) => slide.Info.slideType === SlideTypes.question && !slide.Info.uneditable)
-      .map((slide) => slide.Info)
-  }
+      .filter(
+        (slide) =>
+          slide.Info.slideType === SlideTypes.question &&
+          !slide.Info.uneditable,
+      )
+      .map((slide) => slide.Info),
+  },
 ] as const;
 
 interface RenderOptionsProps {
@@ -33,7 +41,11 @@ interface RenderOptionsProps {
   onCloseMenu?: () => void;
 }
 
-function RenderOptions({ options, onAddSlide, onCloseMenu }: RenderOptionsProps) {
+function RenderOptions({
+  options,
+  onAddSlide,
+  onCloseMenu,
+}: RenderOptionsProps) {
   return options.map((option) => {
     return (
       <SlideOption
@@ -49,7 +61,10 @@ function RenderOptions({ options, onAddSlide, onCloseMenu }: RenderOptionsProps)
   });
 }
 
-export function SlideCreationMenu({ onAddSlide, onCloseMenu }: SlideCreationMenuProps) {
+export function SlideCreationMenu({
+  onAddSlide,
+  onCloseMenu,
+}: SlideCreationMenuProps) {
   const [closeTimeout, setCloseTimeout] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -77,9 +92,9 @@ export function SlideCreationMenu({ onAddSlide, onCloseMenu }: SlideCreationMenu
   }, [closeTimeout]);
 
   return (
-    <PopoverContent 
-      side="right" 
-      className="w-56"
+    <PopoverContent
+      side="right"
+      className="w-fit"
       ref={containerRef}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
@@ -89,10 +104,10 @@ export function SlideCreationMenu({ onAddSlide, onCloseMenu }: SlideCreationMenu
           <div key={group.label} className="flex flex-col gap-2">
             {index > 0 && <Separator className="my-2" />}
             <h4 className="font-medium leading-none mb-3">{group.label}</h4>
-            <RenderOptions 
-              options={group.options} 
-              onAddSlide={onAddSlide} 
-              onCloseMenu={onCloseMenu} 
+            <RenderOptions
+              options={group.options}
+              onAddSlide={onAddSlide}
+              onCloseMenu={onCloseMenu}
             />
           </div>
         ))}

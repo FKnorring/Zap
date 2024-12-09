@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   ref,
   onValue,
@@ -7,10 +7,10 @@ import {
   set,
   update,
   DataSnapshot,
-} from "firebase/database";
-import { database } from "@/firebase";
-import { Participant, Slide } from "@/models/Quiz";
-import { nanoid } from "nanoid";
+} from 'firebase/database';
+import { database } from '@/firebase';
+import { Participant, Slide } from '@/models/Quiz';
+import { nanoid } from 'nanoid';
 
 export const ParticipantService = {
   async checkIfGameExists(quizCode: string): Promise<boolean> {
@@ -40,7 +40,7 @@ export const ParticipantService = {
     const quizExists = await this.checkIfGameExists(quizCode);
 
     if (!quizExists) {
-      console.error("Game does not exist");
+      console.error('Game does not exist');
       return null;
     }
 
@@ -55,13 +55,14 @@ export const ParticipantService = {
       name,
       avatar,
       participantId,
+      isTurn: false,
     };
 
     try {
       await set(participantRef, payload);
       return participantId;
     } catch (error) {
-      console.error("Error adding participant:", error);
+      console.error('Error adding participant:', error);
       return null;
     }
   },
@@ -78,7 +79,7 @@ export const ParticipantService = {
     );
 
     if (!participantExists) {
-      console.error("Participant does not exist in quiz");
+      console.error('Participant does not exist in quiz');
       return false;
     }
 
@@ -89,7 +90,7 @@ export const ParticipantService = {
     const participantSnap = await get(participantRef);
 
     if (!participantSnap.exists()) {
-      console.error("Participant data not found");
+      console.error('Participant data not found');
       return false;
     }
     const participantData = participantSnap.val();
@@ -105,7 +106,47 @@ export const ParticipantService = {
       });
       return true;
     } catch (error) {
-      console.error("Error updating the answer:", error);
+      console.error('Error updating the answer:', error);
+      return false;
+    }
+  },
+
+  // required for bomb slide where we need tempanswer
+  async addTempAnswer(
+    quizCode: string,
+    participantId: string,
+    tempAnswer: string
+  ): Promise<boolean> {
+    const participantExists = await this.participantExists(
+      quizCode,
+      participantId
+    );
+
+    if (!participantExists) {
+      console.error('Participant does not exist in quiz');
+      return false;
+    }
+
+    const participantRef = ref(
+      database,
+      `ongoingQuizzes/${quizCode}/participants/${participantId}`
+    );
+    const participantSnap = await get(participantRef);
+
+    if (!participantSnap.exists()) {
+      console.error('Participant data not found');
+      return false;
+    }
+    const updatedTempAnswers = { tempAnswer, time: new Date().toISOString() };
+
+    try {
+      await update(participantRef, {
+        tempAnswer: updatedTempAnswers,
+        hasAnswered: false,
+      });
+      return true;
+    } catch (error) {
+      console.error('Error updating the answer:', error);
       return false;
     }
   },
@@ -122,8 +163,29 @@ export const ParticipantService = {
       await set(participantRef, null);
       return true;
     } catch (error) {
-      console.error("Error removing participant:", error);
+      console.error('Error removing participant:', error);
       return false;
+    }
+  },
+
+  async removeTempAnswer(
+    quizCode: string,
+    participantId: string
+  ): Promise<void> {
+    const participantRef = ref(
+      database,
+      `ongoingQuizzes/${quizCode}/participants/${participantId}/tempAnswer`
+    );
+
+    try {
+      await set(participantRef, '');
+      console.log(`Cleared tempAnswer for participant ${participantId}`);
+    } catch (error) {
+      console.error(
+        `Failed to clear tempAnswer for participant ${participantId}:`,
+        error
+      );
+      throw error;
     }
   },
 
@@ -182,9 +244,9 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
     onValue(showAnswerRef, handleShowAnswerChange);
 
     return () => {
-      off(slideRef, "value", handleSlideChange);
-      off(participantRef, "value", handleParticipantChange);
-      off(showAnswerRef, "value", handleShowAnswerChange);
+      off(slideRef, 'value', handleSlideChange);
+      off(participantRef, 'value', handleParticipantChange);
+      off(showAnswerRef, 'value', handleShowAnswerChange);
     };
   }, [quizCode, participantId]);
 

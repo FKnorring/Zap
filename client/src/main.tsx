@@ -16,9 +16,9 @@ export const router = createBrowserRouter([{ path: "*", element: <App /> }], {
 
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
+    <React.Fragment>
       <RouterProvider router={router} />
-    </React.StrictMode>
+    </React.Fragment>
   );
 } else {
   console.error("Could not find the 'root' element.");

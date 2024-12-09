@@ -1,61 +1,49 @@
-import { cn } from "@/lib/utils";
-import { LocateItSlide, Participant } from "@/models/Quiz";
 import {
-  GoogleMap,
-  Libraries,
-  useJsApiLoader,
-  Marker,
-  OverlayView,
-  Polyline,
-  Circle,
-} from "@react-google-maps/api";
-import React, { useCallback } from "react";
-import ReactNiceAvatar, { genConfig } from "react-nice-avatar";
-import { Button } from "@/components/ui/button";
-
-const libraries: Libraries = ["places"];
-
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
-
-const circleStyle = {
-  strokeColor: "#FF0000",
-  strokeOpacity: 0.5,
-  strokeWeight: 2,
-  fillColor: "#FF0000",
-  fillOpacity: 0.1,
-  zIndex: 1,
-};
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Pin,
+  InfoWindow,
+  useAdvancedMarkerRef,
+} from '@vis.gl/react-google-maps';
+import React, { useEffect, useState } from 'react';
+import { LocateItSlide, Participant } from '@/models/Quiz';
+import { Button } from '@/components/ui/button';
+import { Circle } from './_circle';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import { Polyline } from './_polyline';
 
 const mockData: Participant[] = [
   {
-    participantId: "DsMCalNtbSK8vCnEpnT59",
-    name: "Nisse",
-    avatar: "EROHNv5Xbi",
+    participantId: 'DsMCalNtbSK8vCnEpnT59',
+    name: 'Nisse',
+    avatar: 'EROHNv5Xbi',
     answers: [
       {
-        answer: ["0", "0"],
+        answer: ['0', '0'],
         slideNumber: 0,
-        time: "2024-12-02T17:28:30.902Z",
+        time: '2024-12-02T17:28:30.902Z',
       },
     ],
+    tempAnswer: { tempAnswer: 'hej', time: '0' },
+    isTurn: false,
     score: [0],
     hasAnswered: true,
   },
   {
-    participantId: "LKFJJSD",
-    name: "LångtNamnYaoo",
-    avatar: "LKFJJSDEROHNv5Xbi",
+    participantId: 'LKFJJSD',
+    name: 'LångtNamnYaoo',
+    avatar: 'LKFJJSDEROHNv5Xbi',
     answers: [
       {
-        answer: ["1", "1"],
+        answer: ['1', '1'],
         slideNumber: 2,
-        time: "2024-12-02T17:30:00.000Z",
+        time: '2024-12-02T17:30:00.000Z',
       },
     ],
     score: [2000],
+    tempAnswer: { tempAnswer: 'hej', time: '0' },
+    isTurn: false,
     hasAnswered: false,
   },
 ];
@@ -69,17 +57,18 @@ export function HostAnswer({
   onNextSlide: () => void;
   participants: Participant[];
 }) {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    libraries,
-  });
+  const APIKEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(
+    slide.location
+  );
+  const [circleRadius, setCircleRadius] = useState<number>(slide.radius);
+  const [zoom, setZoom] = useState(6);
 
   const latestAnswers = participants.map((participant) => {
     const latestAnswer =
       participant.answers.length > 0
         ? participant.answers[participant.answers.length - 1].answer
-        : "??";
+        : ['??', '??'];
     const latestScore =
       participant.score.length > 0
         ? participant.score[participant.score.length - 1]
@@ -94,103 +83,81 @@ export function HostAnswer({
     };
   });
 
-  const onLoad = useCallback(
-    (mapInstance: google.maps.Map) => {
-      if (!mapInstance || !latestAnswers.length) return;
-      const bounds = new google.maps.LatLngBounds();
-
-      latestAnswers.forEach((participant) => {
-        bounds.extend({ lat: participant.lat, lng: participant.lng });
-      });
-      bounds.extend(slide.location);
-
-      mapInstance.fitBounds(bounds);
-    },
-    [latestAnswers, slide.location],
-  );
-
-  if (!isLoaded) return <div>Loading...</div>;
+  useEffect(() => {
+    setMapCenter(slide.location);
+    setCircleRadius(slide.radius);
+  }, [slide.location, slide.radius]);
 
   return (
-    <div className="h-dvh w-full p-20">
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={slide.location}
-        onLoad={onLoad}
-        options={{
-          disableDefaultUI: true,
-          mapTypeControl: false,
-          streetViewControl: false,
-          zoomControl: true,
-          gestureHandling: "greedy",
-        }}
-        zoom={4}
-      >
-        <Marker position={slide.location} />
-        {slide.awardPointsLocation === "RADIUS" && (
-          <Circle
-            onUnmount={() => {
-              console.log("unmount");
-            }}
-            center={{ lat: slide.location.lat, lng: slide.location.lng }}
-            options={{ ...circleStyle, radius: slide.radius }}
-          />
-        )}
-        {latestAnswers.map((participant) => {
-          return (
-            <React.Fragment key={participant.id}>
-              <Marker
-                position={{ lat: participant.lat, lng: participant.lng }}
-              />
-              <Polyline
-                path={[
-                  { lat: slide.location.lat, lng: slide.location.lng },
-                  { lat: participant.lat, lng: participant.lng },
-                ]}
-                options={{
-                  strokeColor: "#FF0000",
-                  strokeOpacity: 1,
-                  strokeWeight: 2,
-                }}
-              />
-              <OverlayView
-                position={{ lat: participant.lat, lng: participant.lng }}
-                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              >
-                <div
-                  className={cn(
-                    "bg-white w-fit p-[5px] rounded flex items-center shadow-[0_2px_6px_rgba(0,0,0,0.3)] -mt-[38px] -translate-x-1/2 -translate-y-full",
-                    participant.score !== 0 ? "bg-green-400" : "bg-red-400",
-                  )}
+    <div className="w-full h-full relative p-20">
+      <APIProvider apiKey={APIKEY}>
+        <Map
+          mapId={slide.id}
+          style={{ width: '100%', height: '100%', zoom: 1.5 }}
+          onCenterChanged={(e) => setMapCenter(e.detail.center)}
+          onZoomChanged={(e) => setZoom(e.detail.zoom)}
+          gestureHandling="greedy"
+          disableDefaultUI={true}
+          zoomControl={true}
+          reuseMaps={true}
+          zoom={zoom}
+          center={mapCenter}
+        >
+          <AdvancedMarker position={slide.location}>
+            <Pin scale={1.5} />
+          </AdvancedMarker>
+
+          {slide.awardPointsLocation === 'RADIUS' && (
+            <Circle
+              center={slide.location}
+              radius={circleRadius}
+              strokeColor="#008000"
+              strokeOpacity={1}
+              strokeWeight={2}
+              fillColor="#00FF00"
+              fillOpacity={0.08}
+            />
+          )}
+
+          {latestAnswers.map((participant) => {
+            const [markerRef, marker] = useAdvancedMarkerRef();
+
+            return (
+              <React.Fragment key={participant.id}>
+                <AdvancedMarker
+                  ref={markerRef}
+                  position={{ lat: participant.lat, lng: participant.lng }}
+                  style={{ border: '2px solid #000000', borderRadius: '50%' }}
                 >
-                  <ReactNiceAvatar
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                    }}
+                  <InfoWindow
+                    anchor={marker}
+                    disableAutoPan
+                    headerDisabled
+                    shouldFocus={true}
+                  >
+                    <div className="text-lg flex flex-col items-center font-display text-black">
+                      <p>
+                        {participant.name} : {participant.score}
+                      </p>
+                    </div>
+                  </InfoWindow>
+                  <Avatar
+                    style={{ width: '3rem', height: '3rem' }}
                     {...genConfig(participant.avatar)}
                   />
-                  <div className="flex flex-row items-center">
-                    <span className="font-display text-black text-xl">
-                      {participant.name}
-                    </span>
-                    {slide.awardPointsLocation === "DISTANCE" && (
-                      <>
-                        <span className="font-display text-black text-xl">
-                          :
-                        </span>
-                        <span className="font-display text-black text-xl ml-2">
-                          {participant.score}
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </OverlayView>
-            </React.Fragment>
-          );
-        })}
-      </GoogleMap>
+                </AdvancedMarker>
+                <Polyline
+                  path={[
+                    slide.location,
+                    { lat: participant.lat, lng: participant.lng },
+                  ]}
+                  strokeColor="#FF0000"
+                />
+              </React.Fragment>
+            );
+          })}
+        </Map>
+      </APIProvider>
       <Button onClick={onNextSlide} className="absolute bottom-5 right-5">
         Next Slide
       </Button>

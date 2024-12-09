@@ -1,6 +1,5 @@
 import { MCQMASlide } from "@/models/Quiz";
 import { BaseQuestionRender } from "@/slides/question/base/QuestionRender";
-import { yesNoColors } from "../base/QuizColors";
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,17 +17,14 @@ export function Preview({ slide }: { slide: MCQMASlide }) {
                   "bg-white/10 backdrop-blur outline outline-white/50":
                     !option.isCorrect, // Blur effect for wrong options
                   "ring-4 ring-white": option.isCorrect, // Green border for correct options
-                }
+                  "bg-white/10": !option.isCorrect,
+                  "bg-green-600": option.isCorrect,
+                },
               )}
-              style={{
-                backgroundColor: option.isCorrect
-                  ? yesNoColors(true) // Green for correct
-                  : "bg-white/10 backdrop-blur outline outline-white/50", // Red for incorrect
-              }}
             >
               <span className="text-center">{option.text}</span>
               {option.isCorrect && (
-                <CheckCircle2 className="w-8 h-8 text-green-500 ml-4" />
+                <CheckCircle2 className="w-8 h-8 text-white ml-4" />
               )}
             </div>
           ))}

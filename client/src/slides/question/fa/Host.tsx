@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { FASlide, Participant } from "@/models/Quiz";
-import { Button } from "@/components/ui/button";
-import Avatar, { genConfig } from "react-nice-avatar";
-import { X, Check } from "lucide-react";
-import { useAppContext } from "@/contexts/App/context";
-import { usePathOnValue } from "@/hooks/usePathOnValue";
-import { BaseQuestionRender } from "../base/QuestionRender";
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { FASlide, Participant, ParticipantAnswer } from '@/models/Quiz';
+import { Button } from '@/components/ui/button';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import { X, Check } from 'lucide-react';
+import { useAppContext } from '@/contexts/App/context';
+import { usePathOnValue } from '@/hooks/usePathOnValue';
+import { BaseQuestionRender } from '../base/QuestionRender';
+import { useTranslation } from 'react-i18next';
 
 export function Host({
   slide,
@@ -19,6 +20,7 @@ export function Host({
   quizCode: string;
 }) {
   const [participantsQueue, setParticipantsQueue] = useState<Participant[]>([]);
+  const { t } = useTranslation(['questions']);
 
   const {
     ongoingQuizzes: { resources: ongoingQuizzes, optimisticUpdate },
@@ -60,23 +62,21 @@ export function Host({
         const newParticipantId = newParticipant.participantId;
 
         if (
-          !newParticipant.answers ||
-          newParticipant.answers.at(-1)?.slideNumber !=
-            ongoingQuiz.currentSlide - 1 ||
+          !newParticipant.tempAnswer ||
           updatedQueue.some((p) => p.participantId === newParticipantId)
         ) {
           return;
         }
 
-        const latestAnswer = newParticipant.answers.length - 1;
-        const newTime = new Date(
-          newParticipant.answers[latestAnswer].time
-        ).getTime();
+        const newTime = new Date(newParticipant.tempAnswer.time).getTime();
 
         let insertIndex = updatedQueue.findIndex(
           (queuedParticipant) =>
-            new Date(queuedParticipant.answers[latestAnswer].time).getTime() >
-            newTime
+            new Date(
+              queuedParticipant.tempAnswer?.time
+                ? queuedParticipant.tempAnswer.time
+                : ''
+            ).getTime() > newTime
         );
 
         if (insertIndex === -1) {
@@ -107,27 +107,31 @@ export function Host({
   }
 
   const setAnswerCorrect = async (participant: Participant) => {
-    const participantsObj = ongoingQuiz?.participants;
-
+    const participantsObj = ongoingQuiz.participants;
+    // If participant was already correct
+    if (
+      participant.answers &&
+      participant.answers.at(-1)?.slideNumber == ongoingQuiz.currentSlide
+    ) {
+      return;
+    }
     if (participantsObj) {
       const updatedAnswers = participant.answers
         ? [...participant.answers]
         : [];
 
-      const lastAnswerIndex = updatedAnswers.length - 1;
-
-      // Update last answer to correct
-      if (lastAnswerIndex >= 0) {
-        updatedAnswers[lastAnswerIndex] = {
-          ...updatedAnswers[lastAnswerIndex],
-          answer: ["correct"], // Update the last answer's content
-        };
-      }
+      const correctAnswer: ParticipantAnswer = {
+        answer: ['correct'],
+        slideNumber: ongoingQuiz.currentSlide,
+        time: participant.tempAnswer?.time ? participant.tempAnswer?.time : '',
+      };
+      updatedAnswers.push(correctAnswer);
 
       // Update participants
       const updatedParticipant: Participant = {
         ...participant,
         answers: updatedAnswers,
+        hasAnswered: true,
       };
       const updatedQuiz = {
         ...ongoingQuiz,
@@ -137,20 +141,21 @@ export function Host({
         },
       };
       try {
-        optimisticUpdate(quizCode, updatedQuiz);
+        await optimisticUpdate(quizCode, updatedQuiz);
       } catch (error) {
         console.error("Error updating participant's answer", error);
       }
     } else {
-      console.error("No participants found");
+      console.error('No participants found');
     }
+    moveFirstParticipantToLast();
   };
 
   return (
     <div>
       <BaseQuestionRender slide={slide} participants={participants} />
       <div className="flex flex-col items-center m-16 gap-10">
-        <h1 className="text-6xl font-display">Next up to answer:</h1>
+        <h1 className="text-6xl font-display">{t('nextUp')}</h1>
         {participantsQueue.slice(0, 3).map((participant, index) => (
           <div
             key={index}
@@ -165,26 +170,26 @@ export function Host({
                 >
                   <X />
                 </Button>
-                <h1 className="text-1xl font-display">Wrong answer</h1>
+                <h1 className="text-1xl font-display">{t('wrongAnswer')}</h1>
               </div>
             )}
             <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
               <Avatar
                 style={{
                   width:
-                    index === 0 ? "10rem" : index === 1 ? "5rem" : "4.5rem",
+                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
                   height:
-                    index === 0 ? "10rem" : index === 1 ? "5rem" : "4.5rem",
+                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
                 }}
-                {...genConfig(participant.avatar ? participant.avatar : "")}
+                {...genConfig(participant.avatar ? participant.avatar : '')}
               />
               <span
                 className={`${
                   index === 0
-                    ? "text-5xl font-bold"
+                    ? 'text-5xl font-bold'
                     : index === 1
-                    ? "text-2xl font-medium"
-                    : "text-xl font-normal"
+                    ? 'text-2xl font-medium'
+                    : 'text-xl font-normal'
                 } font-display`}
               >
                 {participant.name}
@@ -196,13 +201,12 @@ export function Host({
                   variant="ghost"
                   className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
                   onClick={() => {
-                    moveFirstParticipantToLast();
                     setAnswerCorrect(participant);
                   }}
                 >
                   <Check />
                 </Button>
-                <h1 className="text-1xl font-display">Right answer</h1>
+                <h1 className="text-1xl font-display">{t('rightAnswer')}</h1>
               </div>
             )}
           </div>

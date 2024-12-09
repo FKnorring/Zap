@@ -1,6 +1,7 @@
 import { LocateItSlide, Participant } from "@/models/Quiz";
 import { Button } from "@/components/ui/button";
 import { ParticipantAnswers } from "@/slides/_components/ParticipantAnswers";
+import markerIcon from "@/assets/markerIcon.png";
 
 export function Host({
   slide,
@@ -14,8 +15,13 @@ export function Host({
   console.log(slide);
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white rounded p-4 mb-10 mt-20 text-wrap text-center">
-        <h1 className="text-4xl text-black font-display">{slide.title}</h1>
+      <div className="bg-white rounded p-4 mb-10 mt-20 text-wrap text-center flex-row flex items-center">
+        <img
+          src={markerIcon}
+          alt="Marker Icon"
+          className="w-20 h-20 rounded-full "
+        />
+        <h1 className="text-5xl text-black font-display">{slide.title}</h1>
         {slide.imageUrl && (
           <div className="flex justify-center">
             <div className="relative flex items-center justify-center">

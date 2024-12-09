@@ -30,6 +30,7 @@ export default function CreateParticipant({
   }>({ username: "", avatar: "", isLoggedIn: false });
   const [guestName, setGuestName] = useState("");
   const [guestAvatar, setGuestAvatar] = useState(createRandomId());
+  const [addingUser, setAddingUser] = useState(false);
 
   const { user: authenticatedUser } = useGetAuthenticatedUser();
 
@@ -71,17 +72,30 @@ export default function CreateParticipant({
       return;
     }
 
+    if (addingUser) {
+      return;
+    }
+
+    setAddingUser(true);
     handleAddParticipant(nameToUse, avatarToUse);
+
+    setTimeout(() => {
+      setAddingUser(false);
+    }, 1000);
   };
 
   return (
     <div className="flex-1 w-full flex items-center justify-center overflow-hidden p-8">
       {user.isLoggedIn ? (
         <Tabs defaultValue="me">
-          <div className="bg-component-background w-3/4 mx-auto rounded-lg flex flex-col items-center justify-center p-6">
-            <TabsList className="flex-1 w-full grid-cols-2 p-8 rounded-lg">
-              <TabsTrigger value="me">Play as {user.username}</TabsTrigger>
-              <TabsTrigger value="guest">Play as Guest</TabsTrigger>
+          <div className="bg-component-background mx-auto rounded-lg flex flex-col items-center justify-center p-6">
+            <TabsList className="flex-1 w-full pt-4 pb-8 rounded-lg">
+              <TabsTrigger className="bg-white rounded w-full" value="me">
+                Play as {user.username}
+              </TabsTrigger>
+              <TabsTrigger className="bg-white rounded w-full" value="guest">
+                Play as Guest
+              </TabsTrigger>
             </TabsList>
             <TabsContent
               value="me"
@@ -98,6 +112,7 @@ export default function CreateParticipant({
               />
               <Button
                 onClick={() => handleSubmit("me")}
+                disabled={addingUser}
                 className="bg-[#333333] text-3xl text-[#fefefe] hover:bg-[#86D293] py-8 px-12 font-display w-full shadow-lg"
               >
                 Play
@@ -133,6 +148,7 @@ export default function CreateParticipant({
               )}
               <Button
                 onClick={() => handleSubmit("guest")}
+                disabled={addingUser}
                 className="bg-[#333333] text-3xl text-[#fefefe] hover:bg-[#86D293] py-8 px-12 font-display w-full shadow-lg"
               >
                 Play
@@ -140,9 +156,8 @@ export default function CreateParticipant({
             </TabsContent>
           </div>
         </Tabs>
-
       ) : (
-        <div className="bg-component-background w-3/4 mx-auto rounded-lg flex flex-col items-center justify-center p-6  space-y-4">
+        <div className="bg-component-background w-full mx-auto rounded-lg flex flex-col items-center justify-center p-6  space-y-4">
           <Avatar
             style={{ width: "6rem", height: "6rem" }}
             {...genConfig(guestAvatar)}
@@ -169,11 +184,11 @@ export default function CreateParticipant({
           )}
           <Button
             onClick={() => handleSubmit("guest")}
+            disabled={addingUser}
             className="bg-[#333333] text-3xl text-[#fefefe] hover:bg-[#86D293] py-8 px-12 font-display w-full shadow-lg"
           >
             Play
           </Button>
-
         </div>
       )}
     </div>

@@ -1,13 +1,4 @@
-import {
-  Slide,
-  InfoSlide,
-  MCQMASlide,
-  MCQSASlide,
-  RankSlide,
-  QuestionSlide,
-  FTASlide,
-  MatchingSlide,
-} from "@/models/Quiz";
+import { Slide, InfoSlide, MCQMASlide, MCQSASlide, RankSlide, QuestionSlide, FTASlide, MatchingSlide, BombSlide } from "@/models/Quiz";
 import ImageInput from "./_toolbar/inputs/ImageInput";
 import BackgroundInput from "./_toolbar/inputs/BackgroundInput";
 import EmbedVideoInput from "./_toolbar/inputs/EmbedVideoInput";
@@ -20,6 +11,8 @@ import { AnswerText } from "./_toolbar/inputs/AnswerInput";
 import { SelectPoints } from "./_toolbar/inputs/SelectPoints";
 import { LocateItInputs } from "./_toolbar/inputs/LocateItInputs";
 import { MatchingOptionsInput } from "./_toolbar/inputs/MatchingOptionsInput";
+
+import { BombOptionsInput } from "./_toolbar/inputs/BombOptionsInput";
 
 export interface ToolbarProps<T extends Slide> {
   slide: T;
@@ -154,4 +147,14 @@ export const toolbarConfigs = {
       component: LocateItInputs,
     },
   ],
-} as const;
+
+  BOMB: [
+    ...baseToolbarConfig,
+    {
+      field: "labels" as keyof BombSlide,
+      label: "Bomb Question",
+      component: BombOptionsInput,
+    },
+    ...baseQuestionToolbarConfig,
+  ],
+} as const; 

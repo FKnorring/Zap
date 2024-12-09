@@ -1,31 +1,15 @@
-import { LocateItSlide } from "@/models/Quiz";
+import { LocateItSlide } from '@/models/Quiz';
 import {
-  GoogleMap,
-  useJsApiLoader,
-  Marker,
-  StandaloneSearchBox,
-  Libraries,
-  Circle,
-} from "@react-google-maps/api";
-import { useState, useEffect, useRef } from "react";
-
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-  zoom: 2,
-};
-
-const libraries: Libraries = ["places"];
-
-const circleStyle = {
-  strokeColor: "#FF0000",
-  strokeOpacity: 0.5,
-  strokeWeight: 2,
-  fillColor: "#FF0000",
-  fillOpacity: 0.1,
-  zIndex: 1,
-  editable: true,
-};
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  Pin,
+  MapControl,
+  ControlPosition,
+} from '@vis.gl/react-google-maps';
+import { useState, useEffect } from 'react';
+import { Circle } from './_circle';
+import { PlaceAutocompleteClassic } from './_autocomplete';
 
 export function Preview({
   slide,
@@ -35,25 +19,17 @@ export function Preview({
   onSlideUpdate: (slide: LocateItSlide) => void;
 }) {
   const APIKEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-  const [zoom, setZoom] = useState(4);
+  const [zoom, setZoom] = useState(6);
   const [circleCenter, setCircleCenter] = useState<google.maps.LatLngLiteral>();
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(
-    slide.location,
+    slide.location
   );
   const [circleRadius, setCircleRadius] = useState<number>(slide.radius);
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: APIKEY,
-    libraries,
-  });
   const [currentSlideId, setCurrentSlideId] = useState<string | null>(null);
 
   // Initialize marker position from slide.location
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral>(slide.location);
-
-  const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
-  const circleRef = useRef<google.maps.Circle | null>(null);
 
   // Update marker position if slide.location changes externally
   useEffect(() => {
@@ -72,8 +48,6 @@ export function Preview({
     }
   }, [slide.id, currentSlideId]);
 
-  if (!isLoaded) return <div>Loading...</div>;
-
   const handleDragEnd = (event: google.maps.MapMouseEvent) => {
     if (event.latLng) {
       const newLat = event.latLng.lat();
@@ -91,30 +65,26 @@ export function Preview({
     }
   };
 
-  const onPlacesChanged = () => {
-    const places = searchBoxRef.current?.getPlaces();
-    if (places && places.length > 0) {
-      const place = places[0];
-      if (place.geometry?.location) {
-        const newLat = place.geometry.location.lat();
-        const newLng = place.geometry.location.lng();
-        const newPosition = { lat: newLat, lng: newLng };
-        setMarkerPosition(newPosition);
-        const updatedSlide: LocateItSlide = {
-          ...slide,
-          location: newPosition,
-        };
-        onSlideUpdate(updatedSlide);
-        setMapCenter(newPosition);
-        setZoom(14);
-      }
+  const onPlacesChanged = (place: google.maps.places.PlaceResult | null) => {
+    if (!place) return;
+    if (place.geometry?.location) {
+      const newLat = place.geometry.location.lat();
+      const newLng = place.geometry.location.lng();
+      const newPosition = { lat: newLat, lng: newLng };
+      setMarkerPosition(newPosition);
+      const updatedSlide: LocateItSlide = {
+        ...slide,
+        location: newPosition,
+      };
+      onSlideUpdate(updatedSlide);
+      setMapCenter(newPosition);
+      setZoom(14);
     }
   };
 
-  const handleCircleRadiusChange = () => {
-    const circle = circleRef.current;
-    if (!circle || !onSlideUpdate || slide.id !== currentSlideId) return;
-    const newRadius = Math.floor(circle.getRadius());
+  const handleCircleRadiusChange = (radius: number) => {
+    if (!onSlideUpdate || slide.id !== currentSlideId) return;
+    const newRadius = Math.floor(radius);
 
     if (newRadius === slide.radius) return;
 
@@ -126,81 +96,47 @@ export function Preview({
     onSlideUpdate(updatedSlide);
   };
 
-  const handleCircleCenterChange = () => {
-    const newCenter = circleRef.current?.getCenter();
-    if (!newCenter || !onSlideUpdate || !circleCenter) return;
-
-    const newLat = newCenter.lat();
-    const newLng = newCenter.lng();
-
-    const newPosition = { lat: newLat, lng: newLng };
-
-    if (
-      newPosition.lat === circleCenter.lat &&
-      newPosition.lng === circleCenter.lng
-    )
-      return;
-
-    setCircleCenter(markerPosition);
-    circleRef.current?.setCenter(markerPosition);
-  };
-
   return (
     <div className="w-full h-full relative">
-      <StandaloneSearchBox
-        onLoad={(ref) => (searchBoxRef.current = ref)}
-        onPlacesChanged={onPlacesChanged}
-      >
-        <input
-          className="top-10 left-10 box-border border border-gray-100 w-100 h-20 pl-5 font-bold rounded-3xl shadow-md text-3xl outline-none text-black"
-          type="text"
-          placeholder="Search in Maps"
-          style={{
-            position: "absolute",
-            zIndex: 10,
-          }}
-        />
-      </StandaloneSearchBox>
-
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={mapCenter}
-        zoom={zoom}
-        options={{
-          disableDefaultUI: true,
-          mapTypeControl: false,
-          streetViewControl: false,
-          zoomControl: true,
-          gestureHandling: "greedy",
-        }}
-        onUnmount={() => {
-          searchBoxRef.current = null;
-          circleRef.current = null;
-        }}
-      >
-        <Marker
-          position={markerPosition}
-          draggable={true}
-          onDragEnd={handleDragEnd}
-          onDrag={(event) => {
-            if (event.latLng) {
-              const newLat = event.latLng.lat();
-              const newLng = event.latLng.lng();
-              const newPosition = { lat: newLat, lng: newLng };
-              setCircleCenter(newPosition);
-            }
-          }}
-        />
-        {slide.awardPointsLocation !== "CLOSEST" && (
-          <Circle
-            onCenterChanged={handleCircleCenterChange}
-            onRadiusChanged={handleCircleRadiusChange}
-            onLoad={(circle) => (circleRef.current = circle)}
-            options={{ ...circleStyle, radius: circleRadius }}
-            center={circleCenter}
-          />
-        )}
-      </GoogleMap>
+      <APIProvider apiKey={APIKEY}>
+        <Map
+          mapId="locateit-preview"
+          style={{ width: '100%', height: '100%', zoom: 1.5 }}
+          center={mapCenter}
+          zoom={zoom}
+          onCenterChanged={(e) => setMapCenter(e.detail.center)}
+          onZoomChanged={(e) => setZoom(e.detail.zoom)}
+          gestureHandling="greedy"
+          disableDefaultUI={true}
+          zoomControl={true}
+          reuseMaps={true}
+        >
+          <MapControl position={ControlPosition.TOP}>
+            <PlaceAutocompleteClassic onPlaceSelect={onPlacesChanged} />
+          </MapControl>
+          {(slide.awardPointsLocation === 'RADIUS' ||
+            slide.awardPointsLocation === 'DISTANCE') && (
+            <Circle
+              onRadiusChanged={handleCircleRadiusChange}
+              center={circleCenter}
+              radius={circleRadius}
+              strokeColor={'#0c4cb3'}
+              strokeOpacity={1}
+              strokeWeight={3}
+              fillColor={'#3b82f6'}
+              fillOpacity={0.3}
+              editable
+            />
+          )}
+          <AdvancedMarker
+            position={markerPosition}
+            draggable={true}
+            onDragEnd={handleDragEnd}
+          >
+            <Pin scale={1.5} />
+          </AdvancedMarker>
+        </Map>
+      </APIProvider>
     </div>
   );
 }

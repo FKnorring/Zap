@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"; // Ensure you import SelectContent and SelectValue
 import { QuestionSlide } from "@/models/Quiz";
+import { Award } from "lucide-react";
 
 export function SelectPoints({
   slide,
@@ -22,13 +23,17 @@ export function SelectPoints({
   };
 
   return (
-    <div className="space-y-2">
-      <Label>Points</Label>
+    <div className="space-y-1">
+      <div className="flex flex-row items-center">
+        <Award size={17} />
+        <Label>Points</Label>
+      </div>
+
       <Select
         value={slide.points.toString()} // Current points value as string
         onValueChange={(value) => handlePointsChange(Number(value))} // Convert value to number before updating
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder="Select Points" />
         </SelectTrigger>
         <SelectContent>

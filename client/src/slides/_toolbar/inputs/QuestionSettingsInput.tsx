@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Eye, Timer } from "lucide-react";
 
 export function QuestionSettingsInput({
   slide,
@@ -19,8 +20,11 @@ export function QuestionSettingsInput({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center space-x-2">
-        <Label>Show Correct Answer</Label>
+      <div className="space-y-1">
+        <div className="flex flex-row items-center space-x-1">
+          <Eye size={17} />
+          <Label>Show Correct Answer</Label>
+        </div>
         <Select
           value={questionSlide.showCorrectAnswer || "auto"}
           onValueChange={(value) =>
@@ -31,18 +35,49 @@ export function QuestionSettingsInput({
           }
         >
           <SelectTrigger>
-            <SelectValue />
+            <SelectValue>
+              {(() => {
+                switch (slide.showCorrectAnswer) {
+                  case "auto":
+                    return "Auto";
+                  case "manual":
+                    return "Manual";
+                  case "never":
+                    return "Never";
+                  default:
+                    return "Select Award Points";
+                }
+              })()}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="auto">Auto</SelectItem>
-            <SelectItem value="manual">Manual</SelectItem>
-            <SelectItem value="never">Never</SelectItem>
+            <SelectItem value="auto">
+              <h1 className="font-bold">Auto</h1>
+              <h3>
+                Shows the correct answers when everyone has answered or the time
+                runs out.
+              </h3>
+            </SelectItem>
+            <SelectItem value="manual">
+              <h1 className="font-bold">Manual</h1>
+              <h3>
+                Renders a button that allows the presenter to show the correct
+                answers.
+              </h3>
+            </SelectItem>
+            <SelectItem value="never">
+              <h1 className="font-bold">Never</h1>
+              <h3>Never show the correct answers.</h3>
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      <div className="flex items-center space-x-2">
-        <Label>Time Limit</Label>
+      <div className="space-y-1">
+        <div className="flex flex-row items-center">
+          <Timer size={17} />
+          <Label>Time Limit</Label>
+        </div>
         <Input
           type="number"
           value={questionSlide.timeLimit}

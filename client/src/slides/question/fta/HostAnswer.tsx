@@ -16,7 +16,6 @@ export function HostAnswer({
   participants: Participant[];
   handleAddPoints: (
     pointsData: { participantId: string; awardPoints: number }[],
-    slide: FTASlide,
     changeSlide: boolean,
   ) => void;
 }) {
@@ -54,7 +53,6 @@ export function HostAnswer({
         participantId: entry.id,
         awardPoints: entry.points,
       })),
-      slide,
       true,
     );
   }
