@@ -77,8 +77,9 @@ export default function ParticipantLogic() {
   );
 
   useEffect(() => {
-    console.log(currentSlide);
-    navigator.vibrate(500);
+    if (navigator.vibrate) {
+      navigator.vibrate(200);
+    }
   }, [currentSlide]);
 
   // Fetch quiz and participant data
