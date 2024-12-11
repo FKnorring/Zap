@@ -1,0 +1,15 @@
+{
+  "selectSlide": "Välj en slide för att redigera",
+  "quizName": "Quiz Namn",
+  "colorScheme": "Färgschema",
+  "backgroundColor": "Bakgrundsfärg",
+  "primary": "Primär",
+  "secondary": "Sekundär",
+  "showCorrect": "Visa rätt svar (default)",
+  "showCorrect.auto": "Automatiskt",
+  "showCorrect.manual": "Manuellt",
+  "showCorrect.never": "Aldrig",
+  "backgroundStyle": "Bakgrundstil",
+  "resetSettings": "Återställ inställningar",
+  "resetSettings.description": "Återställer färgschema och bakgrundstil till standardvärden"
+}

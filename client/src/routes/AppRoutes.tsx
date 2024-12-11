@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import React, { Suspense } from "react";
+import Spinner from "@/components/Spinner";
 
 const About = React.lazy(() => import("../pages/About"));
 const Home = React.lazy(() => import("../pages/Home"));
@@ -18,7 +19,7 @@ export function AppRoutes() {
   const { isAuthenticated } = useKindeAuth();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Spinner />}>
       <Routes>
         <Route path="/" element={isAuthenticated ? <Quizzes /> : <Home />} />
         <Route path="/about" element={<About />} />

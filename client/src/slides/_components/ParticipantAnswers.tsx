@@ -1,13 +1,12 @@
-import { Participant } from "@/models/Quiz";
+import { Participant } from '@/models/Quiz';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@radix-ui/react-popover";
-import { UserRoundMinus, Users } from "lucide-react";
-import { useState } from "react";
-import Avatar, { genConfig } from "react-nice-avatar";
-import { Button } from "@/components/ui/button";
+} from '@radix-ui/react-popover';
+import { Users } from 'lucide-react';
+import { useState } from 'react';
+import Avatar, { genConfig } from 'react-nice-avatar';
 
 export function ParticipantAnswers({
   participants = [],
@@ -16,7 +15,7 @@ export function ParticipantAnswers({
 }) {
   const noParticipants = participants.length;
   const noAnswers = participants.filter(
-    (participant) => participant.hasAnswered,
+    (participant) => participant.hasAnswered
   ).length;
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,20 +37,17 @@ export function ParticipantAnswers({
           {participants.map((participant) => (
             <div
               key={participant.participantId}
-              className="flex flex-row items-center font-display space-x-2"
+              className="flex flex-row items-center text-lg font-display space-x-1"
             >
               <Avatar
                 style={{
-                  width: "22px",
-                  height: "22px",
+                  width: '22px',
+                  height: '22px',
                 }}
                 {...genConfig(participant.avatar)}
               />
-              {participant.name} -{" "}
-              {participant.hasAnswered ? "Answered" : "Not Answered"}
-              <Button variant="ghost" className="text-red-400">
-                <UserRoundMinus size={18} className="text-red-400" />
-              </Button>
+              {participant.name} -{' '}
+              {participant.hasAnswered ? 'Answered' : 'Not Answered'}
             </div>
           ))}
         </div>

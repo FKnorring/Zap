@@ -1,19 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const quotes = [
-  "Well, that was fast. But was it right? 🤔",
-  "Speed isn’t everything... unless it’s wrong. 😅",
+  'Well, that was fast. But was it right? 🤔',
+  'Speed isn’t everything... unless it’s wrong. 😅',
   "Quick answer! Let's hope it's not a quick mistake. 😏",
-  "Are you confident, or just really fast? 🏎️",
-  "Fast answer, bold move! Let’s see if it pays off. 🧐",
-  "Thinking is overrated anyway, right? 😜",
-  "That was speedy! But was it... considered? 🕵️",
+  'Are you confident, or just really fast? 🏎️',
+  'Fast answer, bold move! Let’s see if it pays off. 🧐',
+  'Thinking is overrated anyway, right? 😜',
+  'That was speedy! But was it... considered? 🕵️',
   "You might have set a record for speed—accuracy, though? We'll see! 🕐",
-  "Sometimes the first thought is the best—sometimes it’s not. 😇",
-  "A quick answer is exciting, but accuracy is thrilling. 🎢",
-  "Let’s hope your guess was as good as your speed. 🎯",
-  "Confidence: 100%. Accuracy: We’ll see. 📊",
-  "You didn’t even let your brain catch up. Respect. Kinda. 😏",
+  'Sometimes the first thought is the best—sometimes it’s not. 😇',
+  'A quick answer is exciting, but accuracy is thrilling. 🎢',
+  'Let’s hope your guess was as good as your speed. 🎯',
+  'Confidence: 100%. Accuracy: We’ll see. 📊',
+  'You didn’t even let your brain catch up. Respect. Kinda. 😏',
+  'Fast fingers, fast mind? We’ll find out! 🧠',
+  'Quick answer! But was it a quick decision? 🤔',
+  'You’re fast! But are you right? 🤞',
 ];
 
 function getRandomQuote() {
@@ -22,7 +25,7 @@ function getRandomQuote() {
 }
 
 export default function HasAnsweredView() {
-  const [typedText, setTypedText] = useState("");
+  const [typedText, setTypedText] = useState('');
 
   useEffect(() => {
     const fullQuote = getRandomQuote(); // Randomly select the quote
@@ -36,7 +39,7 @@ export default function HasAnsweredView() {
       } else {
         clearInterval(interval); // Stop the interval when the full quote is typed
       }
-    }, 60); // Adjust typing speed (milliseconds per character)
+    }, 30); // Adjust typing speed (milliseconds per character)
 
     return () => clearInterval(interval); // Cleanup the interval on unmount
   }, []);

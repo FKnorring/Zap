@@ -8,3 +8,11 @@ export const quizDefaults: QuizSettings = {
     backgroundStyleDefault: BackgroundStyle.BlobInverted,
     showCorrectAnswerDefault: ShowCorrectAnswerTypes.auto
 }
+
+export const quizDefaultsBackgroundStyles: BackgroundStyle[] = [
+    BackgroundStyle.BlobInverted,
+    BackgroundStyle.Blob,
+    BackgroundStyle.Circle,
+    BackgroundStyle.Solid,
+    BackgroundStyle.Waves
+]

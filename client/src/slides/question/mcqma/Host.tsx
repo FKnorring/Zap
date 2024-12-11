@@ -1,7 +1,8 @@
 import { MCQMASlide, Participant } from "@/models/Quiz";
 import { BaseQuestionRender } from "../base/QuestionRender";
 import { getColor } from "../base/QuizColors";
-import { Button } from "@/components/ui/button";
+import NextSlide from "@/slides/_components/NextSlide";
+import { cn } from "@/lib/utils";
 
 export function Host({
   slide,
@@ -14,29 +15,27 @@ export function Host({
 }) {
   return (
     <BaseQuestionRender slide={slide} participants={participants}>
-      <div className="flex flex-col items-center justify-center h-full p-10">
-        <div className="grid grid-cols-2 gap-6 w-full max-w-3xl">
+      <div className="flex flex-col items-center justify-center p-10">
+        <div
+          className={cn(
+            'grid gap-14',
+            slide.options.length > 4 ? 'grid-cols-3' : 'grid-cols-2'
+          )}
+        >
           {/* Only display 4 options, without any click functionality */}
           {slide.options.map((option, index) => (
             <div
               key={option.id}
               style={{
-                backgroundColor: getColor(index), // Get different color for each div
+                backgroundColor: getColor(index), // Get different color for each div. Centrerad text och bredare
               }}
-              className="flex items-center justify-start text-2xl text-white font-display h-24 rounded-lg p-6 box-border" // Added box-border to include padding in the element's total size
+              className="flex items-center justify-center text-5xl text-white font-display h-64 w-[550px] rounded-lg box-border p-8"
             >
-              <span className="text-left">{option.text}</span>
+              <span>{option.text}</span>
             </div>
           ))}
         </div>
-        <Button
-          onClick={() => {
-            onNextSlide();
-          }}
-          className="absolute bottom-5 right-5"
-        >
-          Next Slide
-        </Button>{" "}
+        <NextSlide onClick={onNextSlide} />
       </div>
     </BaseQuestionRender>
   );

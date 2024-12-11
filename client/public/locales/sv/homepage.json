@@ -1,10 +1,15 @@
 {
   "myQuizzes": "Mina Quiz",
-  "gotoOngoing": "Gå till pågående",
+  "gotoOngoing": "Gå till pågående Quiz",
   "createQuiz": "Skapa Quiz",
   "startQuiz": "Starta Quiz",
   "sharedQuizzes": "Delade Quiz",
   "searchShared": "Sök delade quiz...",
   "quizName": "Quiz namn",
-  "create": "Skapa"
+  "create": "Skapa",
+  "copy": "Kopiera Quiz",
+  "deleteQuiz": "Radera Quiz",
+  "noSlides": "Inga slides än",
+  "deleteQuizDescription": "Är du säker att du vill radera: ",
+  "copyDescription": "När du kopierar quizet kommer du kunna redigera det och göra det till ditt eget."
 }

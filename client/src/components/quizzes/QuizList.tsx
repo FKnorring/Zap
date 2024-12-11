@@ -41,7 +41,7 @@ function QuizList({
 
       const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
       const quiz = await get(quizRef);
-      if (await !quiz.exists()) {
+      if (!quiz.exists()) {
         isUnique = true;
         return quizCode;
       }

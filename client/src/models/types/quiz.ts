@@ -23,7 +23,7 @@ export interface QuizSettings {
   secondaryColor: string;
   backgroundColor: string;
   showCorrectAnswerDefault: ShowCorrectAnswerTypes;
-  backgroundStyleDefault: BackgroundStyle;
+  backgroundStyleDefault: BackgroundStyle | 'random';
 }
 
 export interface QuestionCreated {

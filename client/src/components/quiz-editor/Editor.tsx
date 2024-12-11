@@ -1,8 +1,9 @@
-import { SlideTypes, type Slide } from "@/models/Quiz";
-import { SlidePreview } from "./SlidePreview";
-import { useState } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { SlideTypes, type Slide } from '@/models/Quiz';
+import { SlidePreview } from './SlidePreview';
+import { useState } from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 interface EditorProps {
   slide: Slide | null;
@@ -19,12 +20,13 @@ export function Editor({
   secondaryColor,
   onSlideUpdate,
 }: EditorProps) {
-  const [whichPreview, setWhichPreview] = useState("Preview");
+  const [whichPreview, setWhichPreview] = useState('Preview');
+  const { t } = useTranslation();
 
   if (!slide) {
     return (
       <div className="h-full flex items-center justify-center text-muted font-medium">
-        Select a slide to edit or create a new one
+        {t('quizEditor:selectSlide')}
       </div>
     );
   }
@@ -38,12 +40,16 @@ export function Editor({
           className="pb-2"
         >
           <TabsList>
-            <TabsTrigger value="Preview">Preview</TabsTrigger>
-            <TabsTrigger value="Host">Host</TabsTrigger>
+            <TabsTrigger value="Preview">{t('general:preview')}</TabsTrigger>
+            <TabsTrigger value="Host">{t('general:host')}</TabsTrigger>
             {slide.type !== SlideTypes.info && (
               <>
-                <TabsTrigger value="Participant">Participant</TabsTrigger>
-                <TabsTrigger value="HostAnswer">HostAnswer</TabsTrigger>
+                <TabsTrigger value="Participant">
+                  {t('general:participant')}
+                </TabsTrigger>
+                <TabsTrigger value="HostAnswer">
+                  {t('general:hostAnswer')}
+                </TabsTrigger>
               </>
             )}
           </TabsList>
@@ -53,8 +59,8 @@ export function Editor({
       <div className="flex-1 flex items-center justify-center bg-card/30 rounded-lg p-4">
         <div
           className={cn(
-            "w-full",
-            whichPreview === "Participant" ? "max-w-md" : "max-w-4xl",
+            'w-full',
+            whichPreview === 'Participant' ? 'max-w-md' : 'max-w-4xl'
           )}
         >
           <SlidePreview

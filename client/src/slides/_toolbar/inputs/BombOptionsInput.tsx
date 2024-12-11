@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { max_options } from '@/config/max';
 
 export function BombOptionsInput({
   slide,
@@ -55,6 +56,7 @@ export function BombOptionsInput({
         <Input
           type="number"
           value={slide.hearts}
+          max={max_options.bomb.lives}
           onChange={(e) => updateSlide({ hearts: Number(e.target.value) })}
         />
       </div>

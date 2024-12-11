@@ -4,11 +4,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { max_options } from "@/config/max";
+import { Check, ChevronDown } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 
 export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<MatchingSlide>) {
   const [newLabel, setNewLabel] = useState<string>("");
   const [newOption, setNewOption] = useState<string>("");
+
+  const canAddLabel = slide.labels.length < max_options.match.labels;
 
   const updateSlide = (updates: Partial<MatchingSlide>) => {
     onSlideUpdate({
@@ -37,10 +47,18 @@ export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<Matc
   const toggleOptionForLabel = (labelId: string, option: string) => {
     updateSlide({
       labels: slide.labels.map(label => {
+        // Remove the option from other labels first
+        if (label.id !== labelId && label.correctOptions?.includes(option)) {
+          return {
+            ...label,
+            correctOptions: label.correctOptions?.filter(opt => opt !== option)
+          };
+        }
+        // Then toggle it for the current label
         if (label.id === labelId) {
-          const correctOptions = label.correctOptions.includes(option)
-            ? label.correctOptions.filter(opt => opt !== option)
-            : [...label.correctOptions, option];
+          const correctOptions = label.correctOptions?.includes(option)
+            ? label.correctOptions?.filter(opt => opt !== option)
+            : [...(label.correctOptions || []), option];
           return { ...label, correctOptions };
         }
         return label;
@@ -53,7 +71,7 @@ export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<Matc
       <div>
         <Label>Labels</Label>
         {slide.labels.map((label) => (
-          <div key={label.id} className="mt-4 space-y-2">
+          <div key={label.id} className="mt-2 space-y-2">
             <div className="flex items-center space-x-2">
               <Input
                 value={label.text}
@@ -78,18 +96,45 @@ export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<Matc
                 Del
               </Button>
             </div>
-            <div className="ml-4 space-y-1">
-              <Label className="text-sm text-muted-foreground">Correct options for this label:</Label>
-              {slide.options.map((option) => (
-                <div key={option} className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={label.correctOptions.includes(option)}
-                    onCheckedChange={() => toggleOptionForLabel(label.id, option)}
-                  />
-                  <span className="text-sm">{option}</span>
-                </div>
-              ))}
+            <div className="space-y-1">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between"
+                  >
+                    <span className="truncate">
+                      {label.correctOptions?.length > 0
+                        ? label.correctOptions.join(", ")
+                        : "Select options..."}
+                    </span>
+                    <ChevronDown className="h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0" align="start">
+                  <div className="max-h-[200px] overflow-auto">
+                    {slide.options.map((option) => (
+                      <div
+                        key={option}
+                        className={cn(
+                          "flex items-center space-x-2 p-2 cursor-pointer hover:bg-accent",
+                          label.correctOptions?.includes(option) && "bg-green-100"
+                        )}
+                        onClick={() => toggleOptionForLabel(label.id, option)}
+                      >
+                        <div className="w-4 h-4">
+                          {label.correctOptions?.includes(option) && (
+                            <Check className="h-4 w-4" />
+                          )}
+                        </div>
+                        <span className="text-sm">{option}</span>
+                      </div>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
+            <Separator className="bg-black/10" />
           </div>
         ))}
         <div className="flex space-x-2 mt-4">
@@ -99,6 +144,7 @@ export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<Matc
             placeholder="New Label"
           />
           <Button
+            disabled={!canAddLabel}
             onClick={() => {
               if (newLabel.trim() !== "") {
                 updateSlide({
@@ -119,8 +165,8 @@ export function MatchingOptionsInput({ slide, onSlideUpdate }: ToolbarProps<Matc
 
       <div className="space-y-2">
         <Label>Available Options</Label>
-        {slide.options.map((option) => (
-          <div key={option} className="flex items-center space-x-2">
+        {slide.options.map((option, index) => (
+          <div key={index} className="flex items-center space-x-2">
             <Input
               value={option}
               onChange={(e) => {

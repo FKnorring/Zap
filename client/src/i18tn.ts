@@ -22,7 +22,7 @@ i18n
     backend: {
       loadPath: LOAD_PATH_i18,
     },
-    ns: ["general", "about", "quizEditor", "homepage", "questions"],
+    ns: ["general", "about", "quizEditor", "homepage", "questions","slides"],
     defaultNS: "translation",
     load: "languageOnly",
     interpolation: {

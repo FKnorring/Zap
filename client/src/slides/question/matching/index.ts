@@ -12,15 +12,15 @@ import { SlideInfo } from '../..';
 export const Info: SlideInfo = {
     value: "question:MATCHING",
     icon: ListTree,
-    label: "Match Items",
+    label: "Meet Your Match",
     slideType: SlideTypes.question,
     questionType: QuestionTypes.MATCHING,
     defaults: {
         labels: [
-            { id: '1', text: "Label 1", correctOptions: ["Option 1"] },
-            { id: '2', text: "Label 2", correctOptions: ["Option 2"] }
+            { id: '1', text: "Pizzas", correctOptions: ["Margherita", "Pepperoni"] },
+            { id: '2', text: "Pastas", correctOptions: ["Spaghetti", "Lasagna"] }
         ],
-        options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+        options: ["Margherita", "Pepperoni", "Spaghetti", "Lasagna", "Risotto"],
         answerType: AnswerTypes.matching,
         points: 1000,
     }

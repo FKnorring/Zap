@@ -1,13 +1,10 @@
-import { Participant } from "@/models/Quiz";
+import { Participant } from '@/models/Quiz';
+import RenderCorrectIncorrect from '../base/RenderCorrectIncorrect';
 
 export function ParticipantAnswer({
   participant,
 }: {
   participant: Participant;
 }) {
-  return (
-    <div className="flex flex-col items-center justify-center flex-1">
-      <h1 className="text-3xl font-display text-center">{participant.name}</h1>
-    </div>
-  );
+  return <RenderCorrectIncorrect participant={participant} />;
 }

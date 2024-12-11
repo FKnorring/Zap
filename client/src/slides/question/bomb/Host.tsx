@@ -6,74 +6,18 @@ import { HeartIcon } from 'lucide-react';
 import { BombSlide } from '@/models/Quiz';
 import { ParticipantService } from '@/services/participant';
 import { Button } from '@/components/ui/button';
-
-const mockParticipants: Participant[] = [
-  {
-    answers: [
-      { slideNumber: 1, answer: ['Yes'], time: '2024-11-18T10:05:00Z' },
-      { slideNumber: 2, answer: ['No'], time: '2024-11-18T10:10:00Z' },
-    ],
-    hasAnswered: true,
-    avatar: 'https://example.com/avatar1.png',
-    name: 'Olle',
-    participantId: 'P001',
-    score: [8, 12],
-    tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
-  },
-  {
-    answers: [
-      { slideNumber: 1, answer: ['Maybe'], time: '2024-11-18T10:06:00Z' },
-      { slideNumber: 2, answer: ['Yes'], time: '2024-11-18T10:11:00Z' },
-    ],
-    hasAnswered: true,
-    avatar: 'https://example.com/avatar2.png',
-    name: 'Bob Smith',
-    participantId: 'P002',
-    score: [10, 15],
-    tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
-  },
-  {
-    answers: [{ slideNumber: 1, answer: ['No'], time: '2024-11-18T10:07:00Z' }],
-    hasAnswered: true,
-    avatar: 'https://example.com/avatar3.png',
-    name: 'Charlie Brown',
-    participantId: 'P003',
-    score: [5],
-    tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
-  },
-  {
-    answers: [],
-    hasAnswered: false,
-    avatar: 'https://example.com/avatar4.png',
-    name: 'Diana Prince',
-    participantId: 'P004',
-    score: [],
-    tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
-  },
-  {
-    answers: [
-      { slideNumber: 1, answer: ['Agree'], time: '2024-11-18T10:08:00Z' },
-      { slideNumber: 3, answer: ['Disagree'], time: '2024-11-18T10:15:00Z' },
-    ],
-    hasAnswered: true,
-    avatar: 'https://example.com/avatar5.png',
-    name: 'Ethan Hunt',
-    participantId: 'P005',
-    score: [9, 11],
-    tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
-  },
-];
+import NextSlide from '@/slides/_components/NextSlide';
 
 type HostProps = {
   participants: Participant[];
   slide: BombSlide;
   quizCode: string;
   slideNumber: number;
+  changeTurn: (
+    turn: boolean,
+    quizCode: string,
+    participantId: string
+  ) => Promise<void>;
   onNextSlide: () => void;
 };
 
@@ -83,7 +27,7 @@ type ParticipantHearts = {
 };
 
 export function Host({
-  participants = mockParticipants,
+  participants,
   slide,
   quizCode,
   slideNumber,
@@ -102,7 +46,13 @@ export function Host({
   const [answers] = useState(slide.answers);
   const [isCorrect, setIsCorrect] = useState('');
   const [deadParticipants, setDeadParticipants] = useState<string[]>([]);
+  const [aliveParticipants, setAliveParticipants] = useState<Participant[]>([]);
+
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  if (participants == null || undefined) {
+    return <h1>No preview sorry!</h1>;
+  }
 
   const initializeHeartsAndTime = () => {
     const newParticipantHearts = participants.map((participant) => {
@@ -117,8 +67,10 @@ export function Host({
         hearts: Math.min(existingHeart?.hearts ?? slide.hearts, 5),
       };
     });
-    setTime(10000);
+    setTime(slide.initialTime);
+    handleChangeTurnTrue(currentParticipants[0]);
     setParticipantHearts(newParticipantHearts);
+    setAliveParticipants(currentParticipants);
   };
 
   const getNextParticipantIndex = (startIndex: number): number => {
@@ -144,8 +96,6 @@ export function Host({
       participants &&
       currentParticipants.length === participants.length
     ) {
-      console.log('retain order');
-
       // Retain the original order from currentParticipants while updating data from participants
       const newParticipants = currentParticipants.map((currentParticipant) => {
         // Find the matching participant in the new data (from the database)
@@ -165,68 +115,141 @@ export function Host({
     }
   };
 
+  async function handleChangeTurnFalse(participant: Participant) {
+    if (participant) {
+      console.log('handleChangeTurnFalse Access database ');
+      try {
+        const result = await ParticipantService.changeIsTurn(
+          quizCode,
+          participant.participantId,
+          false
+        );
+        if (result) {
+          console.log(
+            `Successfully set isTurn to false for participant: ${participant.name}`
+          );
+        } else {
+          console.error(
+            `Failed to set isTurn to false for participant: ${participant.name}`
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Error setting isTurn to false for participant ${participant.name}:`,
+          error
+        );
+      }
+    }
+  }
+
+  async function handleChangeTurnTrue(participant: Participant) {
+    if (participant) {
+      console.log('here we also access database, handlechange');
+      try {
+        const result = await ParticipantService.changeIsTurn(
+          quizCode,
+          participant.participantId,
+          true
+        );
+        if (result) {
+          console.log(
+            `Successfully set isTurn to true for participant: ${participant.name}`
+          );
+        } else {
+          console.error(
+            `Failed to set isTurn to true for participant: ${participant.name}`
+          );
+        }
+      } catch (error) {
+        console.error(
+          `Error setting isTurn to true for participant ${participant.name}:`,
+          error
+        );
+      }
+    }
+  }
+
   useEffect(() => {
+    console.log('use efffect retainparticipantOrder');
     // Update the order only if participants are different
     retainParticipantOrder();
   }, [participants]); // Trigger this effect only when participants change
 
   useEffect(() => {
-    if (time <= 0 || isTransitioning || currentParticipants.length === 0)
-      return;
+    const updateParticipants = async () => {
+      if (time <= 0 || isTransitioning || currentParticipants.length === 0)
+        return;
 
-    const currentParticipant = currentParticipants[0];
-    const lastTempAnswer = currentParticipant?.tempAnswer?.tempAnswer;
+      const currentParticipant = currentParticipants[0];
+      const lastTempAnswer = currentParticipant?.tempAnswer?.tempAnswer;
 
-    console.log('lasttempasnwer was: ', lastTempAnswer);
-    // Handle correct answers
-    if (
-      lastTempAnswer &&
-      answers.includes(lastTempAnswer) &&
-      !usedAnswers.includes(lastTempAnswer)
-    ) {
-      setIsCorrect('true');
-      setUsedAnswers((prev) => [...prev, lastTempAnswer]);
-      setUserAnswer(lastTempAnswer);
-      setIsTransitioning(true);
+      if (
+        lastTempAnswer &&
+        answers.includes(lastTempAnswer) &&
+        !usedAnswers.includes(lastTempAnswer) &&
+        currentParticipant.isTurn
+      ) {
+        setIsCorrect('true');
+        setUsedAnswers((prev) => [...prev, lastTempAnswer]);
+        setUserAnswer(lastTempAnswer);
+        setIsTransitioning(true);
 
-      setTimeout(() => {
-        setIsCorrect('');
-        setUserAnswer('');
-        setCurrentParticipants((prevParticipants) => {
-          const nextIndex = getNextParticipantIndex(1); // Get the next participant
-          return [
-            ...prevParticipants.slice(nextIndex),
-            ...prevParticipants.slice(0, nextIndex),
-          ];
-        });
+        // Update is turn logic
+        setTimeout(async () => {
+          handleChangeTurnFalse(currentParticipant);
+          setIsCorrect('');
+          setUserAnswer('');
 
-        ParticipantService.removeTempAnswer(
-          quizCode,
-          currentParticipant.participantId
-        );
+          // Get the first participant from the updated order
+          const nextParticipant = [
+            ...currentParticipants.slice(getNextParticipantIndex(1)),
+            ...currentParticipants.slice(0, getNextParticipantIndex(1)),
+          ][0];
 
-        setTime(1000); // Reset the timer
-        setIsTransitioning(false); // Unlock transitions
-      }, 1200);
-    } else if (lastTempAnswer && !answers.includes(lastTempAnswer)) {
-      setIsCorrect('false');
-      setUserAnswer(lastTempAnswer);
-    } else if (
-      lastTempAnswer &&
-      answers.includes(lastTempAnswer) &&
-      usedAnswers.includes(lastTempAnswer)
-    ) {
-      console.log('inside used', usedAnswers, lastTempAnswer);
-      setIsCorrect('used');
-      setUserAnswer(lastTempAnswer);
-      setIsTransitioning(false); // Reset transition lock
-      setTimeout(() => {});
-    }
+          // Compute the updated participants array
+          setCurrentParticipants((prevParticipants) => {
+            const nextIndex = getNextParticipantIndex(1); // Get the next participant index
+            return [
+              ...prevParticipants.slice(nextIndex),
+              ...prevParticipants.slice(0, nextIndex),
+            ];
+          });
+
+          console.log('Right before database access');
+
+          // Wait for the async operation to finish before continuing
+          await ParticipantService.removeTempAnswer(
+            quizCode,
+            currentParticipant.participantId
+          );
+
+          handleChangeTurnTrue(nextParticipant);
+
+          setTime(slide.initialTime); // Reset the timer
+          setIsTransitioning(false); // Unlock transitions
+        }, 1200);
+      } else if (lastTempAnswer && !answers.includes(lastTempAnswer)) {
+        setIsCorrect('false');
+        setUserAnswer(lastTempAnswer);
+      } else if (
+        lastTempAnswer &&
+        answers.includes(lastTempAnswer) &&
+        usedAnswers.includes(lastTempAnswer)
+      ) {
+        setIsCorrect('used');
+        setUserAnswer(lastTempAnswer);
+        setIsTransitioning(false); // Reset transition lock
+        setTimeout(() => {});
+      }
+    };
+
+    updateParticipants(); // Call the async function
   }, [currentParticipants]);
 
   useEffect(() => {
     if (time == 0) {
-      playerLoseHeart();
+      playerLoseHeart(currentParticipants[0]);
+      handleChangeTurnFalse(currentParticipants[0]);
     }
 
     const timer = setInterval(() => {
@@ -236,9 +259,12 @@ export function Host({
     return () => clearInterval(timer);
   }, [time]);
 
-  function playerLoseHeart() {
+  function playerLoseHeart(participant: Participant) {
+    console.log('playerLoseHeart');
+    setUserAnswer('');
+
     if (!isTransitioning) {
-      const currentPlayerId = currentParticipants[0].participantId;
+      const currentPlayerId = participant.participantId;
 
       setParticipantHearts((prevHearts) => {
         const updatedHearts = prevHearts.map((ph) =>
@@ -252,117 +278,105 @@ export function Host({
         );
         if (currentParticipant && currentParticipant.hearts === 0) {
           setDeadParticipants((prevDead) => [...prevDead, currentPlayerId]);
+          setAliveParticipants((prevAlive) =>
+            prevAlive.filter(
+              (participant) => participant.participantId !== currentPlayerId
+            )
+          );
         }
 
         return updatedHearts;
       });
 
-      const aliveParticipants = currentParticipants.filter((p) => {
-        const hearts =
-          participantHearts.find((ph) => ph.participantId === p.participantId)
-            ?.hearts ?? 0;
-        return hearts > 0;
-      });
+      console.log("aliveparticipant length", aliveParticipants.length)
+      console.log("aliveparticipants",aliveParticipants)
 
       if (
-        currentParticipants.length - deadParticipants.length === 1 &&
+        aliveParticipants.length == 1 &&
         !winner &&
         !hasUpdatedDatabaseDontDelete
       ) {
         //GAME IS DONE!
-        sendAnswersToDatabase(aliveParticipants);
+        setWinner(aliveParticipants[0])
+        sendAnswersToDatabase(aliveParticipants, deadParticipants);
+        currentParticipants.forEach((participant) => {
+          handleChangeTurnFalse(participant);
+        });
       }
+      handleChangeTurnFalse(currentParticipants[0]);
+      const nextIndex = getNextParticipantIndex(1);
+      // Use the current state of participants to calculate the next participant
+      const nextParticipant = [
+        ...currentParticipants.slice(nextIndex),
+        ...currentParticipants.slice(0, nextIndex),
+      ][0];
+
+      handleChangeTurnTrue(nextParticipant);
 
       setCurrentParticipants((prevParticipants) => {
         console.log('setcurrentparticipant');
-        const currentIndex = 0;
-        const nextIndex = getNextParticipantIndex(currentIndex + 1);
+
+        const nextIndex = getNextParticipantIndex(1);
         return [
           ...prevParticipants.slice(nextIndex),
           ...prevParticipants.slice(0, nextIndex),
         ];
       });
 
-      setTime(1000);
+      setTime(slide.initialTime);
     }
   }
 
-  async function sendAnswersToDatabase(aliveParticipants: Participant[]) {
-    setWinner(aliveParticipants[0]);
+  async function sendAnswersToDatabase(
+    finalparticipants: Participant[],
+    deadParticipantsId: string[]
+  ) {
+    console.log('send answer to database');
+    setWinner(finalparticipants[0]);
     const currentPlayerId = currentParticipants[0].participantId;
 
-    setDeadParticipants((prevDead) => {
-      const newDeadParticipants = [...prevDead, currentPlayerId];
+    // Merge the current player ID with the list of dead participant IDs
+    const newDeadParticipants = [...deadParticipantsId, currentPlayerId];
 
-      const addAnswerPromises = newDeadParticipants.map(
-        async (participantId, index) => {
-          try {
-            const result = await ParticipantService.addAnswer(
-              quizCode,
-              participantId,
-              [index.toString()],
-              slideNumber
+    const addAnswerPromises = newDeadParticipants.map(
+      async (participantId, index) => {
+        try {
+          const result = await ParticipantService.addAnswer(
+            quizCode,
+            participantId,
+            [index.toString()],
+            slideNumber
+          );
+          if (result) {
+            console.log(
+              `Answer successfully submitted for participant: ${participantId}`
             );
-            if (result) {
-              console.log(
-                `Answer successfully submitted for participant: ${participantId}`
-              );
-            } else {
-              console.error(
-                `Failed to submit answer for participant: ${participantId}`
-              );
-            }
-          } catch (error) {
+          } else {
             console.error(
-              `Error submitting answer for participant ${participantId}:`,
-              error
+              `Failed to submit answer for participant: ${participantId}`
             );
           }
-        }
-      );
-
-      Promise.all(addAnswerPromises)
-        .then(() => {
-          console.log("All dead participants' answers processed.");
-        })
-        .catch((error) => {
+        } catch (error) {
           console.error(
-            'Error processing answers for dead participants:',
+            `Error submitting answer for participant ${participantId}:`,
             error
           );
-        });
+        }
+      }
+    );
 
-      return newDeadParticipants;
-    });
+    // Wait for all promises to resolve
+    Promise.all(addAnswerPromises)
+      .then(() => {
+        console.log("All dead participants' answers processed.");
+      })
+      .catch((error) => {
+        console.error('Error processing answers for dead participants:', error);
+      });
 
     setHasUpdatedDatabaseDontDelete(true);
+    onNextSlide();
   }
-
-  // TEMPCODE FOR ROTATING PLAYERS!
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'x') {
-        setCurrentParticipants((prevParticipants) => {
-          const currentIndex = 0; // Big avatar is always the first participant
-          const nextIndex = getNextParticipantIndex(
-            (currentIndex + 1) % prevParticipants.length
-          );
-          return [
-            ...prevParticipants.slice(nextIndex),
-            ...prevParticipants.slice(0, nextIndex),
-          ];
-        });
-        setTime(1000);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [slide.initialTime, participantHearts]);
 
   if (winner) {
     // Render the Winner Screen
@@ -386,14 +400,7 @@ export function Host({
           }}
           {...genConfig(winner.avatar)}
         />
-        <Button
-          onClick={() => {
-            onNextSlide();
-          }}
-          className="absolute bottom-5 right-5"
-        >
-          Next Slide
-        </Button>
+        <NextSlide onClick={onNextSlide} />
       </motion.div>
     );
   }

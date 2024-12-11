@@ -9,5 +9,16 @@
   "english": "English",
   "swedish": "Swedish",
   "share": "Share",
-  "delete": "Delete"
+  "delete": "Delete",
+  "randomize": "Randomize",
+  "update": "Update",
+  "username": "Username",
+  "nextSlide": "Next slide",
+  "answer": "Answer",
+  "participants": "Participants",
+  "cancel": "Cancel",
+  "preview": "Preview",
+  "host": "Host",
+  "participant": "Participant",
+  "hostAnswer": "Answer view"
 }

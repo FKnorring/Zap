@@ -11,12 +11,18 @@ import {
   removeOption,
   updateOption,
 } from "../../question/helpers/options";
+import { max_options } from "@/config/max";
+import { CustomTooltip } from "@/components/ui/custom-tooltip";
+
+const MAX_OPTIONS = max_options.mcqma;
 
 export function MCQOptionsInput({
   slide,
   onSlideUpdate,
 }: ToolbarProps<MCQMASlide>) {
   if (!("options" in slide)) return null;
+
+  const canAdd = slide.options.length < MAX_OPTIONS;
 
   return (
     <div className="space-y-2">
@@ -62,10 +68,11 @@ export function MCQOptionsInput({
             </Button>
           </div>
         ))}
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() =>
+        {canAdd ? (
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() =>
             addOption(
               slide as MCQMASlide,
               onSlideUpdate as (slide: OptionSlide) => void
@@ -73,8 +80,16 @@ export function MCQOptionsInput({
           }
         >
           <PlusIcon className="mr-2 h-4 w-4" />
-          Add Option
-        </Button>
+            Add Option
+          </Button>
+        ) : (
+          <CustomTooltip content="Max options reached">
+            <Button variant="outline" className="w-full" disabled>
+              <PlusIcon className="mr-2 h-4 w-4" />
+              Add Option
+            </Button>
+          </CustomTooltip>
+        )}
       </div>
     </div>
   );

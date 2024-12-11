@@ -6,5 +6,10 @@
   "sharedQuizzes": "Shared Quizzes",
   "searchShared": "Search Shared Quizzes",
   "quizName": "Quiz name",
-  "create": "Create"
+  "create": "Create",
+  "copy": "Copy Quiz",
+  "noSlides": "No slides yet",
+  "deleteQuiz": "Delete Quiz",
+  "deleteQuizDescription": "Are you sure you want to delete the quiz: ",
+  "copyDescription": "Once you copy the quiz, you will be able to edit it and make it your own."
 }

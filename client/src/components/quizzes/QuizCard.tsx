@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import Quiz from "@/models/Quiz";
-import { SlidePreview } from "../quiz-editor/SlidePreview";
+} from '@/components/ui/card';
+import Quiz from '@/models/Quiz';
+import { SlidePreview } from '../quiz-editor/SlidePreview';
 import {
   Dialog,
   DialogClose,
@@ -17,24 +17,25 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { ReactNode } from "react";
-import { Share, Trash, Zap, MoreHorizontal, Copy } from "lucide-react";
+} from '@/components/ui/dialog';
+import { ReactNode } from 'react';
+import { Share, Trash, Zap, MoreHorizontal, Copy } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAppContext } from "@/contexts/App/context";
-import ReactNiceAvatar, { genConfig } from "react-nice-avatar";
-import { useTranslation } from "react-i18next";
+} from '@/components/ui/dropdown-menu';
+import { useAppContext } from '@/contexts/App/context';
+import ReactNiceAvatar, { genConfig } from 'react-nice-avatar';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 interface QuizCardProps {
   quiz: Quiz;
   onClick?: () => void;
   children?: ReactNode;
-  variant?: "my-quizzes" | "shared-quizzes";
+  variant?: 'my-quizzes' | 'shared-quizzes';
 }
 
 export function QuizCard({ quiz, onClick, children, variant }: QuizCardProps) {
@@ -44,7 +45,7 @@ export function QuizCard({ quiz, onClick, children, variant }: QuizCardProps) {
   const quizHost = users.find((user) => user.id === quiz.user_id);
 
   return (
-    <Card className={`${onClick ? "cursor-pointer" : ""}`} onClick={onClick}>
+    <Card className={`${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
       <CardHeader>
         <div className="flex items-center gap-2">
           <CardTitle className="text-lg mr-auto">{quiz.quiz_name}</CardTitle>
@@ -59,13 +60,13 @@ export function QuizCard({ quiz, onClick, children, variant }: QuizCardProps) {
         {quiz.slides && quiz.slides.length > 0 ? (
           <div className="aspect-video w-full rounded overflow text-white relative">
             <SlidePreview slide={quiz.slides[0]} {...quiz.settings} />
-            {variant === "shared-quizzes" && quizHost && (
+            {variant === 'shared-quizzes' && quizHost && (
               <div className="absolute bottom-[-10px] left-[-10px] z-50 bg-primary p-1 px-2 rounded text-white flex flex-row items-center gap-2">
                 <span className="text-sm font-bold">By:</span>
                 <ReactNiceAvatar
                   style={{
-                    width: "28px",
-                    height: "28px",
+                    width: '28px',
+                    height: '28px',
                   }}
                   {...genConfig(quizHost.avatar)}
                 />
@@ -78,7 +79,7 @@ export function QuizCard({ quiz, onClick, children, variant }: QuizCardProps) {
         ) : (
           <div className="aspect-video w-full">
             <div className="h-full w-full bg-gray-200 animate-pulse rounded flex items-center justify-center">
-              <span>No slides yet</span>
+              <span>{t('homepage:noSlides')}</span>
             </div>
           </div>
         )}
@@ -102,17 +103,27 @@ export function MyQuizButtons({
   onDelete,
 }: MyQuizButtonsProps) {
   const { t } = useTranslation();
+  const { ongoingQuizzes: { resources, isLoading } } = useAppContext();
+  const noSlides = !quiz.slides || quiz.slides.length === 0;
+
+  const existingOngoingQuiz = resources.length !== 0;
+
+  const isDisabled = noSlides || isLoading || existingOngoingQuiz;
+
   return (
     <>
       <Button
         size="sm"
+        disabled={isDisabled}
+        variant={isDisabled ? 'outline' : 'default'}
         onClick={(e) => {
           e.stopPropagation();
+          if (noSlides) return;
           onHost(quiz);
         }}
         className="gap-1 mr-auto flex items-center"
       >
-        <span className="leading-none">Start Quiz</span>
+        <span className="leading-none">{t('homepage:startQuiz')}</span>
         <Zap className="w-4 h-4" />
       </Button>
 
@@ -130,7 +141,7 @@ export function MyQuizButtons({
             }}
           >
             <Share className="w-4 h-4 cursor-pointer" />
-            <span className="cursor-pointer">{t("general:share")}</span>
+            <span className="cursor-pointer">{t('general:share')}</span>
           </DropdownMenuItem>
 
           <DropdownMenuItem
@@ -146,20 +157,19 @@ export function MyQuizButtons({
             <Dialog>
               <DialogTrigger className="flex w-full items-center gap-2">
                 <Trash className="w-4 h-4" />
-                {t("general:delete")}
+                {t('general:delete')}
               </DialogTrigger>
               <DialogContent onClick={(e) => e.stopPropagation()}>
                 <DialogHeader>
-                  <DialogTitle>Delete Quiz</DialogTitle>
+                  <DialogTitle>{t('homepage:deleteQuiz')}</DialogTitle>
                   <DialogDescription>
-                    Are you sure you want to delete "{quiz.quiz_name}"? This
-                    action cannot be undone.
+                    {t('homepage:deleteQuizDescription')} "{quiz.quiz_name}"?
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                   <div className="flex justify-end gap-2 mt-4">
                     <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
+                      <Button variant="outline">{t('general:cancel')}</Button>
                     </DialogClose>
                     <DialogClose asChild>
                       <Button
@@ -169,7 +179,7 @@ export function MyQuizButtons({
                           onDelete(quiz.id);
                         }}
                       >
-                        Delete
+                        {t('general:delete')}
                       </Button>
                     </DialogClose>
                   </div>
@@ -202,22 +212,21 @@ export function SharedQuizButtons({
             e.stopPropagation();
           }}
         >
-          Copy to My Quizzes
+          {t('homepage:copy')}
           <Copy className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent onClick={(e) => e.stopPropagation()}>
         <DialogHeader>
-          <DialogTitle>Copy Quiz</DialogTitle>
-          <DialogDescription>
-            Would you like to copy "{quiz.quiz_name}" to your quizzes? You'll be
-            able to modify it as you wish.
-          </DialogDescription>
+          <DialogTitle>
+            {t('homepage:copy')} "{quiz.quiz_name}"
+          </DialogTitle>
+          <DialogDescription>{t('homepage:copyDescription')}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <div className="flex justify-end gap-2 mt-4">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t('general:cancel')}</Button>
             </DialogClose>
             <DialogClose asChild>
               <Button
@@ -227,7 +236,7 @@ export function SharedQuizButtons({
                   onCopyToMyQuizzes(quiz);
                 }}
               >
-                Copy Quiz
+                {t('homepage:copy')}
               </Button>
             </DialogClose>
           </div>

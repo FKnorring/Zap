@@ -1,4 +1,4 @@
-import { LobbySlide } from "@/models/Quiz";
+import { LobbySlide } from '@/models/Quiz';
 
 export function Participant({ slide }: { slide: LobbySlide }) {
   return (

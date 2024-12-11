@@ -1,0 +1,15 @@
+{
+  "selectSlide": "Select a slide to edit",
+  "quizName": "Quiz Name",
+  "colorScheme": "Color Scheme",
+  "backgroundColor": "Background Color",
+  "primary": "Primary",
+  "secondary": "Secondary",
+  "showCorrect": "Show correct answer (default)",
+  "showCorrect.auto": "Auto",
+  "showCorrect.manual": "Manual",
+  "showCorrect.never": "Never",
+  "backgroundStyle": "Background style",
+  "resetSettings": "Reset Settings",
+  "resetSettings.description": "This will reset all settings back to it's default values"
+}

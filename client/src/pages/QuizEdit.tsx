@@ -11,6 +11,7 @@ import { Toolbar } from "@/components/quiz-editor/Toolbar";
 import { QuizBackground } from "@/components/quiz-editor/QuizBackground";
 import { QuizSettingsToolbar } from "@/components/quiz-editor/QuizSettingsToolbar";
 import { quizDefaults } from "@/components/quiz-editor/utils/quiz-defaults";
+import Spinner from "@/components/Spinner";
 
 function QuizEdit() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function QuizEdit() {
   } = useQuizEditor(id);
 
   if (error) return <div>Error: {error}</div>;
-  if (!quiz) return <div>Loading...</div>;
+  if (!quiz) return <Spinner />;
 
   const quizSettings = {
     ...quizDefaults,

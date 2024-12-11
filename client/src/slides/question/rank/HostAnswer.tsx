@@ -1,53 +1,39 @@
-import { Button } from "@/components/ui/button";
-import { BaseQuestionRender } from "../base/QuestionRender";
-import { Participant, RankSlide } from "@/models/Quiz";
-import { rankColors } from "../base/QuizColors";
+import { RankSlide } from '@/models/Quiz';
+import SlideRank from '@/slides/_components/SlideRank';
+import NextSlide from '@/slides/_components/NextSlide';
+import { getSlideComponents } from '@/slides/utils';
+import SlideTitleSpecial from '@/slides/_components/SlideTitleSpecial';
 
 export function HostAnswer({
   slide,
-  participants,
   onNextSlide,
 }: {
   slide: RankSlide;
-  participants: Participant[];
   onNextSlide: () => void;
 }) {
+  const SlideComponent = getSlideComponents(slide);
   return (
-    <div>
-      <BaseQuestionRender participants={participants} slide={slide}>
-        <div className="grid grid-cols-2 gap-4 w-full pb-5">
-          {slide.ranking.map((text, index) => (
-            <div
-              key={index}
-              className="flex items-center space-x-4 p-4 rounded-lg shadow-md"
-              style={{ minWidth: "400px" }} // Proper object syntax for style
-            >
-              {/* Rank Number with Color */}
-              <h2
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded-md p-4 mb-10 mt-20 text-wrap text-center flex-row flex items-center">
+        <SlideTitleSpecial title={slide.title} icon={SlideComponent.Info.icon} />
+        {slide.imageUrl && (
+          <div className="flex justify-center">
+            <div className="relative flex items-center justify-center">
+              <img
+                src={slide.imageUrl}
+                alt={slide.title}
+                className="w-auto object-contain"
                 style={{
-                  backgroundColor: rankColors(),
+                  height: `${(slide.imageScale || 1) * 400}px`,
+                  transition: 'height 0.2s ease-out',
                 }}
-                className="font-display text-2xl font-bold text-center p-4 rounded-lg text-[#F4F3F2] w-20"
-              >
-                {index + 1}
-              </h2>
-
-              {/* Option Text */}
-              <div className="flex items-center w-full p-4 rounded-lg shadow-md bg-[#F4F3F2] text-xl font-display   text-[#333333]">
-                {text}
-              </div>
+              />
             </div>
-          ))}
-        </div>
-      </BaseQuestionRender>
-      <Button
-        onClick={() => {
-          onNextSlide();
-        }}
-        className="absolute bottom-5 right-5"
-      >
-        Next Slide
-      </Button>
+          </div>
+        )}
+      </div>
+      <SlideRank ranking={slide.ranking} />
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }

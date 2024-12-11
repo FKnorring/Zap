@@ -12,8 +12,8 @@ export function BaseQuestionRender({
   participants: Participant[];
 }) {
   return (
-    <div className="space-y-12 w-full">
-      <div className="flex flex-row justify-center">
+    <div className="flex-1 flex flex-col space-y-12 w-full justify-center">
+      <div className="flex flex-row justify-center items-center">
         <div className="space-y-8">
           <SlideTitle title={slide.title} />
           {slide.imageUrl && (

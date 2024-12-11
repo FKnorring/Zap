@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { quizService } from '@/services/quizzes';
 import { type Slide, type SlideType, type QuestionType, QuizSettings } from '@/models/Quiz';
 import { toast } from 'sonner';
-import { quizDefaults } from '@/components/quiz-editor/utils/quiz-defaults';
+import { quizDefaults, quizDefaultsBackgroundStyles } from '@/components/quiz-editor/utils/quiz-defaults';
 import { getSlideComponentsFromType } from '@/slides/utils';
 import { useAppContext } from '@/contexts/App/context';
 import {nanoid} from 'nanoid'
@@ -45,11 +45,20 @@ export function useQuizEditor(quizId: string | undefined) {
 
     const handleAddSlide = (type: SlideType, questionType?: QuestionType) => {
         if (!quizId || !quiz) return;
+
+
+        let backgroundStyle = quiz.settings?.backgroundStyleDefault ?? quizDefaults.backgroundStyleDefault;
+
+        if (backgroundStyle === 'random') {
+            const randomBackgroundStyle = quizDefaultsBackgroundStyles[Math.floor(Math.random() * quizDefaultsBackgroundStyles.length)];
+            backgroundStyle = randomBackgroundStyle;
+        }
+
         const baseSlide = {
             id: nanoid(),
             title: `New ${type} slide`,
             content: '',
-            backgroundStyle: quiz.settings?.backgroundStyleDefault ?? quizDefaults.backgroundStyleDefault,
+            backgroundStyle,
             type,
         };
 
@@ -104,7 +113,7 @@ export function useQuizEditor(quizId: string | undefined) {
         };
 
         const newSlides = [...quiz?.slides || []];
-        newSlides.splice(currentIndex + 1, 0, newSlide);
+        newSlides.splice(currentIndex + 1, 0, newSlide as never);
         optimisticUpdate(quizId, { slides: newSlides });
         setActiveSlideId(newSlide.id);
     };

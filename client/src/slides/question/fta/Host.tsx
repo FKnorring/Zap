@@ -1,6 +1,6 @@
 import { FTASlide, Participant } from "@/models/Quiz";
-import { Button } from "@/components/ui/button";
 import { ParticipantAnswers } from "@/slides/_components/ParticipantAnswers";
+import NextSlide from "@/slides/_components/NextSlide";
 
 export function Host({
   slide,
@@ -19,14 +19,7 @@ export function Host({
       </div>
       <ParticipantAnswers participants={participants} />
 
-      <Button
-        onClick={() => {
-          onNextSlide();
-        }}
-        className="absolute bottom-5 right-5"
-      >
-        Next Slide
-      </Button>
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export function Participant({
   const { t } = useTranslation(['questions']);
 
   return (
-    <div className="flex flex-col items-center justify-center mt-60 p-8 gap-28 ">
+    <div className="flex flex-1 flex-col items-center justify-center">
       <Button
         className="w-80 h-80 rounded-full text-4xl bg-red-600 text-white"
         onClick={() => {

@@ -84,7 +84,7 @@ export function SlideSidebar({
           {slides.map((slide, index) => {
             const slideComponent = getSlideComponents(slide);
             return (
-              <div>
+              <div key={slide.id}>
                 <h1 className="font-bold text-black text-sm">
                   {index + 1}. {slideComponent.Info.label}
                 </h1>

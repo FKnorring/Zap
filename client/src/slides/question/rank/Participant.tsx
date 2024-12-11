@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   useDraggable,
   useDroppable,
@@ -8,11 +8,11 @@ import {
   useSensors,
   useSensor,
   DragEndEvent,
-} from "@dnd-kit/core";
-import { Button } from "@/components/ui/button";
-import { RankSlide } from "@/models/Quiz";
-import {rankColors } from "../base/QuizColors";
-
+} from '@dnd-kit/core';
+import { Button } from '@/components/ui/button';
+import { RankSlide } from '@/models/Quiz';
+import { rankColors } from '../base/QuizColors';
+import { getSlideComponents } from '@/slides/utils';
 
 interface RankViewProps {
   slide: RankSlide;
@@ -61,7 +61,7 @@ function DroppableContainer({
     <div
       ref={setNodeRef}
       className={`p-0 rounded-lg w-full ${
-        isOver ? "bg-blue-200" : "bg-gray-100"
+        isOver ? 'bg-blue-200' : 'bg-gray-100'
       } shadow-md`}
     >
       {children}
@@ -88,13 +88,13 @@ export function Participant({ slide, answerQuestion }: RankViewProps) {
     const { active, over } = event;
 
     if (!over) {
-      console.log("Item dropped outside of droppable areas.");
+      console.log('Item dropped outside of droppable areas.');
       return;
     }
 
     // Convert UniqueIdentifier to string and parse index
-    const activeIndex = parseInt(String(active.id).split("-")[1], 10);
-    const overIndex = parseInt(String(over.id).split("-")[1], 10);
+    const activeIndex = parseInt(String(active.id).split('-')[1], 10);
+    const overIndex = parseInt(String(over.id).split('-')[1], 10);
 
     if (activeIndex !== overIndex) {
       const updatedRanking = [...currentRanking];
@@ -109,13 +109,15 @@ export function Participant({ slide, answerQuestion }: RankViewProps) {
   };
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-
+  const SlideComponent = getSlideComponents(slide);
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div className="flex flex-col items-center justify-center  w-full p-4">
         <div className="flex flex-col items-center w-full max-w-md space-y-4">
-          <h2 className="text-4xl font-display text-center">{slide.title}</h2>
-          <h3 className="text-2xl font-display text-center">{slide.content}</h3>
+          <div className="bg-white items-center rounded text-wrap p-3 max-w-4/5 flex flex-row space-x-1">
+            <SlideComponent.Info.icon className="w-8 h-8 text-black" />
+            <h1 className="text-3xl text-black font-display">{slide.title}</h1>
+          </div>
           <div className="flex flex-col w-full space-y-3 pb-5">
             {currentRanking.map((text, index) => (
               <div

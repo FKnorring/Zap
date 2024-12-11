@@ -2,7 +2,7 @@ import { MCQSASlide, Participant } from "@/models/Quiz";
 import { CheckCircle2, CircleX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getColor } from "../base/QuizColors";
-import { Button } from "@/components/ui/button";
+import NextSlide from "@/slides/_components/NextSlide";
 
 export function HostAnswer({
   slide,
@@ -85,7 +85,7 @@ export function HostAnswer({
           <div
             key={option.id}
             className={cn(
-              "flex items-center justify-between text-2xl text-white font-display h-24 p-6 gap-4 rounded-lg box-border w-full",
+              "flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full",
               {
                 "bg-white/10 backdrop-blur outline outline-white/50":
                   !option.isCorrect,
@@ -116,14 +116,7 @@ export function HostAnswer({
       </div>
       <AnswerCount />
       <CorrectAnswers />
-      <Button
-        onClick={() => {
-          onNextSlide();
-        }}
-        className="absolute bottom-5 right-5 "
-      >
-        Next Slide
-      </Button>
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }

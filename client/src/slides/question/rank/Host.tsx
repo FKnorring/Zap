@@ -1,73 +1,41 @@
-import { Participant, RankSlide } from "@/models/Quiz";
-import { BaseQuestionRender } from "../base/QuestionRender";
-
-import { Button } from "@/components/ui/button";
-
-function randomizeList<T>(list: T[]): T[] {
-  if (!Array.isArray(list)) {
-    throw new Error("The provided list is not an array.");
-  }
-
-  const shuffled = [...list];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[i]];
-  }
-  return shuffled;
-}
+import { RankSlide, Participant } from '@/models/Quiz';
+import NextSlide from '@/slides/_components/NextSlide';
+import { ParticipantAnswers } from '@/slides/_components/ParticipantAnswers';
+import SlideTitleSpecial from '@/slides/_components/SlideTitleSpecial';
+import { getSlideComponents } from '@/slides/utils';
 
 export function Host({
   slide,
-  participants,
+  participants = [],
   onNextSlide,
 }: {
   slide: RankSlide;
   participants: Participant[];
   onNextSlide: () => void;
 }) {
-  const randomizedRanking = randomizeList(slide.ranking);
+  const SlideComponent = getSlideComponents(slide);
   return (
-    <div className="mt-5">
-      <BaseQuestionRender participants={participants} slide={slide}>
-        <div
-          className="w-full max-w-1000px flex gap-2 pb-5"
-          style={{
-            justifyContent: "center", // Center-align content horizontally
-            alignItems: "center", // Align items vertically if heights differ
-            flexWrap: "wrap", // Allow wrapping to the next line
-          }}
-        >
-          {randomizedRanking.map((text, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-center p-4 rounded-lg shadow-md"
-              style={{
-                flexBasis: "calc(25% - 10px)", // Set to 25% width, minus gap
-                maxWidth: "100%", // Ensure no more than 4 items per row
-              }}
-            >
-              {/* Option Text */}
-              <div
-                className="flex items-center justify-center p-4 rounded-lg shadow-md bg-[#FFEEA9] text-3xl font-display text-[#333333] min-h-[80px]"
+    <div className="flex flex-col items-center">
+      <div className="bg-white rounded p-4 mb-10 mt-20 text-wrap text-center flex-row flex items-center">
+        <SlideTitleSpecial title={slide.title} icon={SlideComponent.Info.icon} />
+        {slide.imageUrl && (
+          <div className="flex justify-center">
+            <div className="relative flex items-center justify-center">
+              <img
+                src={slide.imageUrl}
+                alt={slide.title}
+                className="w-auto object-contain"
                 style={{
-                  minWidth: "100%", // Ensures the item fills the space available
-                  maxWidth: "100%", // Prevents overflow
+                  height: `${(slide.imageScale || 1) * 400}px`,
+                  transition: 'height 0.2s ease-out',
                 }}
-              >
-                {text}
-              </div>
+              />
             </div>
-          ))}
-        </div>
-        <Button
-          onClick={() => {
-            onNextSlide();
-          }}
-          className="absolute bottom-5 right-5"
-        >
-          Next Slide
-        </Button>
-      </BaseQuestionRender>
+          </div>
+        )}
+      </div>
+      <ParticipantAnswers participants={participants} />
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 import { Confetti } from "@/components/particles/Confetti";
-import { Button } from "@/components/ui/button";
 import { Participant, Slide } from "@/models/Quiz";
 
 import ScoreBoard from "@/slides/_components/Scoreboard";
+import NextSlide from "../_components/NextSlide";
 
 export function Host({
   participants,
@@ -23,14 +23,7 @@ export function Host({
         slides={slides}
         participants={participants}
       />
-      <Button
-        onClick={() => {
-          onNextSlide();
-        }}
-        className="absolute right-5 bottom-5"
-      >
-        Next Slide
-      </Button>
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }

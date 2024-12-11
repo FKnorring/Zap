@@ -1,13 +1,18 @@
 import { MCQMASlide, MCQSASlide } from "@/models/Quiz";
 import { nanoid } from "nanoid";
+import { max_options } from "@/config/max";
 
 export type OptionSlide = MCQMASlide | MCQSASlide;
+
+const MAX_OPTIONS = max_options.mcqma;
 
 export function addOption(
   slide: OptionSlide,
   onSlideUpdate: (slide: OptionSlide) => void
 ) {
   if (!("options" in slide)) return;
+
+  if (slide.options.length >= MAX_OPTIONS) return;
 
   onSlideUpdate({
     ...slide,

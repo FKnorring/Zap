@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { useState, useEffect, useRef } from "react";
-import { LocateItSlide } from "@/models/Quiz";
-import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
-import type { MapMouseEvent } from "@vis.gl/react-google-maps";
-import { NONE, MEDIUM, HIGH } from "./MapStyle";
+import { Button } from '@/components/ui/button';
+import { useState, useEffect, useRef } from 'react';
+import { LocateItSlide } from '@/models/Quiz';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import type { MapMouseEvent } from '@vis.gl/react-google-maps';
+import { NONE, MEDIUM, HIGH } from './MapStyle';
+import { useTranslation } from 'react-i18next';
 
 type location = {
   lat: number;
@@ -28,6 +29,7 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const APIKEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
   const [mapDetails, setMapDetails] = useState<google.maps.MapTypeStyle[]>();
+  const { t } = useTranslation();
 
   const handleDragEnd = (event: google.maps.MapMouseEvent) => {
     if (event.latLng) {
@@ -35,7 +37,6 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
       const newLng = event.latLng.lng();
       const updatedPosition = { lat: newLat, lng: newLng };
       setMarkerPosition(updatedPosition);
-      setMapCenter(updatedPosition);
     }
   };
 
@@ -45,7 +46,6 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
         const newLat = event.detail.latLng!.lat;
         const newLng = event.detail.latLng!.lng;
         setMarkerPosition({ lat: newLat, lng: newLng });
-        setMapCenter({ lat: newLat, lng: newLng });
       }, 10);
     }
   };
@@ -58,11 +58,11 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
   };
 
   useEffect(() => {
-    if (slide.mapDetails === "NONE") {
+    if (slide.mapDetails === 'NONE') {
       setMapDetails(NONE);
-    } else if (slide.mapDetails === "MEDIUM") {
+    } else if (slide.mapDetails === 'MEDIUM') {
       setMapDetails(MEDIUM);
-    } else if (slide.mapDetails === "HIGH") {
+    } else if (slide.mapDetails === 'HIGH') {
       setMapDetails(HIGH);
     }
   }, [slide.mapDetails]);
@@ -79,7 +79,7 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
           disableDefaultUI={true}
           mapTypeControl={false}
           streetViewControl={false}
-          zoomControl={true}
+          zoomControl={false}
           gestureHandling="greedy"
           onClick={handleMapClick}
           onDragstart={handleDragStart}
@@ -90,7 +90,7 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
             onDragEnd={handleDragEnd}
           />
 
-          <div className="absolute flex bottom-20 w-full justify-center">
+          <div className="absolute flex bottom-8 w-full justify-center">
             <Button
               onClick={() =>
                 answerQuestion([
@@ -98,9 +98,9 @@ export function Participant({ slide, answerQuestion }: LocateItProps) {
                   markerPosition.lng.toString(),
                 ])
               }
-              className="w-fit text-xl"
+              className="text-3xl p-8"
             >
-              Svara
+              {t('general:answer')}
             </Button>
           </div>
         </Map>

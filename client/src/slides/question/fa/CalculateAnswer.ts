@@ -8,6 +8,6 @@ export function CalculateScore({
   return participants.map((participant) => {
     const latestAnswer = participant.answers.at(-1)?.answer;
     if (!latestAnswer) return 0;
-    return latestAnswer[0] === "correct" ? slide.points : 0;
+    return latestAnswer[0] == "correct" ? slide.points : 0;
   });
 }

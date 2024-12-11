@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FASlide, Participant, ParticipantAnswer } from '@/models/Quiz';
+import { FASlide, Participant } from '@/models/Quiz';
 import { Button } from '@/components/ui/button';
 import Avatar, { genConfig } from 'react-nice-avatar';
 import { X, Check } from 'lucide-react';
@@ -7,6 +7,7 @@ import { useAppContext } from '@/contexts/App/context';
 import { usePathOnValue } from '@/hooks/usePathOnValue';
 import { BaseQuestionRender } from '../base/QuestionRender';
 import { useTranslation } from 'react-i18next';
+import NextSlide from '@/slides/_components/NextSlide';
 
 export function Host({
   slide,
@@ -108,47 +109,34 @@ export function Host({
 
   const setAnswerCorrect = async (participant: Participant) => {
     const participantsObj = ongoingQuiz.participants;
-    // If participant was already correct
-    if (
-      participant.answers &&
-      participant.answers.at(-1)?.slideNumber == ongoingQuiz.currentSlide
-    ) {
-      return;
-    }
-    if (participantsObj) {
-      const updatedAnswers = participant.answers
-        ? [...participant.answers]
-        : [];
 
-      const correctAnswer: ParticipantAnswer = {
-        answer: ['correct'],
-        slideNumber: ongoingQuiz.currentSlide,
-        time: participant.tempAnswer?.time ? participant.tempAnswer?.time : '',
-      };
-      updatedAnswers.push(correctAnswer);
+    const updatedParticipants = Object.entries(participantsObj).reduce(
+      (acc, [id, p]) => {
+        const answers = p.answers ? [...p.answers] : [];
+        answers.push({
+          answer: id === participant.participantId ? ['correct'] : [''],
+          slideNumber: ongoingQuiz.currentSlide - 1,
+          time: p.tempAnswer?.time || new Date().toISOString(),
+        });
 
-      // Update participants
-      const updatedParticipant: Participant = {
-        ...participant,
-        answers: updatedAnswers,
-        hasAnswered: true,
-      };
-      const updatedQuiz = {
+        acc[id] = {
+          ...p,
+          answers,
+          hasAnswered: true,
+        };
+        return acc;
+      },
+      {} as Record<string, Participant>
+    );
+
+    try {
+      await optimisticUpdate(quizCode, {
         ...ongoingQuiz,
-        participants: {
-          ...participantsObj,
-          [participant.participantId]: updatedParticipant,
-        },
-      };
-      try {
-        await optimisticUpdate(quizCode, updatedQuiz);
-      } catch (error) {
-        console.error("Error updating participant's answer", error);
-      }
-    } else {
-      console.error('No participants found');
+        participants: updatedParticipants,
+      });
+    } catch (error) {
+      console.error("Error updating participant's answer", error);
     }
-    moveFirstParticipantToLast();
   };
 
   return (
@@ -188,8 +176,8 @@ export function Host({
                   index === 0
                     ? 'text-5xl font-bold'
                     : index === 1
-                    ? 'text-2xl font-medium'
-                    : 'text-xl font-normal'
+                      ? 'text-2xl font-medium'
+                      : 'text-xl font-normal'
                 } font-display`}
               >
                 {participant.name}
@@ -212,9 +200,7 @@ export function Host({
           </div>
         ))}
       </div>
-      <Button onClick={onNextSlide} className="absolute bottom-5 right-5">
-        Next Slide
-      </Button>
+      <NextSlide onClick={onNextSlide} />
     </div>
   );
 }
