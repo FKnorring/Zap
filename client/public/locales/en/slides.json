@@ -3,5 +3,9 @@
   "numTeams": "Number of Teams",
   "endQuiz": "End Quiz",
   "quizCode": "Quiz code: ",
-  "startQuiz": "Start Quiz"
+  "startQuiz": "Start Quiz",
+  "thankYouForPlaying": "Thank you for playing",
+  "youJustPlayed": "You just played",
+  "results": "Results",
+  "statistics": "Statistics"
 }

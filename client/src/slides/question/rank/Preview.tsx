@@ -1,11 +1,16 @@
-import { Participant, RankSlide } from "@/models/Quiz";
-import { BaseQuestionRender } from "@/slides/question/base/QuestionRender";
-import SlideRank from "@/slides/_components/SlideRank";
+import { Participant, RankSlide } from '@/models/Quiz';
+import { BaseQuestionRender } from '@/slides/question/base/QuestionRender';
+import SlideRank from '@/slides/_components/SlideRank';
 
-export function Preview({ slide, participants }: { slide: RankSlide, participants: Participant[] }) {
+export function Preview({
+  slide,
+}: {
+  slide: RankSlide;
+  participants: Participant[];
+}) {
   return (
-    <BaseQuestionRender slide={slide} participants={participants}>
-      <SlideRank ranking={slide.ranking} />
+    <BaseQuestionRender slide={slide}>
+      <SlideRank ranking={slide.ranking} answers={[]} />
     </BaseQuestionRender>
   );
 }

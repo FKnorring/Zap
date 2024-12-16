@@ -1,17 +1,17 @@
-import { useParams } from "react-router-dom";
-import { useQuizEditor } from "@/hooks/useQuizEditor";
-import { SlideSidebar } from "@/components/quiz-editor/SlideSidebar";
+import { useParams } from 'react-router-dom';
+import { useQuizEditor } from '@/hooks/useQuizEditor';
+import { SlideSidebar } from '@/components/quiz-editor/SlideSidebar';
 import {
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,
-} from "@/components/ui/resizable";
-import { Editor } from "@/components/quiz-editor/Editor";
-import { Toolbar } from "@/components/quiz-editor/Toolbar";
-import { QuizBackground } from "@/components/quiz-editor/QuizBackground";
-import { QuizSettingsToolbar } from "@/components/quiz-editor/QuizSettingsToolbar";
-import { quizDefaults } from "@/components/quiz-editor/utils/quiz-defaults";
-import Spinner from "@/components/Spinner";
+} from '@/components/ui/resizable';
+import { Editor } from '@/components/quiz-editor/Editor';
+import { Toolbar } from '@/components/quiz-editor/Toolbar';
+import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
+import { QuizSettingsToolbar } from '@/components/quiz-editor/QuizSettingsToolbar';
+import { quizDefaults } from '@/components/quiz-editor/utils/quiz-defaults';
+import Spinner from '@/components/Spinner';
 
 function QuizEdit() {
   const { id } = useParams();
@@ -31,6 +31,8 @@ function QuizEdit() {
     handleQuizUpdate,
     setActiveSlideId,
     setShowSettings,
+    hasUnsavedChanges,
+    isSaving,
   } = useQuizEditor(id);
 
   if (error) return <div>Error: {error}</div>;
@@ -49,7 +51,7 @@ function QuizEdit() {
         backgroundColor={quiz.background_color}
         className="absolute inset-0 -z-10"
       />
-      <ResizablePanelGroup direction="horizontal" style={{ height: "inherit" }}>
+      <ResizablePanelGroup direction="horizontal" style={{ height: 'inherit' }}>
         <ResizablePanel defaultSize={20} minSize={12} maxSize={20}>
           <SlideSidebar
             quizName={quiz.quiz_name}
@@ -65,6 +67,8 @@ function QuizEdit() {
             onSlideMove={handleSlideMove}
             onSettingsClick={() => setShowSettings(true)}
             onSaveClick={handleSave}
+            hasUnsavedChanges={hasUnsavedChanges}
+            isSaving={isSaving}
             backgroundColor={quizSettings.backgroundColor}
             primaryColor={quizSettings.primaryColor}
             secondaryColor={quizSettings.secondaryColor}

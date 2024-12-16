@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { max_options } from '@/config/max';
+import { useTranslation } from 'react-i18next';
 
 export function BombOptionsInput({
   slide,
@@ -18,6 +19,7 @@ export function BombOptionsInput({
       ...updates,
     });
   };
+  const { t } = useTranslation(['questions']);
 
   const addAnswers = (input: string) => {
     const newAnswers = input
@@ -43,7 +45,7 @@ export function BombOptionsInput({
     <div className="space-y-6">
       {/* Hearts and Initial Time */}
       <div className="space-y-2">
-        <Label>Initial Time (seconds)</Label>
+        <Label>{t('initialTime')}</Label>
         <Input
           type="number"
           value={slide.initialTime}
@@ -52,7 +54,7 @@ export function BombOptionsInput({
       </div>
 
       <div className="space-y-2">
-        <Label>Hearts</Label>
+        <Label>{t('hearts')}</Label>
         <Input
           type="number"
           value={slide.hearts}
@@ -63,18 +65,18 @@ export function BombOptionsInput({
 
       {/* Answers Section */}
       <div className="space-y-2">
-        <Label>Available Answers</Label>
+        <Label>{t('availableAnswers')}</Label>
         {/* Conditionally render the answers section if there are answers */}
         {slide.answers &&
         Array.isArray(slide.answers) &&
         slide.answers.length > 0 ? (
           slide.answers.map((answer, index) => (
             <div key={index} className="flex items-center space-x-2">
-              <h2>{index+1}</h2>
+              <h2>{index + 1}</h2>
               <Input
                 value={answer}
                 onChange={(e) => {
-                  const updatedAnswer = e.target.value.trim();
+                  const updatedAnswer = e.target.value.trim().toUpperCase();
                   if (!updatedAnswer) return;
 
                   updateSlide({
@@ -90,12 +92,12 @@ export function BombOptionsInput({
                 size="icon"
                 onClick={() => removeAnswer(answer)}
               >
-                Del
+                {t('del')}
               </Button>
             </div>
           ))
         ) : (
-          <p>No answers available.</p> // Optional message if there are no answers
+          <p>{t('noAnswer')}</p> // Optional message if there are no answers
         )}
 
         <div className="flex space-x-2">
@@ -107,12 +109,12 @@ export function BombOptionsInput({
           <Button
             onClick={() => {
               if (newAnswer.trim() !== '') {
-                addAnswers(newAnswer);
+                addAnswers(newAnswer.toUpperCase());
                 setNewAnswer('');
               }
             }}
           >
-            Add Answer
+            {t('addAnswer')}
           </Button>
         </div>
       </div>

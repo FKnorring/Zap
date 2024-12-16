@@ -4,13 +4,25 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ParticipantService, useGameStatus } from '@/services/participant';
 import TeamInfo from './components/ParticipantInfo';
 import CreateParticipant from './components/CreateParticipant';
-import { LogOut, Zap } from 'lucide-react';
+import { LogIn, Zap } from 'lucide-react';
 import { useCookies } from 'react-cookie';
 import LobbyView from '@/pages/participantQuizView/components/LobbyView';
 import HasAnsweredView from '@/pages/participantQuizView/components/HasAnsweredView';
 import QuizEndedView from '@/pages/participantQuizView/components/QuizEndedView';
-import { Participant, Slide } from '@/models/Quiz';
+import { Participant, QuestionTypes, Slide } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
+import Spinner from '@/components/Spinner';
+import { useTranslation } from 'react-i18next';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
 
 function QuizView({
   questions,
@@ -18,6 +30,7 @@ function QuizView({
   participantData,
   answerQuestion,
   answerTempQuestion,
+  isTurn,
 
   showAnswer,
 }: {
@@ -26,10 +39,11 @@ function QuizView({
   participantData: Participant;
   answerQuestion: (answer: string[]) => Promise<void>;
   answerTempQuestion: (answer: string) => Promise<void>;
+  isTurn: string;
 
   showAnswer: boolean;
 }) {
-  if (!questions || !participantData) return <div>Loading Questions...</div>;
+  if (!questions || !participantData) return <Spinner />;
   if (currentSlide === 0) return <LobbyView />;
   if (currentSlide > questions.length) return <QuizEndedView />;
 
@@ -48,7 +62,9 @@ function QuizView({
 
   if (
     participantData.hasAnswered ||
-    (participantData.tempAnswer && !participantData.isTurn)
+    (participantData.tempAnswer &&
+      'questionType' in currentQuestion &&
+      currentQuestion.questionType !== QuestionTypes.BOMB)
   )
     return <HasAnsweredView />;
 
@@ -57,7 +73,8 @@ function QuizView({
       slide={currentQuestion as never}
       answerQuestion={answerQuestion as never}
       answerTempQuestion={answerTempQuestion as never}
-      isTurn={participantData.isTurn}
+      participantData={participantData}
+      isTurn={isTurn}
     />
   );
 }
@@ -70,17 +87,12 @@ export default function ParticipantLogic() {
   const [cookies, setCookie, removeCookie] = useCookies(['participantId']);
   const [questions, setQuestions] = useState<Slide[]>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
-  const { currentSlide, participantData, showAnswer } = useGameStatus(
+  const { currentSlide, participantData, showAnswer, isTurn } = useGameStatus(
     quizCode as string,
     participantId as string
   );
-
-  useEffect(() => {
-    if (navigator.vibrate) {
-      navigator.vibrate(200);
-    }
-  }, [currentSlide]);
 
   // Fetch quiz and participant data
   useEffect(() => {
@@ -197,10 +209,43 @@ export default function ParticipantLogic() {
       {/* Top: Leave functionality */}
       <div className="flex p-2 w-full bg-[#F4F3F2] text-[#333333]">
         <div className="flex-1 flex items-center justify-start">
-          <Button variant="outline" onClick={handleRemoveParticipant}>
-            <LogOut />
-            Leave
-          </Button>
+          <Dialog>
+            <DialogTrigger className="flex w-full items-center gap-2">
+              <Button className="gap-1" variant="outline">
+                <LogIn transform="rotate(180)" />
+                {t('participants:leave')}
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              onClick={(e) => e.stopPropagation()}
+              className="w-4/5 rounded-lg"
+            >
+              <DialogHeader>
+                <DialogTitle>{t('participants:leaveTitle')}</DialogTitle>
+                <DialogDescription>
+                  {t('participants:leaveDescription')}
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <div className="flex justify-end gap-2 mt-4">
+                  <DialogClose asChild>
+                    <Button variant="outline">{t('general:cancel')}</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button
+                      variant="destructive"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveParticipant();
+                      }}
+                    >
+                      {t('participants:leave')}
+                    </Button>
+                  </DialogClose>
+                </div>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="flex-1 flex items-center justify-center text-xl">
@@ -222,6 +267,7 @@ export default function ParticipantLogic() {
           answerQuestion={answerQuestion}
           showAnswer={showAnswer}
           answerTempQuestion={answerTempQuestion}
+          isTurn={isTurn}
         />
       </div>
 

@@ -151,43 +151,7 @@ export const ParticipantService = {
     }
   },
 
-  // required for bomb slide where we need tempanswer
-  async changeIsTurn(
-    quizCode: string,
-    participantId: string,
-    isTurn: boolean
-  ): Promise<boolean> {
-    const participantExists = await this.participantExists(
-      quizCode,
-      participantId
-    );
-    if (!participantExists) {
-      console.error('Participant does not exist in quiz');
-      return false;
-    }
-
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const participantSnap = await get(participantRef);
-
-    if (!participantSnap.exists()) {
-      console.error('Participant data not found');
-      return false;
-    }
-
-    try {
-      await update(participantRef, {
-        isTurn: isTurn,
-        hasAnswered: false,
-      });
-      return true;
-    } catch (error) {
-      console.error('Error updating the turn:', error);
-      return false;
-    }
-  },
+  
 
   async removeParticipant(
     quizCode: string,
@@ -253,6 +217,7 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
   const [participantData, setParticipantData] = useState<Participant | null>(
     null
   );
+  const [isTurn,setListenIsTurn] = useState("")
 
   useEffect(() => {
     const slideRef = ref(database, `ongoingQuizzes/${quizCode}/currentSlide`);
@@ -264,6 +229,9 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       database,
       `ongoingQuizzes/${quizCode}/isShowingCorrectAnswer`
     );
+
+    const isTurnRef = ref(database,`ongoingQuizzes/${quizCode}/isTurn`)
+    
 
     const handleSlideChange = (snapshot: DataSnapshot) => {
       setCurrentSlide(snapshot.exists() ? snapshot.val() : 0);
@@ -277,16 +245,24 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       setShowAnswer(snapshot.exists() ? snapshot.val() : false);
     };
 
+    const handleIsTurnChange = (snapshot: DataSnapshot) => {
+      setListenIsTurn(snapshot.exists() ? snapshot.val() : false);
+    };
+
+
+
     onValue(slideRef, handleSlideChange);
     onValue(participantRef, handleParticipantChange);
     onValue(showAnswerRef, handleShowAnswerChange);
+    onValue(isTurnRef, handleIsTurnChange)
 
     return () => {
       off(slideRef, 'value', handleSlideChange);
       off(participantRef, 'value', handleParticipantChange);
       off(showAnswerRef, 'value', handleShowAnswerChange);
+      off(isTurnRef,'value', handleIsTurnChange)
     };
   }, [quizCode, participantId]);
 
-  return { currentSlide, participantData, showAnswer };
+  return { currentSlide, participantData, showAnswer, isTurn };
 };

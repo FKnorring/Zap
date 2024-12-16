@@ -1,11 +1,12 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import Avatar, { genConfig } from 'react-nice-avatar';
+//import Avatar, { genConfig } from 'react-nice-avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useGetAuthenticatedUser from '@/hooks/useGetAuthenticatedUser';
 import { userService } from '@/services/users';
 import { InfoIcon, Dices } from 'lucide-react';
+import Avatar from '@/Avatar';
 
 interface CreateParticipantProps {
   handleAddParticipant: (name: string, avatar: string) => void;
@@ -26,8 +27,9 @@ export default function CreateParticipant({
   const [user, setUser] = useState<{
     username: string;
     avatar: string;
+    collectionName: string;
     isLoggedIn: boolean;
-  }>({ username: '', avatar: '', isLoggedIn: false });
+  }>({ username: '', avatar: '', isLoggedIn: false, collectionName: "" });
   const [guestName, setGuestName] = useState('');
   const [guestAvatar, setGuestAvatar] = useState(createRandomId());
   const [addingUser, setAddingUser] = useState(false);
@@ -49,12 +51,14 @@ export default function CreateParticipant({
         }
 
         if (data) {
+          console.log(data)
           setUser({
             username: data.username || '',
             avatar: data.avatar || createRandomId(),
             isLoggedIn: true,
+            collectionName: data.collectionName
           });
-        }
+        } 
       } catch (error) {
         console.error('Failed to initialize user:', error);
       }
@@ -101,10 +105,7 @@ export default function CreateParticipant({
               value="me"
               className="flex flex-col items-center justify-center space-y-4"
             >
-              <Avatar
-                style={{ width: '6rem', height: '6rem' }}
-                {...genConfig(user.avatar)}
-              />
+              <Avatar avatarString={user.avatar} collectionName={user.collectionName} />
               <Input
                 disabled
                 className="text-[#333333] text-center font-display md:text-lg text-lg py-8 px-12 w-full shadow-lg"
@@ -122,16 +123,13 @@ export default function CreateParticipant({
               value="guest"
               className="flex flex-col items-center justify-center space-y-4"
             >
-              <Avatar
-                style={{ width: '6rem', height: '6rem' }}
-                {...genConfig(guestAvatar)}
-              />
+              <Avatar avatarString={guestAvatar} collectionName="micah" />
               <button
                 onClick={() => setGuestAvatar(createRandomId())}
                 className="m-2 p-2 rounded-3xl bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
                 title="Randomize Avatar"
               >
-                <p className="font-display text-black pr-1">New Avatar</p>
+                <p className="font-display text-black  p-2">New Avatar</p>
                 <Dices className="w-6 h-6 text-black" />
               </button>
               <Input
@@ -159,10 +157,7 @@ export default function CreateParticipant({
         </Tabs>
       ) : (
         <div className="bg-component-background w-full mx-auto rounded-lg flex flex-col items-center justify-center p-6  space-y-4">
-          <Avatar
-            style={{ width: '6rem', height: '6rem' }}
-            {...genConfig(guestAvatar)}
-          />
+          <Avatar avatarString={guestAvatar} collectionName="micah" />
           <button
             onClick={() => setGuestAvatar(createRandomId())}
             className="m-2 p-2 rounded-full bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"

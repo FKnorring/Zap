@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export function Preview({ slide }: { slide: MCQSASlide }) {
   return (
-    <BaseQuestionRender slide={slide} participants={[]}>
+    <BaseQuestionRender slide={slide}>
       <div className="flex flex-col items-center justify-center h-full p-10">
         <div className="grid grid-cols-2 gap-6 w-full max-w-3xl">
           {slide.options.map((option) => (

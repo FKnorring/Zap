@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
-import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
-import { Zap } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
+import { Button } from '@/components/ui/button';
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
+import { Zap } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
+import Settings from '@/components/Settings';
 
 export function Header() {
   const location = useLocation();
@@ -27,7 +28,7 @@ export function Header() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (location.pathname.endsWith("/lobby")) {
+      if (location.pathname.endsWith('/lobby')) {
         if (e.clientY < 100) {
           // Clear any existing timeout
           if (timeoutId) clearTimeout(timeoutId);
@@ -44,14 +45,15 @@ export function Header() {
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseMove);
       if (timeoutId) clearTimeout(timeoutId);
     };
   }, [location.pathname, timeoutId]);
 
-  const inLobby = location.pathname.endsWith("/lobby");
+  const inLobby = location.pathname.endsWith('/lobby');
+  const inGame = location.pathname.startsWith('/play');
 
   if (inLobby && !showHeader) {
     return null;
@@ -60,12 +62,13 @@ export function Header() {
   return (
     <header
       className={cn(
-        "bg-black/40 hidden md:block transition-opacity duration-200 border-b-2 border-b-primary shadow shadow-black/20 z-50",
-        inLobby && "absolute top-0 left-0 right-0",
+        'bg-black/40 md:block transition-opacity duration-200 border-b-2 border-b-primary shadow shadow-black/20 z-50',
+        inLobby && 'absolute top-0 left-0 right-0',
+        inGame && 'hidden'
       )}
     >
-      <div className="container flex h-16 items-center px-4">
-        <div className="mr-4 hidden md:flex w-full">
+      <div className="container flex h-16 items-center px-1">
+        <div className={cn('mr-0 md:flex w-full', inGame && 'hidden')}>
           <nav className="flex items-center space-x-6 font-medium w-full justify-between">
             <Link
               to="/"
@@ -75,20 +78,28 @@ export function Header() {
               <span className="fancy-wrap">Zap!</span>
             </Link>
             <div className="flex items-center font-display gap-1">
-              <Link to="/">
+              <Link to="/play">
                 <Button
-                  variant={location.pathname === "/" ? "default" : "ghost"}
+                  variant={location.pathname === '/play' ? 'default' : 'ghost'}
                   className="text-lg"
                 >
-                  {t("general:home")}
+                  {t('general:play')}
+                </Button>
+              </Link>
+              <Link to="/">
+                <Button
+                  variant={location.pathname === '/' ? 'default' : 'ghost'}
+                  className="text-lg"
+                >
+                  {t('general:home')}
                 </Button>
               </Link>
               <Link to="/about">
                 <Button
-                  variant={location.pathname === "/about" ? "default" : "ghost"}
+                  variant={location.pathname === '/about' ? 'default' : 'ghost'}
                   className="text-lg"
                 >
-                  {t("general:about")}
+                  {t('general:about')}
                 </Button>
               </Link>
               {isAuthenticated && (
@@ -96,34 +107,35 @@ export function Header() {
                   <Link to="/profile">
                     <Button
                       variant={
-                        location.pathname === "/profile" ? "default" : "ghost"
+                        location.pathname === '/profile' ? 'default' : 'ghost'
                       }
                       className="text-lg"
                     >
-                      {t("general:profile")}
+                      {t('general:profile')}
                     </Button>
                   </Link>
                   <Button variant="ghost" className="text-lg" onClick={logout}>
-                    {t("general:logout")}
+                    {t('general:logout')}
                   </Button>
                 </>
               )}
+              <Settings />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="text-lg">
-                    {t("general:language")}
+                    {t('general:language')}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>
-                    {t("general:chooseLanguage")}
+                    {t('general:chooseLanguage')}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleLanguageChange("en")}>
-                    {t("general:english")}
+                  <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
+                    {t('general:english')}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleLanguageChange("sv")}>
-                    {t("general:swedish")}
+                  <DropdownMenuItem onClick={() => handleLanguageChange('sv')}>
+                    {t('general:swedish')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

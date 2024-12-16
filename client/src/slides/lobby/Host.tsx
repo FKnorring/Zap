@@ -1,23 +1,26 @@
 import { LobbySlide, Participant } from "@/models/Quiz";
-import { Preview } from "./Preview";
+import Render from "./Render";
 
 export function Host({
   slide,
   participants,
   onNextSlide,
+  removeParticipant,
   quizCode,
 }: {
   slide: LobbySlide;
   participants: Participant[];
   onNextSlide: () => void;
+  removeParticipant: (participantId: string) => void;
   quizCode: string;
 }) {
   return (
-    <Preview
+    <Render
       slide={slide}
       participants={participants}
       onNextSlide={onNextSlide}
       quizCode = {quizCode}
+      removeParticipant={removeParticipant}
     />
   );
 }

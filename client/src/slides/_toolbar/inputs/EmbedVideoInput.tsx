@@ -1,25 +1,28 @@
-import React, { useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { Link, MinusIcon } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { EmbedVideoInputProps } from "../../info/Toolbar";
-import { getYoutubeThumbnailUrl, validateYoutubeUrl } from "../../info/utils";
+import React, { useCallback } from 'react';
+import { Button } from '@/components/ui/button';
+import { Link, MinusIcon } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { EmbedVideoInputProps } from '../../info/Toolbar';
+import { getYoutubeThumbnailUrl, validateYoutubeUrl } from '../../info/utils';
+import { useTranslation } from 'react-i18next';
 
 function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
   const [embedVideoUrl, setEmbedVideoUrl] = React.useState<string>(
-    slide.embedVideoUrl || "",
+    slide.embedVideoUrl || ''
   );
   const [error, setError] = React.useState<string | null>(null);
   const [debouncedValue, setDebouncedValue] = React.useState<string>(
-    embedVideoUrl || "",
+    embedVideoUrl || ''
   );
+
+  const { t } = useTranslation(['questions']);
 
   React.useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedValue(embedVideoUrl);
       if (embedVideoUrl && !validateYoutubeUrl(embedVideoUrl)) {
-        setError("Invalid YouTube URL");
+        setError('Invalid YouTube URL');
       } else {
         setError(null);
       }
@@ -31,7 +34,7 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
   }, [embedVideoUrl]);
 
   React.useEffect(() => {
-    setEmbedVideoUrl(slide.embedVideoUrl || "");
+    setEmbedVideoUrl(slide.embedVideoUrl || '');
   }, [slide.embedVideoUrl]);
 
   const handleEmbedVideoUrl = () => {
@@ -44,18 +47,18 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setEmbedVideoUrl(e.target.value);
     },
-    [],
+    []
   );
 
   const handleRemoveEmbeddedVideo = useCallback(() => {
-    onSlideUpdate({ ...slide, embedVideoUrl: "" }); // Remove embedded video
+    onSlideUpdate({ ...slide, embedVideoUrl: '' }); // Remove embedded video
   }, [onSlideUpdate, slide]);
 
   return (
     <div className="space-y-1 w-full">
       <div className="flex flex-row items-center space-x-1">
         <Link size={16} />
-        <Label>Embed YouTube Video</Label>
+        <Label> {t('embededYT')}</Label>
       </div>
       <div className="flex w-full max-w-sm items-center justify-between">
         {slide.embedVideoUrl && (
@@ -67,10 +70,10 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
         )}
         {!slide.embedVideoUrl && (
           <Input
-            value={embedVideoUrl || ""}
+            value={embedVideoUrl || ''}
             onChange={handleEmbedVideoUrlChange}
             placeholder="https://www.youtube.com/watch?v=..."
-            className={`font-bold ${error ? "border-red-500" : ""}`}
+            className={`font-bold ${error ? 'border-red-500' : ''}`}
           />
         )}
         <div className="flex items-center ml-2 gap-2 justify-end">
@@ -81,7 +84,7 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
               onClick={handleEmbedVideoUrl}
               disabled={!debouncedValue || !!error}
             >
-              Embed
+              {t('embeded')}
             </Button>
           )}
           {slide.embedVideoUrl && (
@@ -91,7 +94,7 @@ function EmbedVideoInput({ slide, onSlideUpdate }: EmbedVideoInputProps) {
               onClick={handleRemoveEmbeddedVideo}
             >
               <MinusIcon className="" />
-              Remove
+              {t('remove')}
             </Button>
           )}
         </div>

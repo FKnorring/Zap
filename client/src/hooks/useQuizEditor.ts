@@ -1,176 +1,302 @@
-import { useState } from 'react';
-import { quizService } from '@/services/quizzes';
-import { type Slide, type SlideType, type QuestionType, QuizSettings } from '@/models/Quiz';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  type Slide,
+  type SlideType,
+  type QuestionType,
+  QuizSettings,
+  type Quiz,
+} from '@/models/Quiz';
 import { toast } from 'sonner';
-import { quizDefaults, quizDefaultsBackgroundStyles } from '@/components/quiz-editor/utils/quiz-defaults';
+import {
+  quizDefaults,
+  quizDefaultsBackgroundStyles,
+} from '@/components/quiz-editor/utils/quiz-defaults';
 import { getSlideComponentsFromType } from '@/slides/utils';
 import { useAppContext } from '@/contexts/App/context';
-import {nanoid} from 'nanoid'
+import { nanoid } from 'nanoid';
+import { useTranslation } from 'react-i18next';
 
 const DEFAULT_TIME_LIMIT = 0;
+const SAVE_ON_N_ACTIONS = 50;
+const SAVE_ON_LAST_ACTION = 30000; // 30 seconds
 
 export function useQuizEditor(quizId: string | undefined) {
-    const [error, setError] = useState<string | null>(null);
-    const [activeSlideId, setActiveSlideId] = useState<string | null>(null);
-    const [showSettings, setShowSettings] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const { quizzes: { optimisticUpdate, resources: quizzes, isLoading } } = useAppContext();
-    const quiz = quizzes.find(q => q.id === quizId);
+  const [error, setError] = useState<string | null>(null);
+  const [activeSlideId, setActiveSlideId] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const {
+    quizzes: { optimisticUpdate, resources: quizzes, isLoading, enrichResource },
+  } = useAppContext();
 
-    // Save all slides
-    const handleSave = async () => {
-        if (!quizId || !quiz) return;
-        setIsSaving(true);
+  const { t } = useTranslation(['questions']);
 
-        const savePromise = new Promise((resolve, reject) => {
-            quizService.update(quizId, quiz)
-                .then(({ error: saveError }) => {
-                    if (saveError) {
-                        setError(saveError.message);
-                        reject(saveError.message);
-                        return false;
-                    }
-                    resolve('Slides saved successfully');
-                    return true;
-                })
-                .catch(reject);
-        });
+  // Local state
+  const [localQuiz, setLocalQuiz] = useState<Quiz | null>(null);
+  const [, setActionCount] = useState(0);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [enriched, setEnriched] = useState(false);
 
-        toast.promise(savePromise, {
-            loading: 'Saving slides...',
-            success: 'Slides saved successfully',
-            error: (err) => `Error: ${err}`
-        });
+  useEffect(() => {
+    if (quizId) {
+      enrichResource(quizId).then(() => setEnriched(true));
+    }
+  }, [quizId]);
+
+  useEffect(() => {
+    if (quizId && enriched) {
+      const globalQuiz = quizzes.find((q) => q.id === quizId)
+      if (globalQuiz) {
+        setLocalQuiz(globalQuiz);
+      }
+    }
+  }, [quizId, enriched, quizzes]);
+
+  // Auto-save timer
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+
+    const timer = setTimeout(() => {
+      handleSave(true);
+    }, SAVE_ON_LAST_ACTION);
+
+    return () => clearTimeout(timer);
+  }, [hasUnsavedChanges, localQuiz]);
+
+  // Track actions and trigger save
+  const trackAction = useCallback(() => {
+    setActionCount((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= SAVE_ON_N_ACTIONS) {
+        handleSave(true);
+        return 0;
+      }
+      return newCount;
+    });
+    setHasUnsavedChanges(true);
+  }, []);
+
+  // Save all slides
+  const handleSave = async (autoSave: boolean = false) => {
+    if (!quizId || !localQuiz) return;
+    setIsSaving(true);
+
+    const savePromise = new Promise((resolve, reject) => {
+      optimisticUpdate(quizId, localQuiz)
+        .then(({ error: saveError }) => {
+          if (saveError) {
+            setError(saveError.message);
+            reject(saveError.message);
+            return false;
+          }
+          setHasUnsavedChanges(false);
+          setActionCount(0);
+          resolve(
+            autoSave
+              ? 'Quiz auto-saved successfully'
+              : 'Quiz saved successfully'
+          );
+          return true;
+        })
+        .catch(reject)
+        .finally(() => setIsSaving(false));
+    });
+
+    if (!autoSave) {
+      toast.promise(savePromise, {
+        loading: 'Saving quiz...',
+        success: 'Quiz saved successfully',
+        error: (err) => `Error: ${err}`,
+      });
+    } else {
+      toast.promise(savePromise, {
+        loading: 'Auto-saving quiz...',
+        success: 'Quiz auto-saved successfully',
+        error: (err) => `Auto-save error: ${err}`,
+      });
+    }
+  };
+
+  const handleAddSlide = (type: SlideType, questionType?: QuestionType) => {
+    if (!quizId || !localQuiz) return;
+
+    let backgroundStyle =
+      localQuiz.settings?.backgroundStyleDefault ??
+      quizDefaults.backgroundStyleDefault;
+
+    if (backgroundStyle === 'random') {
+      const randomBackgroundStyle =
+        quizDefaultsBackgroundStyles[
+          Math.floor(Math.random() * quizDefaultsBackgroundStyles.length)
+        ];
+      backgroundStyle = randomBackgroundStyle;
+    }
+
+    const baseSlide = {
+      id: nanoid(),
+      title: `New ${type} slide`,
+      content: '',
+      backgroundStyle,
+      type,
     };
 
-    const handleAddSlide = (type: SlideType, questionType?: QuestionType) => {
-        if (!quizId || !quiz) return;
+    const SlideInfo = getSlideComponentsFromType(type, questionType).Info;
 
+    const newSlide = {
+      ...baseSlide,
+      ...SlideInfo.defaults,
+      ...(questionType
+        ? {
+            questionType,
+            timeLimit: DEFAULT_TIME_LIMIT,
+            showCorrectAnswer:
+              localQuiz?.settings?.showCorrectAnswerDefault ??
+              quizDefaults.showCorrectAnswerDefault,
+          }
+        : {}),
+      title: t(SlideInfo.label),
+    } as Slide;
 
-        let backgroundStyle = quiz.settings?.backgroundStyleDefault ?? quizDefaults.backgroundStyleDefault;
+    setLocalQuiz((prev) =>
+      prev
+        ? {
+            ...prev,
+            slides: [...(prev.slides || []), newSlide],
+          }
+        : null
+    );
+    setActiveSlideId(newSlide.id);
+    trackAction();
+  };
 
-        if (backgroundStyle === 'random') {
-            const randomBackgroundStyle = quizDefaultsBackgroundStyles[Math.floor(Math.random() * quizDefaultsBackgroundStyles.length)];
-            backgroundStyle = randomBackgroundStyle;
-        }
+  const handleSlideUpdate = (updatedSlide: Slide) => {
+    if (!quizId || !localQuiz) return;
+    setLocalQuiz((prev) =>
+      prev
+        ? {
+            ...prev,
+            slides: prev.slides.map((slide) =>
+              slide.id === updatedSlide.id ? updatedSlide : slide
+            ),
+          }
+        : null
+    );
+    trackAction();
+  };
 
-        const baseSlide = {
-            id: nanoid(),
-            title: `New ${type} slide`,
-            content: '',
-            backgroundStyle,
-            type,
-        };
+  const handleSlideDelete = (slideId: string) => {
+    if (!quizId || !localQuiz) return;
+    setLocalQuiz((prev) =>
+      prev
+        ? {
+            ...prev,
+            slides: prev.slides.filter((slide) => slide.id !== slideId),
+          }
+        : null
+    );
+    if (activeSlideId === slideId) {
+      setActiveSlideId(
+        localQuiz?.slides.find((s) => s.id !== slideId)?.id ?? null
+      );
+    }
+    trackAction();
+  };
 
-        const SlideInfo = getSlideComponentsFromType(type, questionType).Info;
+  const handleSlideDuplicate = (slideId: string) => {
+    if (!quizId || !localQuiz) return;
 
-        const newSlide = {
-            ...baseSlide,
-            ...SlideInfo.defaults,
-            ...(questionType ? {
-                questionType,
-                timeLimit: DEFAULT_TIME_LIMIT,
-                showCorrectAnswer: quiz?.settings?.showCorrectAnswerDefault ?? quizDefaults.showCorrectAnswerDefault
-            } : {}),
-        } as Slide;
+    const currentIndex =
+      localQuiz?.slides.findIndex((slide) => slide.id === slideId) || 0;
+    const slideToClone = localQuiz?.slides[currentIndex];
+    if (!slideToClone) return;
 
-        optimisticUpdate(quizId, { slides: [...(quiz.slides || []), newSlide] });
-        setActiveSlideId(newSlide.id);
+    const newSlide = {
+      ...slideToClone,
+      id: nanoid(),
+      title: `${slideToClone.title} (Copy)`,
+      backgroundStyle:
+        slideToClone.backgroundStyle ||
+        localQuiz.settings?.backgroundStyleDefault ||
+        quizDefaults.backgroundStyleDefault,
     };
 
-    const handleSlideUpdate = (updatedSlide: Slide) => {
-        if (!quizId || !quiz) return;
-        optimisticUpdate(quizId, { slides: quiz.slides.map(slide =>
-            slide.id === updatedSlide.id ? updatedSlide : slide
-            )
-        }).then((res) => {
-            if (res.error) {
-                toast.error(`Error updating slide: ${res.error.message}`);
-            }
-        });
-    };
+    setLocalQuiz((prev) => {
+      if (!prev) return null;
+      const newSlides = [...prev.slides];
+      newSlides.splice(currentIndex + 1, 0, newSlide as never);
+      return { ...prev, slides: newSlides };
+    });
+    setActiveSlideId(newSlide.id);
+    trackAction();
+  };
 
-    const handleSlideDelete = (slideId: string) => {
-        if (!quizId || !quiz) return;
-        optimisticUpdate(quizId, { slides: quiz.slides.filter(slide => slide.id !== slideId) });
-        if (activeSlideId === slideId) {
-            setActiveSlideId(quiz?.slides.find(s => s.id !== slideId)?.id ?? null);
-        }
-    };
+  const handleSlideMove = (slideId: string, direction: 'up' | 'down') => {
+    if (!quizId || !localQuiz) return;
 
-    const handleSlideDuplicate = (slideId: string) => {
-        if (!quizId || !quiz) return;
+    const currentIndex = localQuiz?.slides.findIndex(
+      (slide) => slide.id === slideId
+    );
+    if (currentIndex === -1 || currentIndex === undefined) return;
 
-        const currentIndex = quiz?.slides.findIndex(slide => slide.id === slideId) || 0;
-        const slideToClone = quiz?.slides[currentIndex];
-        if (!slideToClone) return;
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= (localQuiz?.slides.length || 0)) return;
 
-        const newSlide = {
-            ...slideToClone,
-            id: nanoid(),
-            title: `${slideToClone.title} (Copy)`,
-            backgroundStyle: slideToClone.backgroundStyle || quiz.settings?.backgroundStyleDefault || quizDefaults.backgroundStyleDefault,
-        };
+    setLocalQuiz((prev) => {
+      if (!prev) return null;
+      const newSlides = [...prev.slides];
+      [newSlides[currentIndex], newSlides[newIndex]] = [
+        newSlides[newIndex],
+        newSlides[currentIndex],
+      ];
+      return { ...prev, slides: newSlides };
+    });
+    trackAction();
+  };
 
-        const newSlides = [...quiz?.slides || []];
-        newSlides.splice(currentIndex + 1, 0, newSlide as never);
-        optimisticUpdate(quizId, { slides: newSlides });
-        setActiveSlideId(newSlide.id);
-    };
+  const handleQuizUpdate = async (updates: {
+    quizName?: string;
+    settings?: QuizSettings;
+  }) => {
+    if (!quizId || !localQuiz) return;
 
-    const handleSlideMove = (slideId: string, direction: 'up' | 'down') => {
-        if (!quizId || !quiz) return;
-
-        const currentIndex = quiz?.slides.findIndex(slide => slide.id === slideId);
-        if (currentIndex === -1 || currentIndex === undefined) return;
-
-        const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-        if (newIndex < 0 || newIndex >= (quiz?.slides.length || 0)) return;
-
-        const newSlides = [...quiz?.slides || []];
-        [newSlides[currentIndex], newSlides[newIndex]] = [newSlides[newIndex], newSlides[currentIndex]];
-        optimisticUpdate(quizId, { slides: newSlides });
-    };
-
-    const handleQuizUpdate = async (updates: {
-        quizName?: string;
-        settings?: QuizSettings;
-    }) => {
-        if (!quizId || !quiz) return;
-
-        const updatedQuiz = {
-            ...quiz,
-            quiz_name: updates.quizName ?? quiz.quiz_name,
+    setLocalQuiz((prev) =>
+      prev
+        ? {
+            ...prev,
+            quiz_name: updates.quizName ?? prev.quiz_name,
             settings: {
-                ...quizDefaults,
-                ...quiz.settings,
-                ...updates.settings,
+              ...quizDefaults,
+              ...prev.settings,
+              ...updates.settings,
             },
-        };
+          }
+        : null
+    );
+    trackAction();
+  };
 
-        optimisticUpdate(quizId, updatedQuiz);
-    };
+  const activeSlide =
+    localQuiz?.slides?.find((slide) => slide.id === activeSlideId) ?? null;
 
-    const activeSlide = quiz?.slides?.find(slide => slide.id === activeSlideId) ?? null;
-
-    return {
-        quiz,
-        error,
-        slides: quiz?.slides || [],
-        activeSlide,
-        activeSlideId,
-        showSettings,
-        isLoading,
-        isSaving,
-        handleAddSlide,
-        handleSlideUpdate,
-        handleSlideDelete,
-        handleSlideDuplicate,
-        handleSlideMove,
-        handleQuizUpdate,
-        handleSave,
-        setActiveSlideId,
-        setShowSettings,
-        setError,
-    };
-} 
+  return {
+    quiz: localQuiz,
+    error,
+    slides: localQuiz?.slides || [],
+    activeSlide,
+    activeSlideId,
+    showSettings,
+    isLoading,
+    isSaving,
+    hasUnsavedChanges,
+    handleAddSlide,
+    handleSlideUpdate,
+    handleSlideDelete,
+    handleSlideDuplicate,
+    handleSlideMove,
+    handleQuizUpdate,
+    handleSave,
+    setActiveSlideId,
+    setShowSettings,
+    setError,
+  };
+}

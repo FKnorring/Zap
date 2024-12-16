@@ -1,31 +1,26 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
-import CreateQuizPopover from "@/components/quizzes/CreateQuizPopover";
-import QuizList from "@/components/quizzes/QuizList";
-import { useCallback, useEffect, useState } from "react";
-import { Loader2, Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import Quiz from "@/models/Quiz";
-import { useAppContext } from "@/contexts/App/context";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { quizService } from "@/services/quizzes";
-import { useTranslation } from "react-i18next";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { toast } from 'sonner';
+import CreateQuizPopover from '@/components/quizzes/CreateQuizPopover';
+import QuizList from '@/components/quizzes/QuizList';
+import SharedQuizList from '@/components/quizzes/SharedQuizList';
+import { useCallback, useEffect, useState } from 'react';
+import { Loader2, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { SharedQuizzes } from '@/models/Quiz';
+import { useAppContext } from '@/contexts/App/context';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
+import { quizService } from '@/services/quizzes';
+import { useTranslation } from 'react-i18next';
 
 function useQuizzesPage() {
   const {
-    quizzes: {
-      resources: quizzes,
-      isLoading: quizzesLoading,
-      optimisticCreate,
-      optimisticDelete,
-      optimisticUpdate,
-    },
+    quizzes: { resources: quizzes, isLoading: quizzesLoading, optimisticCreate, optimisticDelete, optimisticUpdate },
     user: { user },
     ongoingQuizzes: { resources: ongoingQuizzes },
   } = useAppContext();
 
-  const [sharedQuizzes, setSharedQuizzes] = useState<Quiz[]>([]);
+  const [sharedQuizzes, setSharedQuizzes] = useState<SharedQuizzes[]>([]);
   const [sharedQuizzesLoading, setSharedQuizzesLoading] = useState(false);
 
   useEffect(() => {
@@ -42,88 +37,82 @@ function useQuizzesPage() {
     async (name: string) => {
       if (!user) return;
 
-      const { error } = await optimisticCreate({
+      const { data: userQuiz } = await quizService.createQuiz({
         quiz_name: name,
         user_id: user.id,
       });
 
-      if (error) {
-        toast.error("Failed to create quiz");
+      if (!userQuiz) {
+        toast.error('Failed to create quiz');
         return;
       }
 
-      toast.success("Quiz created successfully");
+      // Create optimistic quiz from userQuiz data
+      optimisticCreate({
+        id: userQuiz.quizId,
+        quiz_name: userQuiz.quizName,
+        user_id: userQuiz.userId,
+        isHosted: userQuiz.isHosted,
+        isShared: userQuiz.isShared,
+        created_at: userQuiz.createdAt,
+        updated_at: userQuiz.updatedAt,
+      });
     },
-    [user, optimisticCreate],
+    [user, optimisticCreate]
   );
 
   const handleDeleteQuiz = useCallback(
     async (quizId: string) => {
-      const { error } = await optimisticDelete(quizId);
-
+      const { error } = await quizService.deleteQuiz(quizId);
+      
       if (error) {
-        toast.error("Failed to delete quiz");
+        toast.error('Failed to delete quiz');
         return;
       }
 
-      toast.success("Quiz deleted successfully");
+      optimisticDelete(quizId);
+      toast.success('Quiz deleted successfully');
     },
-    [optimisticDelete],
+    [optimisticDelete]
   );
 
   const handleShareQuiz = useCallback(
-    async (quizId: string) => {
-      const currentShareState = quizzes.find(
-        (quiz) => quiz.id === quizId,
-      )?.isShared;
-      const { error } = await optimisticUpdate(quizId, {
-        isShared: !currentShareState,
-      });
+    async (quizId: string, quizName: string) => {
+      if (!user) return;
 
-      const shareString = !currentShareState ? "shared" : "unshared";
-
+      const { data: isShared, error } = await quizService.shareQuiz(quizId, user, quizName);
+      
       if (error) {
-        toast.error(`Failed to ${shareString} quiz`);
+        toast.error('Failed to share quiz');
         return;
       }
 
-      toast.success(`Quiz ${shareString} successfully`);
+      optimisticUpdate(quizId, { isShared: isShared ?? false });
+      if (isShared) {
+        toast.success(`Quiz ${quizName} was successfully shared`);
+      }
     },
-    [optimisticUpdate, quizzes],
+    [optimisticUpdate, user]
   );
 
   const handleCopyQuiz = useCallback(
-    async (quiz: Quiz) => {
+    async (quiz: SharedQuizzes) => {
       if (!user) return;
 
-      const { data, error } = await optimisticCreate({
-        ...quiz,
-        quiz_name: `${quiz.quiz_name} (Copy)`,
-        user_id: user.id,
-        isShared: false,
-        updated_at: new Date().toLocaleString(),
-      });
+      const { data: newQuiz, error } = await quizService.copyQuiz(quiz, user.id);
 
-      if (error || !data) {
-        toast.error("Failed to copy quiz");
+      if (error || !newQuiz) {
+        toast.error('Failed to copy quiz');
         return;
       }
 
-      const { error: updateError } = await optimisticUpdate(data.id, {
-        id: data.id,
-      });
-
-      if (updateError) {
-        toast.error("Failed to copy quiz");
-        return;
-      }
-
-      toast.success("Quiz copied successfully");
+      optimisticCreate(newQuiz);
+      toast.success('Quiz copied successfully');
     },
-    [user, optimisticCreate, optimisticUpdate],
+    [user, optimisticCreate]
   );
 
-  const ongoingQuiz = ongoingQuizzes.find((quiz) => quiz.quizHost === user?.id);
+  const ongoingQuiz = ongoingQuizzes.find((quiz) => quiz.quizHost !== user?.id);
 
   return {
     quizzes,
@@ -153,20 +142,20 @@ function Quizzes() {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   return (
     <div className="flex-1 flex flex-col items-center justify-around gap-4 overflow-y-auto p-4">
       <Card className="w-full max-w-7xl">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
-            <span>{t("homepage:myQuizzes")}</span>
+            <span>{t('homepage:myQuizzes')}</span>
             {ongoingQuiz && (
               <Button
                 variant="outline"
                 onClick={() => navigate(`/quizzes/${ongoingQuiz.id}/lobby`)}
               >
-                {t("homepage:gotoOngoing")}
+                {t('homepage:gotoOngoing')}
               </Button>
             )}
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
@@ -179,8 +168,15 @@ function Quizzes() {
             </div>
           ) : (
             <QuizList
-              quizzes={quizzes}
-              variant="my-quizzes"
+              quizzes={quizzes.map(quiz => ({
+                quizId: quiz.id,
+                quizName: quiz.quiz_name,
+                userId: quiz.user_id,
+                isHosted: quiz.isHosted,
+                isShared: quiz.isShared,
+                createdAt: quiz.created_at,
+                updatedAt: quiz.updated_at,
+              }))}
               onDeleteQuiz={handleDeleteQuiz}
               onShareQuiz={handleShareQuiz}
             />
@@ -192,12 +188,12 @@ function Quizzes() {
         <CardHeader>
           <CardTitle>
             <div className="flex items-center gap-4">
-              <span className="m-0">{t("homepage:sharedQuizzes")}</span>
+              <span className="m-0">{t('homepage:sharedQuizzes')}</span>
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder={t("homepage:searchShared")}
+                  placeholder={t('homepage:searchShared')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="max-w-lg"
@@ -212,9 +208,8 @@ function Quizzes() {
               <Loader2 className="animate-spin" />
             </div>
           ) : (
-            <QuizList
+            <SharedQuizList
               quizzes={sharedQuizzes}
-              variant="shared-quizzes"
               onCopyQuiz={handleCopyQuiz}
               searchTerm={searchTerm}
             />

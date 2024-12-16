@@ -18,6 +18,7 @@ export function Preview({
       participants={participants}
       onNextSlide={onNextSlide}
       quizCode={quizCode}
+      removeParticipant={() => {}}
     />
   );
 }

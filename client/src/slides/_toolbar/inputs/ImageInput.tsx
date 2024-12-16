@@ -1,10 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { MinusIcon } from "lucide-react";
-import { Label } from "@/components/ui/label";
-import { ImageIcon } from "lucide-react";
-import { ToolbarProps } from "../../toolbar";
-import { Slider } from "@/components/ui/slider";
-import { Slide } from "@/models/Quiz";
+import { Button } from '@/components/ui/button';
+import { MinusIcon } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { ImageIcon } from 'lucide-react';
+import { ToolbarProps } from '../../toolbar';
+import { Slider } from '@/components/ui/slider';
+import { Slide } from '@/models/Quiz';
+import { useTranslation } from 'react-i18next';
 
 export default function ImageInput<T extends Slide>({
   slide,
@@ -24,28 +25,29 @@ export default function ImageInput<T extends Slide>({
     };
     reader.readAsDataURL(file);
   };
+  const { t } = useTranslation(['quizEditor']);
 
   return (
     <>
       <div className="space-y-1">
         <div className="flex flex-row items-center space-x-1">
           <ImageIcon size={16} />
-          <Label>Image</Label>
+          <Label>{t('image')}</Label>
         </div>
 
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => document.getElementById("image-upload")?.click()}
+            onClick={() => document.getElementById('image-upload')?.click()}
           >
-            {slide.imageUrl ? "Change Image" : "Add Image"}
+            {slide.imageUrl ? t('changeImage') : t('addImage')}
           </Button>
           {slide.imageUrl && (
             <Button
               variant="destructive"
               size="icon"
-              onClick={() => onSlideUpdate({ ...slide, imageUrl: "" })}
+              onClick={() => onSlideUpdate({ ...slide, imageUrl: '' })}
             >
               <MinusIcon className="h-4 w-4" />
             </Button>
@@ -62,7 +64,7 @@ export default function ImageInput<T extends Slide>({
       {slide.imageUrl && (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label>Image Scale</Label>
+            <Label>{t('imageScale')}</Label>
             <span className="text-sm text-muted-foreground">
               {Math.round((slide.imageScale || 1) * 100)}%
             </span>

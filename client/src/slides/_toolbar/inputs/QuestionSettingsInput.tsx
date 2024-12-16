@@ -1,21 +1,24 @@
-import { QuestionSlide, ShowCorrectAnswerTypes } from "@/models/Quiz";
-import { ToolbarProps } from "@/slides/toolbar";
-import { Label } from "@/components/ui/label";
+import { QuestionSlide, ShowCorrectAnswerTypes } from '@/models/Quiz';
+import { ToolbarProps } from '@/slides/toolbar';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Eye, Timer } from "lucide-react";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Eye, Timer } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function QuestionSettingsInput({
   slide,
   onSlideUpdate,
 }: ToolbarProps<QuestionSlide>) {
-  if (!("showCorrectAnswer" in slide)) return null;
+  const { t } = useTranslation(['quizEditor']);
+
+  if (!('showCorrectAnswer' in slide)) return null;
   const questionSlide = slide as QuestionSlide;
 
   return (
@@ -23,10 +26,10 @@ export function QuestionSettingsInput({
       <div className="space-y-1">
         <div className="flex flex-row items-center space-x-1">
           <Eye size={17} />
-          <Label>Show Correct Answer</Label>
+          <Label>{t('showCorrect')}</Label>
         </div>
         <Select
-          value={questionSlide.showCorrectAnswer || "auto"}
+          value={questionSlide.showCorrectAnswer || 'auto'}
           onValueChange={(value) =>
             onSlideUpdate({
               ...questionSlide,
@@ -38,36 +41,30 @@ export function QuestionSettingsInput({
             <SelectValue>
               {(() => {
                 switch (slide.showCorrectAnswer) {
-                  case "auto":
-                    return "Auto";
-                  case "manual":
-                    return "Manual";
-                  case "never":
-                    return "Never";
+                  case 'auto':
+                    return 'Auto';
+                  case 'manual':
+                    return 'Manual';
+                  case 'never':
+                    return 'Never';
                   default:
-                    return "Select Award Points";
+                    return 'Select Award Points';
                 }
               })()}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="auto">
-              <h1 className="font-bold">Auto</h1>
-              <h3>
-                Shows the correct answers when everyone has answered or the time
-                runs out.
-              </h3>
+              <h1 className="font-bold">{t('showCorrect.auto')}</h1>
+              <h3>{t('showCorrectAuto')}</h3>
             </SelectItem>
             <SelectItem value="manual">
-              <h1 className="font-bold">Manual</h1>
-              <h3>
-                Renders a button that allows the presenter to show the correct
-                answers.
-              </h3>
+              <h1 className="font-bold">{t('showCorrect.manual')}</h1>
+              <h3>{t('showCorrectManual')}</h3>
             </SelectItem>
             <SelectItem value="never">
-              <h1 className="font-bold">Never</h1>
-              <h3>Never show the correct answers.</h3>
+              <h1 className="font-bold">{t('showCorrect.never')}</h1>
+              <h3>{t('showCorrectNever')}</h3>
             </SelectItem>
           </SelectContent>
         </Select>
@@ -76,7 +73,7 @@ export function QuestionSettingsInput({
       <div className="space-y-1">
         <div className="flex flex-row items-center">
           <Timer size={17} />
-          <Label>Time Limit</Label>
+          <Label>{t('timeLimit')}</Label>
         </div>
         <Input
           type="number"

@@ -32,6 +32,25 @@ export interface QuestionCreated {
   question_number: number;
 }
 
+export interface UserQuizzes {
+  userId: string;
+  quizId: string;
+  quizName: string;
+  isHosted: boolean;
+  isShared: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SharedQuizzes {
+  userId: string;
+  userName: string;
+  userAvatar: string;
+  quizId: string;
+  quizName: string;
+  sharedAt: string;
+}
+
 export enum ShowCorrectAnswerTypes {
   auto = "auto",
   manual = "manual",
@@ -41,6 +60,7 @@ export enum ShowCorrectAnswerTypes {
 export interface OngoingQuiz {
   id: string;
   startedAt: string;
+  isTurn: string;
   isShowingCorrectAnswer: boolean;
   currentSlide: number;
   quiz: Quiz;

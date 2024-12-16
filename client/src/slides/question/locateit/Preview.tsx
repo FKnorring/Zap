@@ -19,7 +19,7 @@ export function Preview({
   onSlideUpdate: (slide: LocateItSlide) => void;
 }) {
   const APIKEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-  const [zoom, setZoom] = useState(6);
+  const [zoom, setZoom] = useState(8);
   const [circleCenter, setCircleCenter] = useState<google.maps.LatLngLiteral>();
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(
     slide.location
@@ -45,6 +45,11 @@ export function Preview({
   useEffect(() => {
     if (currentSlideId !== slide.id) {
       setCurrentSlideId(slide.id);
+      if (slide.awardPointsLocation === 'RADIUS') {
+        setZoom(13);
+      } else {
+        setZoom(8);
+      }
     }
   }, [slide.id, currentSlideId]);
 
@@ -72,13 +77,31 @@ export function Preview({
       const newLng = place.geometry.location.lng();
       const newPosition = { lat: newLat, lng: newLng };
       setMarkerPosition(newPosition);
-      const updatedSlide: LocateItSlide = {
-        ...slide,
-        location: newPosition,
-      };
+
+      let updatedSlide: LocateItSlide;
+      if (slide.awardPointsLocation === 'RADIUS') {
+        updatedSlide = {
+          ...slide,
+          radius: 2000,
+          location: newPosition,
+        };
+      } else {
+        updatedSlide = {
+          ...slide,
+          location: newPosition,
+        };
+      }
+
       onSlideUpdate(updatedSlide);
       setMapCenter(newPosition);
-      setZoom(14);
+      if (
+        slide.awardPointsLocation === 'RADIUS' ||
+        slide.awardPointsLocation === 'CLOSEST'
+      ) {
+        setZoom(13);
+      } else {
+        setZoom(8);
+      }
     }
   };
 

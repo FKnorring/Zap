@@ -11,7 +11,8 @@ import {
   QuestionTypes,
 } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
-import { ParticipantService } from '@/services/participant';
+import { database } from '@/firebase';
+import { ref, update } from 'firebase/database';
 
 export interface LatestScore {
   id: string;
@@ -26,6 +27,24 @@ export const useHostLogic = (id: string | undefined) => {
   const ongoingQuiz = useMemo(
     () => ongoingQuizzes.find((quiz) => quiz.id === id),
     [ongoingQuizzes, id]
+  );
+
+  const removeParticipant = useCallback(
+    (participantId: string) => {
+      if (!ongoingQuiz) return;
+      optimisticUpdate(ongoingQuiz.id, {
+        participants: Object.entries(ongoingQuiz.participants || {}).reduce((acc, [id, participant]) => {
+          if (id === participantId) {
+            return acc;
+          }
+          return {
+            ...acc,
+            [id]: participant,
+          };
+        }, {} as { [key: string]: Participant }),
+      });
+    },
+    [optimisticUpdate, ongoingQuiz]
   );
 
   const updateParticipants = useCallback(
@@ -56,6 +75,7 @@ export const useHostLogic = (id: string | undefined) => {
   );
 
   const updateScores = async (slide: Slide, showAnswer: boolean) => {
+    console.log('Inne i updatescore');
     if (slide.type !== SlideTypes.question) return {};
     const questionSlide = slide as QuestionSlide;
     if (questionSlide.questionType == QuestionTypes.FTA) return {};
@@ -75,13 +95,15 @@ export const useHostLogic = (id: string | undefined) => {
         })),
         showAnswer
       );
+      console.log('innan return');
       return updateParticipants;
     } else return ongoingQuiz?.participants ? ongoingQuiz.participants : {};
   };
 
   const handleAddPoints = async (
     pointsData: { participantId: string; awardPoints: number }[],
-    showAnswer: boolean
+    showAnswer: boolean,
+    changeSlide?: boolean 
   ) => {
     const participants = { ...ongoingQuiz!.participants };
 
@@ -95,12 +117,23 @@ export const useHostLogic = (id: string | undefined) => {
         hasAnswered: false,
       };
     });
-
+    console.log('changeSlide', changeSlide);
+    if(changeSlide) {
+      console.log('changeSlide');
+      await optimisticUpdate(ongoingQuiz!.id, {
+        ...ongoingQuiz,
+        participants,
+        currentSlide: ongoingQuiz!.currentSlide + 1,
+        isShowingCorrectAnswer: false,
+      });
+    } else {
     await optimisticUpdate(ongoingQuiz!.id, {
       ...ongoingQuiz,
       participants,
       isShowingCorrectAnswer: showAnswer,
     });
+  }
+    
     return participants;
   };
 
@@ -205,35 +238,85 @@ export const useHostLogic = (id: string | undefined) => {
   };
 
   const changeTurn = async (
-    turn: boolean,
-    quizCode: string,
-    participantId: string
-  ) => {
-    if (!quizCode || !participantId) {
-      console.error('Quiz code or participant ID is missing.');
-      return;
+    participantId: string,
+    quizCode: string
+  ): Promise<void> => {
+    if (!participantId) {
+      console.error('Participant ID is missing.');
+      throw new Error('Invalid parameters provided.');
     }
 
     try {
-      const success = await ParticipantService.changeIsTurn(
-        quizCode,
-        participantId,
-        turn
-      );
-      if (success) {
-        console.log(
-          `Participant ${participantId} turn changed to ${turn} and reset hasAnswered.`
-        );
-      } else {
-        console.error(
-          `Failed to change turn for participant ${participantId}.`
-        );
-      }
+      console.log(`Updating turn to participant ID: ${participantId}`);
+
+      // Reference the specific quiz path in the database
+      const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
+
+      // Update only the 'isTurn' field
+      await update(quizRef, { isTurn: participantId });
+
+      console.log(`Turn successfully updated to participant ${participantId}.`);
     } catch (error) {
       console.error(
-        `Error changing turn for participant ${participantId}:`,
+        `Error updating turn for participant ${participantId}:`,
         error
       );
+      throw error; // Propagate the error for the caller to handle
+    }
+  };
+
+  const updateSlideUsedAnswers = async (
+    slideId: string,
+    quizCode: string,
+    usedAnswers: string[]
+  ): Promise<void> => {
+    if (!ongoingQuiz || !ongoingQuiz.quiz?.slides) {
+      console.error('Quiz data or slides are missing.');
+      throw new Error('Invalid quiz data.');
+    }
+
+    console.log('Used answers:', usedAnswers);
+
+    try {
+      // Get the slide to update
+      const slide = ongoingQuiz.quiz.slides[ongoingQuiz.currentSlide - 1];
+      console.log('Slide to be updated:', slide);
+
+      // Update the usedAnswers field
+      const updatedSlide = {
+        ...slide,
+        usedAnswers, // Update the usedAnswers field with the provided list
+      };
+
+      // Create a copy of the quiz with the updated slide
+      const updatedQuiz = {
+        ...ongoingQuiz,
+        quiz: {
+          ...ongoingQuiz.quiz,
+          slides: [
+            ...ongoingQuiz.quiz.slides.slice(0, ongoingQuiz.currentSlide - 1),
+            updatedSlide,
+            ...ongoingQuiz.quiz.slides.slice(ongoingQuiz.currentSlide),
+          ],
+        },
+      };
+
+      // Log the updated quiz to verify the changes before updating the database
+      console.log('Updated Quiz:', updatedQuiz);
+
+      console.log('updated slide', updatedSlide);
+
+      // Perform an optimistic update
+      const updateResult = await optimisticUpdate(quizCode, updatedQuiz);
+      if (!updateResult) {
+        console.error('Optimistic update failed.');
+        throw new Error('Optimistic update failed.');
+      }
+
+      console.log(`UsedAnswers updated for slide ${slideId}.`);
+    } catch (error) {
+      console.error(`Error updating usedAnswers for slide ${slideId}:`, error);
+      throw error;
     }
   };
 
@@ -283,6 +366,8 @@ export const useHostLogic = (id: string | undefined) => {
     nextSlide,
     handleAddPoints,
     changeTurn,
+    updateSlideUsedAnswers,
     endQuiz,
+    removeParticipant,
   };
 };

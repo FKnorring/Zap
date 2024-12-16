@@ -1,14 +1,15 @@
-import { ToolbarProps } from "@/slides/toolbar";
-import { Label } from "@/components/ui/label";
+import { ToolbarProps } from '@/slides/toolbar';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
   SelectValue,
-} from "@/components/ui/select"; // Ensure you import SelectContent and SelectValue
-import { QuestionSlide } from "@/models/Quiz";
-import { Award } from "lucide-react";
+} from '@/components/ui/select'; // Ensure you import SelectContent and SelectValue
+import { QuestionSlide } from '@/models/Quiz';
+import { Award } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function SelectPoints({
   slide,
@@ -21,12 +22,13 @@ export function SelectPoints({
     };
     onSlideUpdate(updatedSlide); // Update slide with the new points value
   };
+  const { t } = useTranslation(['quizEditor']);
 
   return (
     <div className="space-y-1">
       <div className="flex flex-row items-center">
         <Award size={17} />
-        <Label>Points</Label>
+        <Label>{t("points")}</Label>
       </div>
 
       <Select

@@ -14,5 +14,7 @@ export const Info: SlideInfo = {
     icon: BarChart3Icon,
     label: "Score Slide",
     slideType: SlideTypes.score,
-    defaults: {}
+    defaults: {
+        title: "Current Standings",
+    }
 } as const;

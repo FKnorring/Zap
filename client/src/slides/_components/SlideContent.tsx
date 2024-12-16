@@ -8,7 +8,7 @@ interface SlideContentProps {
 export function SlideContent({ content, wiggle = false }: SlideContentProps) {
     if (!content) return null;
 
-    const className = "md:text-[40px] text-[20px] text-center leading-normal";
+    const className = "md:text-[40px] text-[20px] text-center leading-normal font-display";
     
     return wiggle ? (
         <WiggleText className={className} text={content} />

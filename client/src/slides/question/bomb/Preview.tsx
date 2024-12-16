@@ -17,7 +17,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P001',
     score: [8, 12],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
+    
   },
   {
     answers: [
@@ -30,7 +30,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P002',
     score: [10, 15],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
+    
   },
   {
     answers: [{ slideNumber: 1, answer: ['No'], time: '2024-11-18T10:07:00Z' }],
@@ -40,7 +40,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P003',
     score: [5],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
+    
   },
   {
     answers: [],
@@ -50,7 +50,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P004',
     score: [],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
+    
   },
   {
     answers: [
@@ -63,7 +63,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P005',
     score: [9, 11],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    isTurn: false,
+    
   },
 ];
 

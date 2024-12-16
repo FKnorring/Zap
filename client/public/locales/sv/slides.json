@@ -3,5 +3,9 @@
   "numTeams": "Antal lag",
   "endQuiz": "Avsluta Quiz",
   "quizCode": "Quiz kod: ",
-  "startQuiz": "Starta Quiz"
+  "startQuiz": "Starta Quiz",
+  "thankYouForPlaying": "Tack för att spelade",
+  "youJustPlayed": "Du spelade precis",
+  "results": "Resultat",
+  "statistics": "Statistik"
 }

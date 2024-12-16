@@ -10,6 +10,7 @@ interface BaseModel {
 interface UseOptimisticResourceOptions<T> {
   api: BaseService<T>;
   userScoped?: boolean; // Whether the resource is scoped to the user
+  enrichResource?: (id: string) => Promise<FirebaseResponse<T>>; // Optional function to enrich a resource with additional data
 }
 
 export type OptimisticResponse<T> = Promise<{
@@ -35,6 +36,19 @@ export function createOptimisticResourceHook<T extends BaseModel>(options: UseOp
     const { user } = useGetAuthenticatedUser();
     const [resources, setResources] = useState<T[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const enrichResource = useCallback(async (id: string) => {
+      if (!options.enrichResource) return;
+      
+      const { data, error } = await options.enrichResource(id);
+      if (!error && data) {
+        setResources(prev => 
+          prev.map(resource => 
+            resource.id === id ? { ...resource, ...data } : resource
+          )
+        );
+      }
+    }, []);
 
     const fetchResources = useCallback(() => {
       if (options.userScoped && !user) return;
@@ -124,7 +138,8 @@ export function createOptimisticResourceHook<T extends BaseModel>(options: UseOp
         isLoading, 
         optimisticCreate, 
         optimisticUpdate, 
-        optimisticDelete 
+        optimisticDelete,
+        enrichResource 
       };
     }
 
@@ -133,7 +148,8 @@ export function createOptimisticResourceHook<T extends BaseModel>(options: UseOp
       isLoading, 
       optimisticCreate, 
       optimisticUpdate, 
-      optimisticDelete 
+      optimisticDelete,
+      enrichResource 
     };
   };
 } 

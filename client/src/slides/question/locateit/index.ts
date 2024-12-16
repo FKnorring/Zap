@@ -10,9 +10,9 @@ import { MapPinnedIcon } from "lucide-react";
 import { SlideInfo } from "../..";
 
 export const Info: SlideInfo = {
-  value: "question:LOCATEIT",
+  value: 'question:LOCATEIT',
   icon: MapPinnedIcon,
-  label: "LocateIt",
+  label: QuestionTypes.LOCATEIT,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.LOCATEIT,
   interactivePreview: true,
@@ -24,7 +24,7 @@ export const Info: SlideInfo = {
     mapDetails: MapDetails.NONE,
     awardPointsLocation: AwardPointsLocation.DISTANCE,
     answerType: AnswerTypes.location,
-    points:1000,
-    radius:300000,
+    points: 1000,
+    radius: 100000,
   },
 } as const;

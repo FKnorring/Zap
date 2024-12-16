@@ -4,6 +4,7 @@ interface User {
     created_at: string;
     username: string;
     avatar: string;
+    collectionName: string
 }
 
 export default User;

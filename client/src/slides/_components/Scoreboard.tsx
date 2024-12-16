@@ -1,9 +1,34 @@
-import { useEffect, useState } from "react";
-import Avatar, { genConfig } from "react-nice-avatar";
-import { motion, AnimatePresence } from "framer-motion";
-import { Participant, Slide, SlideTypes } from "@/models/Quiz";
+import { useEffect, useState } from 'react';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Participant, Slide, SlideTypes } from '@/models/Quiz';
 
-// Counter component for animating the score display
+function setDeceleratingTimeout(
+  callback: () => void,
+  initialFactor: number,
+  finalFactor: number,
+  fastSteps: number,
+  totalSteps: number
+) {
+  const internalCallback = (tick: number) => {
+    return function () {
+      if (tick > 0) {
+        const delay =
+          tick > totalSteps - fastSteps
+            ? initialFactor + Math.random() * 5 // Quick updates with a slight variation
+            : initialFactor +
+              ((finalFactor - initialFactor) / (totalSteps - fastSteps)) *
+                (totalSteps - tick); // Gradual increase in delay
+
+        window.setTimeout(internalCallback(tick - 1), delay);
+        callback();
+      }
+    };
+  };
+
+  window.setTimeout(internalCallback(totalSteps), initialFactor);
+}
+
 function Counter({
   value,
   shouldAnimate,
@@ -18,22 +43,32 @@ function Counter({
   useEffect(() => {
     if (!shouldAnimate || value === previousValue) return;
 
-    const gap = Math.abs(value - displayValue);
-    const speed = Math.max(2.5, 500 / gap);
-    const increment = value > displayValue ? 1 : -1;
+    const totalSteps = 100; // Total steps for the animation
+    const fastSteps = 80; // Steps with quick updates
+    const initialFactor = 10; // Starting delay (ms)
+    const finalFactor = 30; // Maximum delay for the last steps (ms)
+    const totalChange = value - previousValue;
+    const stepValue = totalChange / totalSteps;
 
-    const timer = setInterval(() => {
-      setDisplayValue((prev) => {
-        if (prev === value) {
-          clearInterval(timer);
-          return prev;
-        }
-        return prev + increment;
-      });
-    }, speed);
+    let currentStep = 0;
 
-    return () => clearInterval(timer);
-  }, [value, previousValue, shouldAnimate, displayValue]);
+    setDeceleratingTimeout(
+      () => {
+        setDisplayValue(() => {
+          currentStep += 1;
+          return Math.round(previousValue + currentStep * stepValue);
+        });
+      },
+      initialFactor,
+      finalFactor,
+      fastSteps,
+      totalSteps
+    );
+
+    return () => {
+      // No cleanup necessary as timeouts naturally resolve
+    };
+  }, [value, previousValue, shouldAnimate]);
 
   return <span>{displayValue}</span>;
 }
@@ -157,7 +192,7 @@ function ScoreBoard({ participants, slides, currentSlide }: ScoreBoardProps) {
                   {index + 1}
                 </span>
                 <Avatar
-                  style={{ width: "4rem", height: "4rem" }}
+                  style={{ width: '4rem', height: '4rem' }}
                   {...genConfig(participant.avatar)}
                 />
                 <div className="bg-component-background flex items-center justify-between font-display p-4 rounded-lg w-full flex-grow min-w-0">

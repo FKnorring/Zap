@@ -18,14 +18,11 @@ interface AppContextType {
     optimisticCreate: OptimisticCreate<Quiz>;
     optimisticDelete: OptimisticDelete;
     optimisticUpdate: OptimisticUpdate<Quiz>;
+    enrichResource: (id: string) => Promise<void>;
   };
   user: {
     user: User | null;
     updateUser: (user: User) => Promise<void>;
-  };
-  users: {
-    resources: User[];
-    isLoading: boolean;
   };
 }
 

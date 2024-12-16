@@ -18,7 +18,7 @@ export function DroppableContainer({
 
   return (
     <>
-      <h3 className="text-xl font-semibold mb-2">{label}</h3>
+      <h3 className="textlgl font-semibold ml-2 mb-2">{label}</h3>
       <div
         ref={setNodeRef}
         className={`min-h-[4rem] rounded-lg border-2 border-dashed transition-colors p-2

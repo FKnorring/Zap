@@ -21,7 +21,8 @@ class UserService extends BaseService<User> {
         email,
         created_at: new Date().toISOString(),
         username: "temp",
-        avatar: "temp"
+        avatar: "temp",
+        collectionName: "micah"
       };
 
       await this.create(newUser, id);

@@ -8,6 +8,7 @@ import { usePathOnValue } from '@/hooks/usePathOnValue';
 import { BaseQuestionRender } from '../base/QuestionRender';
 import { useTranslation } from 'react-i18next';
 import NextSlide from '@/slides/_components/NextSlide';
+import Spinner from '@/components/Spinner';
 
 export function Host({
   slide,
@@ -22,7 +23,15 @@ export function Host({
 }) {
   const [participantsQueue, setParticipantsQueue] = useState<Participant[]>([]);
   const { t } = useTranslation(['questions']);
+  const [time, setTime] = useState(10);
+  useEffect(() => {
+    if (time <= 0) return;
+    const timer = setInterval(() => {
+      setTime((prevTime) => prevTime - 1);
+    }, 1000);
 
+    return () => clearInterval(timer);
+  }, [time]);
   const {
     ongoingQuizzes: { resources: ongoingQuizzes, optimisticUpdate },
   } = useAppContext();
@@ -31,7 +40,7 @@ export function Host({
     () => ongoingQuizzes.find((quiz) => quiz.id === quizCode),
     [ongoingQuizzes, quizCode]
   );
-  if (!ongoingQuiz) return <h1>Loading quiz</h1>;
+  if (!ongoingQuiz) return <Spinner />;
   const updateParticipants = useCallback(
     (id: string, participants: { [key: string]: Participant }) => {
       optimisticUpdate(
@@ -138,69 +147,82 @@ export function Host({
       console.error("Error updating participant's answer", error);
     }
   };
-
-  return (
-    <div>
-      <BaseQuestionRender slide={slide} participants={participants} />
-      <div className="flex flex-col items-center m-16 gap-10">
-        <h1 className="text-6xl font-display">{t('nextUp')}</h1>
-        {participantsQueue.slice(0, 3).map((participant, index) => (
-          <div
-            key={index}
-            className="flex flex-row justify-center items-center gap-16"
-          >
-            {index == 0 && (
-              <div className="flex flex-col items-center">
-                <Button
-                  variant="ghost"
-                  className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
-                  onClick={() => moveFirstParticipantToLast()}
-                >
-                  <X />
-                </Button>
-                <h1 className="text-1xl font-display">{t('wrongAnswer')}</h1>
-              </div>
-            )}
-            <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
-              <Avatar
-                style={{
-                  width:
-                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                  height:
-                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                }}
-                {...genConfig(participant.avatar ? participant.avatar : '')}
-              />
-              <span
-                className={`${
-                  index === 0
-                    ? 'text-5xl font-bold'
-                    : index === 1
-                      ? 'text-2xl font-medium'
-                      : 'text-xl font-normal'
-                } font-display`}
-              >
-                {participant.name}
-              </span>
-            </div>
-            {index == 0 && (
-              <div className="flex flex-col items-center">
-                <Button
-                  variant="ghost"
-                  className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
-                  onClick={() => {
-                    setAnswerCorrect(participant);
-                  }}
-                >
-                  <Check />
-                </Button>
-                <h1 className="text-1xl font-display">{t('rightAnswer')}</h1>
-              </div>
-            )}
-          </div>
-        ))}
+  if (time > 0) {
+    return (
+      <div className="flex flex-1 flex-col text-center justify-center gap-20">
+        <div>
+          <h1 className="font-display text-9xl justify-center">
+            {t('getReady')}
+            {time}
+          </h1>
+        </div>
+        <h1 className="font-display text-6xl">{t('knowTheAnswer')}</h1>
       </div>
-      <NextSlide onClick={onNextSlide} />
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <BaseQuestionRender slide={slide} />
+        <div className="flex flex-col items-center m-16 gap-10">
+          <h1 className="text-6xl font-display">{t('nextUp')}</h1>
+          {participantsQueue.slice(0, 3).map((participant, index) => (
+            <div
+              key={index}
+              className="flex flex-row justify-center items-center gap-16"
+            >
+              {index == 0 && (
+                <div className="flex flex-col items-center">
+                  <Button
+                    variant="ghost"
+                    className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
+                    onClick={() => moveFirstParticipantToLast()}
+                  >
+                    <X />
+                  </Button>
+                  <h1 className="text-1xl font-display">{t('wrongAnswer')}</h1>
+                </div>
+              )}
+              <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
+                <Avatar
+                  style={{
+                    width:
+                      index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
+                    height:
+                      index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
+                  }}
+                  {...genConfig(participant.avatar ? participant.avatar : '')}
+                />
+                <span
+                  className={`${
+                    index === 0
+                      ? 'text-5xl font-bold'
+                      : index === 1
+                        ? 'text-2xl font-medium'
+                        : 'text-xl font-normal'
+                  } font-display`}
+                >
+                  {participant.name}
+                </span>
+              </div>
+              {index == 0 && (
+                <div className="flex flex-col items-center">
+                  <Button
+                    variant="ghost"
+                    className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
+                    onClick={() => {
+                      setAnswerCorrect(participant);
+                    }}
+                  >
+                    <Check />
+                  </Button>
+                  <h1 className="text-1xl font-display">{t('rightAnswer')}</h1>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <NextSlide onClick={onNextSlide} />
+      </div>
+    );
+  }
 }

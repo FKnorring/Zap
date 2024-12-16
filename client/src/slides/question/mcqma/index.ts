@@ -11,18 +11,18 @@ import { SlideInfo } from '../..';
 import { nanoid } from 'nanoid'
 
 export const Info: SlideInfo = {
-    value: "question:MCQMA",
-    icon: CheckSquareIcon,
-    label: "Multiple Choice",
-    slideType: SlideTypes.question,
-    questionType: QuestionTypes.MCQMA,
-    defaults: {
-        options: Array.from({ length: 4 }, (_, i) => ({
-            id: nanoid(),
-            text: `Option ${i + 1}`,
-            isCorrect: i <= 1,
-        })),
-        answerType: AnswerTypes.multipleStrings,
-        points:1000,
-    }
+  value: 'question:MCQMA',
+  icon: CheckSquareIcon,
+  label: QuestionTypes.MCQMA,
+  slideType: SlideTypes.question,
+  questionType: QuestionTypes.MCQMA,
+  defaults: {
+    options: Array.from({ length: 4 }, (_, i) => ({
+      id: nanoid(),
+      text: `Option ${i + 1}`,
+      isCorrect: i <= 1,
+    })),
+    answerType: AnswerTypes.multipleStrings,
+    points: 1000,
+  },
 } as const; 

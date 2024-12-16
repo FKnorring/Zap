@@ -12,7 +12,6 @@ export interface TempAnswer {
 export interface Participant {
   answers: Array<ParticipantAnswer>;
   tempAnswer?: TempAnswer;
-  isTurn?: boolean;
   hasAnswered: boolean;
   avatar: string;
   name: string;

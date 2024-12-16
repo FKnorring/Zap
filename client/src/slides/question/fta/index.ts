@@ -9,14 +9,14 @@ import { QuestionTypes, SlideTypes, AnswerTypes } from "@/models/Quiz";
 import { TypeIcon } from "lucide-react";
 import { SlideInfo } from "../..";
 export const Info: SlideInfo = {
-  value: "question:FTA",
+  value: 'question:FTA',
   icon: TypeIcon,
-  label: "Free Text",
+  label: QuestionTypes.FTA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.FTA,
   defaults: {
-    correctAnswer: "",
+    correctAnswer: '',
     answerType: AnswerTypes.freeText,
-    points:1000,
+    points: 1000,
   },
 } as const;

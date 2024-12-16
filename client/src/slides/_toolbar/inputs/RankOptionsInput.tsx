@@ -7,12 +7,14 @@ import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { ListOrdered } from 'lucide-react';
 import { max_options } from '@/config/max';
+import { useTranslation } from 'react-i18next';
 
 export function RankOptionsInput({
   slide,
   onSlideUpdate,
 }: ToolbarProps<RankSlide>) {
   const [newRank, setNewRank] = useState<string>('');
+  const { t } = useTranslation(['questions']);
 
   if (!('ranking' in slide)) return null;
 
@@ -29,7 +31,7 @@ export function RankOptionsInput({
     <div className="space-y-4">
       <div className="flex flex-row items-center space-x-1">
         <ListOrdered size={17} />
-        <Label>Rank Answer</Label>
+        <Label>{t('rankAnswer')}</Label>
       </div>
       {(slide as RankSlide).ranking.map((rankItem, index) => (
         <div key={index} className="flex items-center space-x-2">
@@ -77,7 +79,7 @@ export function RankOptionsInput({
                 }
               }}
             >
-              Add
+              {t('add')}
             </Button>
           </>
         )}

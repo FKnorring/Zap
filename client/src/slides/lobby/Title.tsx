@@ -9,27 +9,29 @@ interface TitleProps {
 
 export default function Title({ title = 'Loading...', quizCode }: TitleProps) {
   return (
-    <div className="flex gap-4 items-center justify-center w-full ">
-      <div className=" flex flex-row gap-4 items-center justify-center bg-card w-fit p-4 rounded-lg">
+    <div className="flex items-center justify-center w-full gap-32">
+      <div className="flex flex-row gap-8 items justify-center items-center bg-card w-fit p-4 rounded-lg">
         <QRCode
           style={{ height: 'auto', width: '220px', margin: '3' }}
           value={`${import.meta.env.VITE_QR_BASE_URL}${quizCode}`}
           viewBox={`0 0 256 256`}
         />
 
-        <div className="flex-1 flex items-center justify-center">
-          <span className="flex flex-col gap-4 items-center">
-            <span className="text-2xl flex items-center gap-2">
-              <GameShackTitle icon={false} className="text-5xl" />
-            </span>
-            <span className=" text-black text-6xl font-display w-fit">
-              {title}
-            </span>
-            <span className="text-black font-display text-3xl">
-              {t('slides:quizCode')} {quizCode}
-            </span>
+        <div className="flex flex-col items-center justify-center">
+          <span className="text-black text-2xl font-bold">{t('slides:quizCode')}</span>
+          <span className="text-black font-display text-9xl">
+            {quizCode}
           </span>
         </div>
+      </div>
+
+      <div className="flex flex-col items-center justify-between gap-2">
+        <span className="text-8xl flex items-center gap-2">
+          <GameShackTitle icon={false} className="text-8xl" />
+        </span>
+        <span className=" text-white text-6xl font-display w-fit">
+          {title}
+        </span>
       </div>
     </div>
   );

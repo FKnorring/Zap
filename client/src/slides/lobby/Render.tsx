@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import PlayButton from './PlayButton';
 import EndButton from './EndButton';
 import { flags } from '@/config/features';
-
 interface Team {
   id: string;
   name: string;
@@ -30,11 +29,13 @@ export default function Render({
   onNextSlide,
   quizCode,
   participants,
+  removeParticipant,
 }: {
   slide: LobbySlide;
   participants: Participant[];
   onNextSlide: () => void;
   quizCode: string;
+  removeParticipant: (participantId: string) => void;
 }) {
   const participantsRef = useRef<HTMLDivElement>(null);
   const [teamsEnabled, setTeamsEnabled] = useState(false);
@@ -159,7 +160,7 @@ export default function Render({
     <div className="flex-1 flex flex-col items-center justify-between gap-4 p-10 overflow-y-auto">
       <Title title={ongoingQuiz?.quiz.quiz_name} quizCode={quizCode} />
 
-      <div className="flex flex-col items-center gap-4 w-full max-w-6xl">
+      <div className="flex flex-col items-center gap-4 w-full">
         {teamsEnabled ? (
           <TeamView
             numberOfTeams={numberOfTeams}
@@ -169,14 +170,11 @@ export default function Render({
           />
         ) : (
           <div className="flex flex-col items-center gap-2 w-full">
-            <span className="text-4xl font-display">
-              {t('general:participants')}
-            </span>
             <div
               ref={participantsRef}
-              className="grid grid-cols-4 gap-4 bg-black/50 backdrop-blur-md rounded-lg min-h-40 overflow-y-auto w-full"
+              className="flex flex-wrap items-center justify-center rounded-lg min-h-40 overflow-y-auto w-full max-h-[29rem]"
             >
-              <Participants participants={participants} />
+              <Participants participants={participants} removeParticipant={removeParticipant} />
             </div>
           </div>
         )}

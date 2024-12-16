@@ -1,69 +1,173 @@
-import { Participant } from "@/models/Quiz";
-import Avatar, { genConfig } from "react-nice-avatar";
+import { Participant, ParticipantAnswer, TempAnswer } from '@/models/Quiz';
+import Avatar, { genConfig } from 'react-nice-avatar';
+import { Ellipsis } from 'lucide-react';
 
-export default function Results({ participants }: { participants: Participant[] }) {
-  const participantsWithTotal = participants.map(participant => ({
-    ...participant,
-    total: participant.score.reduce((acc, curr) => acc + curr, 0),
-  })).sort((a, b) => b.total - a.total);
+interface ParticipantTotal {
+  total: number;
+  answers: Array<ParticipantAnswer>;
+  tempAnswer?: TempAnswer;
+  hasAnswered: boolean;
+  avatar: string;
+  name: string;
+  participantId: string;
+  score: number[];
+}
 
-  const hasMoreThanThree = participantsWithTotal.length > 3;
+const DisplayPlacement = ({
+  participants,
+}: {
+  participants: ParticipantTotal[];
+}) => {
+  const size =
+    participants.length === 1
+      ? 'w-32 h-32'
+      : participants.length === 2
+        ? 'w-24 h-24'
+        : 'w-20 h-20';
+
+  const textSize =
+    participants.length === 1
+      ? 'text-4xl'
+      : participants.length === 2
+        ? 'text-3xl'
+        : 'text-2xl';
+  return (
+    <div className="flex flex-row gap-8 items-center justify-center">
+      {participants.slice(0, 3).map((participant) => (
+        <div key={participant.participantId} className="flex flex-col items-center">
+          <Avatar 
+            className={`${size}`}
+            {...genConfig(participant.avatar)}
+          />
+          <div className="flex flex-col items-center">
+            <span className={`font-display ${textSize}`}>{participant.name}</span>
+          </div>
+        </div>
+      ))}
+      {participants.length > 3 && (
+        <Ellipsis className="items-start self-center justify-start w-12 h-12" />
+      )}
+    </div>
+  );
+};
+
+
+export default function Results({
+  participants,
+}: {
+  participants: Participant[];
+}) {
+  const participantsWithTotal = participants
+    .map((participant) => ({
+      ...participant,
+      total: participant.score.reduce((acc, curr) => acc + curr, 0),
+    }))
+    .sort((a, b) => b.total - a.total);
+
+  const getTopThree = (
+    participants: ParticipantTotal[]
+  ): ParticipantTotal[][] => {
+    if (participants.length === 0) return [[], [], [], []];
+
+    // Create lists for first, second, and third places
+    const result: ParticipantTotal[][] = [[], [], [], []];
+    let currentRank = 0;
+    let lastValue = null;
+
+    for (const participant of participants) {
+      if (currentRank > 3) {
+        result[3].push(participant);
+      }
+
+      // If the score changes, move to the next rank
+      if (participant.total !== lastValue) {
+        currentRank++;
+        lastValue = participant.total;
+      }
+
+      // Add the participant to the correct rank list
+      if (currentRank <= 3) {
+        result[currentRank - 1].push(participant);
+      }
+    }
+
+    return result;
+  };
+
+ 
+  // Returns a list with a list of the placements
+  const placement = getTopThree(participantsWithTotal);
+
+  const firstPlace = placement[0];
+
+  const secondPlace = placement[1];
+
+  const thirdPlace = placement[2];
+  // Rest of the participants
+  const forthPlace = placement[3];
+  const showFourthPlace = forthPlace.length > 0;
 
   return (
     <div className="flex-1 flex flex-col">
-        {/* Podium Section */}
-        <div className="flex-1 flex items-end justify-center gap-4 w-full">
-          {/* Second Place - Only show if there are at least 2 participants */}
-          {participantsWithTotal.length >= 2 && (
-            <div className="flex flex-col items-center">
-              <Avatar className="w-16 h-16" {...genConfig(participantsWithTotal[1].name)} />
-              <span className="font-semibold">{participantsWithTotal[1].name}</span>
-              <span className="text-sm text-gray-600">{participantsWithTotal[1].total} pts</span>
-              <div className="w-24 bg-silver h-32 rounded-t-lg flex items-center justify-center text-2xl font-bold">
-                2
-              </div>
+      {/* Podium Section */}
+      <div className="flex-1 flex items-end justify-center gap-10 w-full">
+        {/* Second Place */}
+        {secondPlace.length > 0 && (
+          <div className="flex flex-col items-center">
+            <DisplayPlacement participants={secondPlace} />
+            <span className="font-semibold text-3xl text-gray-600">
+              {secondPlace[0].total} pts
+            </span>
+            <div className="w-32 bg-silver h-40 rounded-t-lg flex items-center justify-center text-4xl font-bold font-display">
+              2
             </div>
-          )}
+          </div>
+        )}
 
-          {/* First Place - Always show if there's at least one participant */}
-          {participantsWithTotal.length >= 1 && (
-            <div className="flex flex-col items-center">
-              <Avatar className="w-20 h-20" {...genConfig(participantsWithTotal[0].name)} />
-              <span className="font-bold text-lg">{participantsWithTotal[0].name}</span>
-              <span className="text-sm text-gray-600">{participantsWithTotal[0].total} pts</span>
-              <div className="w-24 bg-gold h-40 rounded-t-lg flex items-center justify-center text-3xl font-bold">
-                1
-              </div>
+        {/* First Place */}
+        {firstPlace.length > 0 && (
+          <div className="flex flex-col items-center">
+            <DisplayPlacement participants={firstPlace} />
+            <span className="font-semibold text-3xl text-gray-600">
+              {firstPlace[0].total} pts
+            </span>
+            <div className="w-32 bg-gold h-52 rounded-t-lg flex items-center justify-center text-5xl font-bold font-display">
+              1
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Third Place - Only show if there are at least 3 participants */}
-          {participantsWithTotal.length >= 3 && (
-            <div className="flex flex-col items-center">
-              <Avatar className="w-16 h-16" {...genConfig(participantsWithTotal[2].name)} />
-              <span className="font-semibold">{participantsWithTotal[2].name}</span>
-              <span className="text-sm text-gray-600">{participantsWithTotal[2].total} pts</span>
-              <div className="w-24 bg-bronze h-24 rounded-t-lg flex items-center justify-center text-2xl font-bold">
-                3
-              </div>
+        {/* Third Place */}
+        {thirdPlace.length > 0 && (
+          <div className="flex flex-col items-center">
+            <DisplayPlacement participants={thirdPlace} />
+            <span className="font-semibold text-3xl text-gray-600">
+              {thirdPlace[0].total} pts
+            </span>
+            <div className="w-32 bg-bronze h-24 rounded-t-lg flex items-center justify-center text-4xl font-bold font-display">
+              3
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
-      {/* Rest of Participants List - Only show if more than 3 participants */}
-      {hasMoreThanThree && (
-        <div className="flex-1 w-full max-w-2xl mx-auto overflow-y-auto max-h-80 border rounded-lg">
-            {participantsWithTotal.slice(3).map((participant, index) => (
-              <div
-                key={participant.name}
-                className="flex items-center gap-4 p-3 border-b last:border-b-0"
-              >
-                <span className="font-semibold w-8">{index + 4}.</span>
-                <Avatar className="w-10 h-10" {...genConfig(participant.name)} />
-                <span className="flex-grow">{participant.name}</span>
-                <span className="font-semibold">{participant.total} pts</span>
-              </div>
-            ))}
+      {/* Rest of Participants List */}
+      {showFourthPlace && (
+        <div className="flex-1 w-full max-w-4xl mx-auto overflow-y-auto max-h-80 border rounded-lg">
+          {forthPlace.map((participant, index) => (
+            <div
+              key={participant.name}
+              className="flex items-center gap-4 p-3 border-b last:border-b-0"
+            >
+              <span className="font-semibold w-8">{index + 4}.</span>
+              <Avatar
+                className="w-10 h-10"
+                {...genConfig(participant.avatar)}
+              />
+              <span className="flex-grow text-2xl font-semibold">{participant.name}</span>
+              <span className="font-semibold text-2xl">{participant.total} pts</span>
+            </div>
+          ))}
         </div>
       )}
     </div>
