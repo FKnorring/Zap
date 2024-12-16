@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from 'react';
 import { Circle } from './_circle';
 import { PlaceAutocompleteClassic } from './_autocomplete';
+import { SlideTitle } from '@/slides/_components/SlideTitle';
 
 export function Preview({
   slide,
@@ -120,11 +121,15 @@ export function Preview({
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative pl-10 pr-10 pb-10">
+      <div className="flex flex-row justify-center p-10">
+        <SlideTitle title={slide.title} />
+      </div>
+
       <APIProvider apiKey={APIKEY}>
         <Map
           mapId="locateit-preview"
-          style={{ width: '100%', height: '100%', zoom: 1.5 }}
+          style={{ width: '100%', height: '83%', zoom: 1.5 }}
           center={mapCenter}
           zoom={zoom}
           onCenterChanged={(e) => setMapCenter(e.detail.center)}
