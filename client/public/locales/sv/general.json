@@ -1,8 +1,11 @@
 {
   "login": "Logga in",
   "logout": "Logga ut",
+  "register": "Registrera dig GRATIS",
   "home": "Hem",
   "profile": "Profil",
+  "settings": "Inställningar",
+  "appearance": "Utseende",
   "about": "Om Oss",
   "play": "Spela",
   "language": "Språk",

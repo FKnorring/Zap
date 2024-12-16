@@ -5,26 +5,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import Settings from '@/components/Settings';
 
 export function Header() {
   const location = useLocation();
-  const { isAuthenticated, logout } = useKindeAuth();
+  const { isAuthenticated, login, register } = useKindeAuth();
   const [showHeader, setShowHeader] = useState(false);
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
-  const { t, i18n } = useTranslation();
-
-  const handleLanguageChange = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -102,43 +90,25 @@ export function Header() {
                   {t('general:about')}
                 </Button>
               </Link>
-              {isAuthenticated && (
+              {!isAuthenticated && (
                 <>
-                  <Link to="/profile">
-                    <Button
-                      variant={
-                        location.pathname === '/profile' ? 'default' : 'ghost'
-                      }
-                      className="text-lg"
-                    >
-                      {t('general:profile')}
-                    </Button>
-                  </Link>
-                  <Button variant="ghost" className="text-lg" onClick={logout}>
-                    {t('general:logout')}
+                  <Button
+                    variant="ghost"
+                    className="text-lg"
+                    onClick={() => login()}
+                  >
+                    {t('general:login')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="text-lg bg-green-600"
+                    onClick={() => register()}
+                  >
+                    {t('general:register')}
                   </Button>
                 </>
               )}
               <Settings />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-lg">
-                    {t('general:language')}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>
-                    {t('general:chooseLanguage')}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => handleLanguageChange('en')}>
-                    {t('general:english')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleLanguageChange('sv')}>
-                    {t('general:swedish')}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
           </nav>
         </div>
