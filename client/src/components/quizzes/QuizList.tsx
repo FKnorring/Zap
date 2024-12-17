@@ -94,8 +94,12 @@ function QuizList({
           const bDate = b.updatedAt || b.createdAt;
           return new Date(bDate).getTime() - new Date(aDate).getTime();
         })
-        .map((quiz) => (
-          <div key={quiz.quizId} className="flex-none w-[300px]">
+        .map((quiz, index) => (
+          <div
+            key={quiz.quizId}
+            className="flex-none w-[300px]"
+            id={index === 0 ? 'first-quiz-card' : undefined}
+          >
             <QuizCard
               quiz={quiz}
               onClick={() => navigate(`/quizzes/${quiz.quizId}/edit`)}

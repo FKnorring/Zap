@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Participant } from '@/models/Quiz';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HeartIcon } from 'lucide-react';
 import { BombSlide } from '@/models/Quiz';
 import { ParticipantService } from '@/services/participant';
 import { Button } from '@/components/ui/button';
-
+import { useTranslation } from 'react-i18next';
 import { BombIcon } from 'lucide-react';
+import NextSlide from '@/slides/_components/NextSlide';
 
 type HostProps = {
   participants: Participant[];
@@ -34,9 +35,11 @@ export function Host({
   slide,
   quizCode,
   slideNumber,
+  onNextSlide,
   changeTurn,
   updateSlideUsedAnswers,
 }: HostProps) {
+  const { t } = useTranslation();
   const [time, setTime] = useState(1000000000);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [currentParticipants, setCurrentParticipants] = useState(participants);
@@ -159,7 +162,7 @@ export function Host({
           setIsCorrect('true');
 
           setUsedAnswers((prev) => {
-            const updatedAnswers = [...prev, lastTempAnswer];
+            const updatedAnswers = [...prev, lastTempAnswer.toUpperCase()];
 
             if (answers.length === updatedAnswers.length) {
               console.log('inne I FKNIN LOOPEN');
@@ -209,7 +212,10 @@ export function Host({
             setIsTransitioning(false); // Unlock transitions
             setUserAnswer('');
           }, 1200);
-        } else if (lastTempAnswer && !answers.includes(lastTempAnswer.toUpperCase())) {
+        } else if (
+          lastTempAnswer &&
+          !answers.includes(lastTempAnswer.toUpperCase())
+        ) {
           setIsCorrect('false');
           setUserAnswer(lastTempAnswer);
         } else if (
@@ -416,8 +422,8 @@ export function Host({
 
   if (!gameStarted) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center gap-16">
-        <div className="mt-10 rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center break-words text-center">
+      <div className="h-screen flex flex-col items-center justify-center gap-8">
+        <div className="mt-8 rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center break-words text-center">
           <BombIcon size={32} className="ml-4"></BombIcon>
           <h1 className="p-8 text-5xl max-w-screen-lg">{slide.title} </h1>
         </div>
@@ -425,10 +431,10 @@ export function Host({
         <div className="space-y-10 mx-10">
           <Button
             size={'lg'}
-            className="text-5xl p-20 mx-10 rounded-lg"
+            className="text-5xl p-16 mx-10 rounded-full font-display"
             onClick={initializeHeartsAndTime}
           >
-            Start game
+            Start
           </Button>
         </div>
       </div>
@@ -439,7 +445,7 @@ export function Host({
     return (
       <div className="h-screen flex flex-col items-center justify-start gap-16">
         {/* Title moved outside of the motion.div */}
-        <div className="mt-10 rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
+        <div className="mt-16  rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
           <BombIcon size={32} className="ml-4"></BombIcon>
           <h1 className="p-4">{slide.title}</h1>
         </div>
@@ -476,7 +482,7 @@ export function Host({
                     width: '100%', // Ensure full width for content
                   }}
                 >
-                  <div className="  items-center bg-component-background rounded-lg grid grid-cols-2 gap-4 p-4">
+                  <div className="m-8 p-12 items-center bg-component-background rounded-lg grid grid-cols-2 gap-4">
                     {/* Timer stays in the first column */}
                     <div className="flex-col justify-center items-center font-display">
                       <h2 className=" text-black text-5xl">{time}</h2>
@@ -485,7 +491,7 @@ export function Host({
                           {currentParticipants[0].name}
                         </h3>
                       </div>
-                      <div className="mt-4 justify-center items center flex gap-0.5rem">
+                      <div className="justify-center items center flex gap-0.5rem">
                         {Array.from({
                           length:
                             participantHearts.find(
@@ -512,95 +518,107 @@ export function Host({
                       transition={{ duration: 0.35, ease: 'easeInOut' }}
                     >
                       <Avatar
-                        style={{
-                          width: '8rem',
-
-                          height: '8rem', // Ensure avatar size is big
-                        }}
-                        {...genConfig(currentParticipants[0].avatar)}
+                        avatarString={currentParticipants[0].avatar}
+                        collectionName={currentParticipants[0].collectionName}
+                        width="8em"
+                        height="8rem"
                       />
                     </motion.div>
                   </div>
-                  <div className="mt-16 flex justify-center items-center">
-                    <div
-                      className={`p-2 px-4 rounded-md text-black font-display text-2xl ${
-                        userAnswer === ''
-                          ? 'bg-white' // White background for empty answer
-                          : isCorrect === 'true'
-                            ? 'bg-green-500' // Green for 'true'
-                            : isCorrect === 'false'
-                              ? 'bg-red-500' // Red for 'false'
-                              : isCorrect === 'used'
-                                ? 'bg-yellow-500' // Yellow for 'used'
-                                : 'bg-white' // Default to white
-                      }`}
-                    >
-                      {userAnswer === '' ? 'Answering...' : userAnswer}
-                    </div>
+
+                  <div
+                    className={`p-8 mt-16 rounded-md text-black font-display text-6xl  ${
+                      userAnswer === ''
+                        ? 'bg-white' // White background for empty answer
+                        : isCorrect === 'true'
+                          ? 'bg-green-500' // Green for 'true'
+                          : isCorrect === 'false'
+                            ? 'bg-red-500' // Red for 'false'
+                            : isCorrect === 'used'
+                              ? 'bg-yellow-500' // Yellow for 'used'
+                              : 'bg-white' // Default to white
+                    }`}
+                  >
+                    {userAnswer === '' ? t('questions:answering') : userAnswer}
                   </div>
                 </motion.div>
               )}
           </AnimatePresence>
-
-          {/* Avatar Row */}
-          <motion.div
+          <div
+            className="absolute flex flex-col justify-center items-center"
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '4rem',
-              width: '100%',
-              padding: '1rem 2rem',
-              overflow: 'hidden',
+              left: '25%',
+              top: '45%',
+              transform: 'translate(-90%, -50%)',
             }}
           >
-            {currentParticipants.map((participant) => (
-              <motion.div
-                key={participant.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  filter:
-                    (participantHearts.find(
-                      (ph) => ph.participantId === participant.participantId
-                    )?.hearts ?? 0) > 0
-                      ? 'none'
-                      : 'grayscale(100%)',
-                }}
-              >
-                <Avatar
+            <h1 className="text-3xl font-display">
+              {t('questions:used')} / {t('questions:total')}
+            </h1>
+            <h1 className="text-6xl font-display">
+              {usedAnswers.length}/{answers.length}
+            </h1>
+          </div>
+          <div className="relative flex items-center justify-center w-full">
+            <motion.div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '4rem',
+                width: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              {currentParticipants.slice(1, 10).map((participant) => (
+                <motion.div
+                  key={participant.name}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
                   style={{
-                    width: '6rem',
-                    height: '6rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    filter:
+                      (participantHearts.find(
+                        (ph) => ph.participantId === participant.participantId
+                      )?.hearts ?? 0) > 0
+                        ? 'none'
+                        : 'grayscale(100%)',
                   }}
-                  {...genConfig(participant.avatar)}
-                />
-                <h3 className="font-display">{participant.name}</h3>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  {(participantHearts.find(
-                    (ph) => ph.participantId === participant.participantId
-                  )?.hearts ?? 0) > 0 ? (
-                    Array.from({
-                      length:
-                        participantHearts.find(
-                          (ph) => ph.participantId === participant.participantId
-                        )?.hearts ?? 0,
-                    }).map((_, index) => (
-                      <HeartIcon key={index} fill="#FF4545" color="#FF4545" />
-                    ))
-                  ) : (
-                    <span style={{ fontSize: '1.5rem' }}>💀</span>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                >
+                  <Avatar
+                    avatarString={participant.avatar}
+                    collectionName={participant.collectionName}
+                    width="6rem"
+                    height="6rem"
+                  />
+                  <h3 className="font-display">{participant.name}</h3>
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    {(participantHearts.find(
+                      (ph) => ph.participantId === participant.participantId
+                    )?.hearts ?? 0) > 0 ? (
+                      Array.from({
+                        length:
+                          participantHearts.find(
+                            (ph) =>
+                              ph.participantId === participant.participantId
+                          )?.hearts ?? 0,
+                      }).map((_, index) => (
+                        <HeartIcon key={index} fill="#FF4545" color="#FF4545" />
+                      ))
+                    ) : (
+                      <span style={{ fontSize: '1.5rem' }}>💀</span>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </motion.div>
+        <NextSlide onClick={onNextSlide} />
       </div>
     );
   }

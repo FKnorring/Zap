@@ -26,7 +26,12 @@ export function useQuizEditor(quizId: string | undefined) {
   const [showSettings, setShowSettings] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const {
-    quizzes: { optimisticUpdate, resources: quizzes, isLoading, enrichResource },
+    quizzes: {
+      optimisticUpdate,
+      resources: quizzes,
+      isLoading,
+      enrichResource,
+    },
   } = useAppContext();
 
   const { t } = useTranslation(['questions']);
@@ -45,7 +50,7 @@ export function useQuizEditor(quizId: string | undefined) {
 
   useEffect(() => {
     if (quizId && enriched) {
-      const globalQuiz = quizzes.find((q) => q.id === quizId)
+      const globalQuiz = quizzes.find((q) => q.id === quizId);
       if (globalQuiz) {
         setLocalQuiz(globalQuiz);
       }
@@ -117,7 +122,11 @@ export function useQuizEditor(quizId: string | undefined) {
     }
   };
 
-  const handleAddSlide = (type: SlideType, questionType?: QuestionType) => {
+  const handleAddSlide = (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => {
     if (!quizId || !localQuiz) return;
 
     let backgroundStyle =
@@ -161,7 +170,13 @@ export function useQuizEditor(quizId: string | undefined) {
       prev
         ? {
             ...prev,
-            slides: [...(prev.slides || []), newSlide],
+            slides: index
+              ? [
+                  ...prev.slides?.slice(0, index),
+                  newSlide,
+                  ...prev.slides?.slice(index),
+                ]
+              : [...(prev?.slides || []), newSlide],
           }
         : null
     );
@@ -275,6 +290,29 @@ export function useQuizEditor(quizId: string | undefined) {
     trackAction();
   };
 
+  const handleSlideSwap = (activeId: string, overId: string) => {
+    if (!quizId || !localQuiz || activeId === overId) return;
+
+    setLocalQuiz((prev) => {
+      if (!prev) return null;
+
+      const oldIndex = prev.slides.findIndex((slide) => slide.id === activeId);
+      const newIndex = prev.slides.findIndex((slide) => slide.id === overId);
+
+      if (oldIndex === -1 || newIndex === -1) return prev;
+
+      const newSlides = [...prev.slides];
+      const [movedSlide] = newSlides.splice(oldIndex, 1);
+      newSlides.splice(newIndex, 0, movedSlide);
+
+      return {
+        ...prev,
+        slides: newSlides,
+      };
+    });
+    trackAction();
+  };
+
   const activeSlide =
     localQuiz?.slides?.find((slide) => slide.id === activeSlideId) ?? null;
 
@@ -298,5 +336,6 @@ export function useQuizEditor(quizId: string | undefined) {
     setActiveSlideId,
     setShowSettings,
     setError,
+    handleSlideSwap,
   };
 }

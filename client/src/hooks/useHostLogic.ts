@@ -152,11 +152,20 @@ export const useHostLogic = (id: string | undefined) => {
             ongoingQuiz.currentSlide - 1
         ) {
           var updatedParticipants = ongoingQuiz.participants;
-          const newAnswer = {
+          const currentSlide  = getCurrentSlide() as QuestionSlide;
+
+          let newAnswer = {
             answer: [''],
             slideNumber: ongoingQuiz.currentSlide - 1,
             time: new Date().toISOString(),
-          };
+          }
+          if(currentSlide.questionType == QuestionTypes.LOCATEIT) {
+            newAnswer = {
+              answer: ['-83','160'],
+              slideNumber: ongoingQuiz.currentSlide - 1,
+              time: new Date().toISOString(),
+            }
+          }
           if (!participant.answers) {
             updatedParticipants[id].answers = [newAnswer];
           } else {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FASlide, Participant } from '@/models/Quiz';
 import { Button } from '@/components/ui/button';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { X, Check } from 'lucide-react';
 import { useAppContext } from '@/contexts/App/context';
 import { usePathOnValue } from '@/hooks/usePathOnValue';
@@ -184,14 +184,16 @@ export function Host({
               )}
               <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
                 <Avatar
-                  style={{
-                    width:
-                      index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                    height:
-                      index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                  }}
-                  {...genConfig(participant.avatar ? participant.avatar : '')}
+                  width={
+                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem'
+                  }
+                  height={
+                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem'
+                  }
+                  avatarString={participant.avatar}
+                  collectionName={participant.collectionName}
                 />
+
                 <span
                   className={`${
                     index === 0

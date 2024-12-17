@@ -1,16 +1,18 @@
-import { KindeProvider } from "@kinde-oss/kinde-auth-react";
-import { Header } from "./components/Header";
-import { AppRoutes } from "./routes/AppRoutes";
-import { Toaster } from "sonner";
-import { AppProvider } from "./contexts/App/provider";
-import OngoingQuizHandler from "./components/OngoingQuizHandler";
+import { KindeProvider } from '@kinde-oss/kinde-auth-react';
+import { Header } from './components/Header';
+import { AppRoutes } from './routes/AppRoutes';
+import { Toaster } from 'sonner';
+import { AppProvider } from './contexts/App/provider';
+import OngoingQuizHandler from './components/OngoingQuizHandler';
+import { TutorialProvider } from './contexts/Tutorial/context';
+import { TutorialOverlay } from './components/tutorial/TutorialOverlay';
 
 const environment = import.meta.env.VITE_ENVIRONMENT;
 
 const uri =
-  environment === "DEV"
-    ? "http://localhost:5173"
-    : "https://zap-quiz.vercel.app/";
+  environment === 'DEV'
+    ? 'http://localhost:5173'
+    : 'https://zap-quiz.vercel.app/';
 
 function App() {
   return (
@@ -23,10 +25,13 @@ function App() {
           logoutUri={uri}
         >
           <AppProvider>
-            <Header />
-            <AppRoutes />
-            <OngoingQuizHandler />
-            <Toaster />
+            <TutorialProvider>
+              <Header />
+              <AppRoutes />
+              <OngoingQuizHandler />
+              <Toaster />
+              <TutorialOverlay disabled={false} />
+            </TutorialProvider>
           </AppProvider>
         </KindeProvider>
       </main>

@@ -1,8 +1,9 @@
 import { BombSlide } from '@/models/Quiz';
 import NextSlide from '@/slides/_components/NextSlide';
 import { BombIcon } from 'lucide-react';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import type { Participant } from '@/models/Quiz';
+import { useTranslation } from 'react-i18next';
 
 export function HostAnswer({
   participants,
@@ -14,6 +15,7 @@ export function HostAnswer({
   onNextSlide: () => void;
 }) {
   // Find the highest answer and collect participants with that answer
+  const { t } = useTranslation();
   let highestAnswer = -Infinity;
   let winningParticipants: Participant[] = [];
 
@@ -41,34 +43,42 @@ export function HostAnswer({
         {slide.answers.map((answer, index) => (
           <div
             key={index}
-            className={`flex flex-col items-center justify-center p-4 rounded-lg shadow-md ${
+            className={`m-1 flex flex-col items-center justify-center p-4 rounded-lg shadow-md ${
               slide.usedAnswers
                 ? slide.usedAnswers.includes(answer)
-                  ? 'bg-green-400'
+                  ? 'bg-green-600 '
                   : 'bg-component-background'
                 : 'bg-component-background'
             }`}
           >
-            <span className="text-lg font-semibold">{answer}</span>
+            <span className="text-3xl font-display">{answer}</span>
           </div>
         ))}
       </div>
 
       {/* Render the avatars of the winning participants */}
       <div className="flex flex-col items-center h-full p-10 w-full">
-        <h1 className="m-4 text-3xl font-display">
-          {winningParticipants.length > 1 ? 'Winners!' : 'Winner!'}
-        </h1>
         <div className="flex gap-4">
-          {winningParticipants.map((participant) => (
-            <Avatar
+          {participants.slice(0, 5).map((participant) => (
+            <div
+              className="mx-4 flex flex-col items-center h-full"
               key={participant.participantId}
-              style={{
-                width: '8rem',
-                height: '8rem', // Ensure avatar size is big
-              }}
-              {...genConfig(participant.avatar)} // Use avatar of the winning participant
-            />
+            >
+              <h1 className="m-4 text-3xl font-display">
+                {winningParticipants.includes(participant)
+                  ? t('question:winner')
+                  : '💀'}
+              </h1>
+              <Avatar
+                width={'8rem'}
+                height={'8rem'}
+                avatarString={participant.avatar}
+                collectionName={participant.collectionName}
+              ></Avatar>
+              <h1 className="font-display text-2xl mt-2">
+                + {participant.score.at(-1)}
+              </h1>
+            </div>
           ))}
         </div>
       </div>

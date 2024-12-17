@@ -1,14 +1,20 @@
-import { Participant } from "@/models/Quiz";
-import Avatar, { genConfig } from "react-nice-avatar";
+import { Participant } from '@/models/Quiz';
+import Avatar from '@/Avatar';
 
-export default function ParticipantCard({ participant }: { participant: Participant }) {
+export default function ParticipantCard({
+  participant,
+}: {
+  participant: Participant;
+}) {
   return (
     <div className="flex items-center gap-2 bg-black/30 p-2 rounded-lg cursor-move">
       <Avatar
-        style={{ width: "2rem", height: "2rem" }}
-        {...genConfig(participant.avatar)}
+        avatarString={participant.avatar}
+        collectionName={participant.collectionName}
+        width="2rem"
+        height="2em"
       />
       <span className="text-sm font-display">{participant.name}</span>
     </div>
   );
-} 
+}

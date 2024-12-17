@@ -12,55 +12,92 @@ import {
 } from '@/components/ui/collapsible';
 import { useTranslation } from 'react-i18next';
 import Profile from '@/pages/User/Profile';
-import { ChevronDown, LogIn, User } from 'lucide-react';
+import { ChevronDown, LogIn } from 'lucide-react';
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import { Separator } from '@radix-ui/react-dropdown-menu';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { useAppContext } from '@/contexts/App/context';
 
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const { isAuthenticated, logout } = useKindeAuth();
+  const {
+    user: { user, updateUser },
+  } = useAppContext();
 
   const handleLanguageChange = (lng: string) => {
     i18n.changeLanguage(lng);
+  };
+
+  const handleTutorialToggle = (enabled: boolean) => {
+    if (user) {
+      updateUser({
+        ...user,
+        tutorialsDisabled: !enabled,
+      });
+    }
+  };
+
+  const handleResetTutorials = () => {
+    if (user) {
+      updateUser({
+        ...user,
+        completedTutorials: [],
+      });
+    }
   };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" className="text-lg flex flex-row items-center">
-          <User size={24} />
-          {t('general:settings')}
+          {t('general:profile')}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="max-w-80 w-fit">
+      <PopoverContent className="w-[220px] p-3 ">
         <div className="grid gap-2">
           <Collapsible open={isLanguageOpen} onOpenChange={setIsLanguageOpen}>
-            <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-4 py-2 font-display hover:bg-primary/90 rounded">
+            <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-2 py-2 font-display hover:bg-primary/90 rounded">
               <ChevronDown
                 className="w-4 h-4 mr-2"
+                strokeWidth={3}
                 style={{
+                  transition: 'transform 0.2s ease',
                   transform: isLanguageOpen ? `rotate(180deg)` : 'none',
                 }}
               />
               {t('general:language')}
             </CollapsibleTrigger>
 
-            <CollapsibleContent className="px-4 py-2 bg-gray-50 rounded">
-              <div className="grid gap-2">
-                <button
-                  onClick={() => handleLanguageChange('en')}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded"
-                >
-                  {t('general:english')}
-                </button>
-                <button
-                  onClick={() => handleLanguageChange('sv')}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-50 rounded"
-                >
-                  {t('general:swedish')}
-                </button>
+            <CollapsibleContent className="px-4 py-3 rounded bg-gray-200">
+              <div className="grid gap-2 font-display ">
+                <RadioGroup defaultValue={i18n.language}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="sv"
+                      id="sv"
+                      onClick={() => handleLanguageChange('sv')}
+                    />
+                    <Label className="cursor-pointer" htmlFor="sv">
+                      {t('general:swedish')}
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem
+                      value="en"
+                      id="en"
+                      onClick={() => handleLanguageChange('en')}
+                    />
+                    <Label className="cursor-pointer" htmlFor="en">
+                      {t('general:english')}
+                    </Label>
+                  </div>
+                </RadioGroup>
               </div>
             </CollapsibleContent>
           </Collapsible>
@@ -70,27 +107,64 @@ export default function Settings() {
                 open={isAppearanceOpen}
                 onOpenChange={setIsAppearanceOpen}
               >
-                <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-4 py-2 font-display hover:bg-primary/90 rounded">
+                <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-2 py-2 font-display hover:bg-primary/90 rounded">
                   <ChevronDown
-                    className="w-4 h-4 mr-2"
+                    className="w-4 h-4 ml-0 mr-2"
+                    strokeWidth={3}
                     style={{
+                      transition: 'transform 0.2s ease',
                       transform: isAppearanceOpen ? `rotate(180deg)` : 'none',
                     }}
                   />
                   {t('general:appearance')}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="px-4 py-2 bg-gray-50 rounded">
+                <CollapsibleContent className="px-2 py-2 bg-gray-200 rounded">
                   <div className="grid gap-2">
                     <Profile />
                   </div>
                 </CollapsibleContent>
               </Collapsible>
+
+              <Collapsible
+                open={isTutorialOpen}
+                onOpenChange={setIsTutorialOpen}
+              >
+                <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-2 py-2 font-display hover:bg-primary/90 rounded">
+                  <ChevronDown
+                    className="w-4 h-4 ml-0 mr-2"
+                    strokeWidth={3}
+                    style={{
+                      transition: 'transform 0.2s ease',
+                      transform: isTutorialOpen ? `rotate(180deg)` : 'none',
+                    }}
+                  />
+                  Tutorials
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 py-3 rounded bg-gray-200">
+                  <div className="grid gap-4">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="tutorial-toggle">Enable Tutorials</Label>
+                      <Switch
+                        id="tutorial-toggle"
+                        checked={!user?.tutorialsDisabled}
+                        onCheckedChange={handleTutorialToggle}
+                      />
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleResetTutorials}
+                      className="w-full"
+                    >
+                      Reset All Tutorials
+                    </Button>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+
               <Separator />
               <div>
-                <Button
-                  className="w-full text-left px-4 hover:bg-gray-100 rounded"
-                  onClick={logout}
-                >
+                <Button className="w-full rounded" onClick={logout}>
                   <LogIn size={16} transform="rotate(180)" />
                   {t('general:logout')}
                 </Button>

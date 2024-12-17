@@ -3,5 +3,8 @@
   "answer": "Answer",
   "leave": "Leave",
   "leaveTitle": "Leave quiz",
-  "leaveDescription": "Are you sure you want to leave the quiz?"
+  "leaveDescription": "Are you sure you want to leave the quiz?",
+  "waitYourTurn": "Wait for your turn!",
+  "send": "Send",
+  "enterAnswer": "Enter answer"
 }

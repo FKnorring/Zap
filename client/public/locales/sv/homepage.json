@@ -11,5 +11,6 @@
   "deleteQuiz": "Radera Quiz",
   "noSlides": "Inga slides än",
   "deleteQuizDescription": "Är du säker att du vill radera: ",
-  "copyDescription": "När du kopierar quizet kommer du kunna redigera det och göra det till ditt eget."
+  "copyDescription": "När du kopierar quizet kommer du kunna redigera det och göra det till ditt eget.",
+  "collection": "Kollektion"
 }

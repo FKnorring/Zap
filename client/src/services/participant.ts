@@ -12,6 +12,7 @@ import { database } from '@/firebase';
 import { Participant, Slide } from '@/models/Quiz';
 import { nanoid } from 'nanoid';
 
+
 export const ParticipantService = {
   async checkIfGameExists(quizCode: string): Promise<boolean> {
     const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
@@ -34,7 +35,8 @@ export const ParticipantService = {
   async addParticipant(
     quizCode: string,
     name: string,
-    avatar: string
+    avatar: string,
+    collectionName: string
   ): Promise<string | null> {
     const participantId = nanoid();
     const quizExists = await this.checkIfGameExists(quizCode);
@@ -55,6 +57,7 @@ export const ParticipantService = {
       name,
       avatar,
       participantId,
+      collectionName,
       isTurn: false,
     };
 

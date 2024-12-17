@@ -24,5 +24,10 @@
   "preview": "Preview",
   "host": "Host",
   "participant": "Participant",
-  "hostAnswer": "Answer view"
+  "hostAnswer": "Answer view",
+  "thumbs": "Thumbs",
+  "micah": "Micah",
+  "adventurerNeutral": "Adventurer",
+  "avataaarsNeutral": "Avatars",
+  "botttsNeutral": "Robots"
 }

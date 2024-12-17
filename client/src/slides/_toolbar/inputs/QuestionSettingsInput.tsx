@@ -43,8 +43,6 @@ export function QuestionSettingsInput({
                 switch (slide.showCorrectAnswer) {
                   case 'auto':
                     return 'Auto';
-                  case 'manual':
-                    return 'Manual';
                   case 'never':
                     return 'Never';
                   default:
@@ -57,10 +55,6 @@ export function QuestionSettingsInput({
             <SelectItem value="auto">
               <h1 className="font-bold">{t('showCorrect.auto')}</h1>
               <h3>{t('showCorrectAuto')}</h3>
-            </SelectItem>
-            <SelectItem value="manual">
-              <h1 className="font-bold">{t('showCorrect.manual')}</h1>
-              <h3>{t('showCorrectManual')}</h3>
             </SelectItem>
             <SelectItem value="never">
               <h1 className="font-bold">{t('showCorrect.never')}</h1>

@@ -1,15 +1,17 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { PopoverContent } from '@/components/ui/popover';
 import { type SlideType, type QuestionType, SlideTypes } from '@/models/Quiz';
 import * as Slides from '@/slides';
-import { SlideOption } from './SlideOption';
 import { SlideInfo } from '@/slides';
 import { useTranslation } from 'react-i18next';
+import { SlideOption } from './SlideOption';
 
 interface SlideCreationMenuProps {
-  onAddSlide: (type: SlideType, questionType?: QuestionType) => void;
+  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
   onCloseMenu?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 // Replace existing slides and questions arrays with optionGroups
@@ -36,7 +38,7 @@ const optionGroups = [
 
 interface RenderOptionsProps {
   options: SlideInfo[];
-  onAddSlide: (type: SlideType, questionType?: QuestionType) => void;
+  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
   onCloseMenu?: () => void;
 }
 
@@ -65,41 +67,19 @@ function RenderOptions({
 export function SlideCreationMenu({
   onAddSlide,
   onCloseMenu,
+  onMouseEnter,
+  onMouseLeave,
 }: SlideCreationMenuProps) {
-  const [closeTimeout, setCloseTimeout] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation(['quizEditor']);
-
-  const handleMouseLeave = () => {
-    const timeoutId = window.setTimeout(() => {
-      onCloseMenu?.();
-    }, 300); // 300ms delay before closing
-    setCloseTimeout(timeoutId);
-  };
-
-  const handleMouseEnter = () => {
-    if (closeTimeout) {
-      clearTimeout(closeTimeout);
-      setCloseTimeout(null);
-    }
-  };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (closeTimeout) {
-        clearTimeout(closeTimeout);
-      }
-    };
-  }, [closeTimeout]);
 
   return (
     <PopoverContent
       side="right"
       className="w-fit"
       ref={containerRef}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <div className="space-y-2">
         {optionGroups.map((group, index) => (

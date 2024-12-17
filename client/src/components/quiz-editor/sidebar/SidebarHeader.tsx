@@ -3,22 +3,17 @@ import { Separator } from '@/components/ui/separator';
 import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { WrenchIcon, SaveIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useSlideSidebarContext } from './SlideSidebarContext';
 
-interface SidebarHeaderProps {
-  quizName: string;
-  onSettingsClick: () => void;
-  onSaveClick: () => void;
-  hasUnsavedChanges?: boolean;
-  isSaving?: boolean;
-}
+export function SidebarHeader() {
+  const {
+    quizName,
+    onSettingsClick,
+    onSaveClick,
+    hasUnsavedChanges = false,
+    isSaving = false,
+  } = useSlideSidebarContext();
 
-export function SidebarHeader({
-  quizName,
-  onSettingsClick,
-  onSaveClick,
-  hasUnsavedChanges = false,
-  isSaving = false,
-}: SidebarHeaderProps) {
   return (
     <div className="p-3">
       <span className="flex items-center justify-between gap-2">

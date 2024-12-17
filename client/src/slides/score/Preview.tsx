@@ -13,6 +13,7 @@ const mockParticipants: Participant[] = [
     name: 'Alice Johnson',
     participantId: 'P001',
     score: [8, 2001],
+    collectionName: 'micah',
   },
   {
     answers: [
@@ -24,6 +25,7 @@ const mockParticipants: Participant[] = [
     name: 'Bob Smith',
     participantId: 'P002',
     score: [10, 1980],
+    collectionName: 'micah',
   },
   {
     answers: [{ slideNumber: 1, answer: ['No'], time: '2024-11-18T10:07:00Z' }],
@@ -32,6 +34,7 @@ const mockParticipants: Participant[] = [
     name: 'Charlie Brown',
     participantId: 'P003',
     score: [5, 1460],
+    collectionName: 'micah',
   },
   {
     answers: [],
@@ -40,6 +43,7 @@ const mockParticipants: Participant[] = [
     name: 'Diana Prince',
     participantId: 'P004',
     score: [0, 3089],
+    collectionName: 'micah',
   },
   {
     answers: [
@@ -51,6 +55,7 @@ const mockParticipants: Participant[] = [
     name: 'Ethan Hunt',
     participantId: 'P005',
     score: [1000, 100065],
+    collectionName: 'micah',
   },
 ];
 

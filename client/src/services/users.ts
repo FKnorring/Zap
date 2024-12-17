@@ -1,16 +1,19 @@
-import { BaseService, FirebaseResponse } from "./base";
-import User from "@/models/User";
+import { BaseService, FirebaseResponse } from './base';
+import User from '@/models/User';
 
 class UserService extends BaseService<User> {
   constructor() {
-    super("users");
+    super('users');
   }
 
-  async findOrCreate(id: string, email: string): Promise<FirebaseResponse<User>> {
+  async findOrCreate(
+    id: string,
+    email: string
+  ): Promise<FirebaseResponse<User>> {
     try {
       // Check if user exists
       const snapshot = await this.getById(id);
-      
+
       if (snapshot.data) {
         return { data: snapshot.data as User, error: null };
       }
@@ -20,9 +23,10 @@ class UserService extends BaseService<User> {
         id,
         email,
         created_at: new Date().toISOString(),
-        username: "temp",
-        avatar: "temp",
-        collectionName: "micah"
+        username: 'temp',
+        avatar: 'temp',
+        collectionName: 'micah',
+        completedTutorials: [],
       };
 
       await this.create(newUser, id);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Participant } from '@/models/Quiz';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HeartIcon } from 'lucide-react';
 import { BombSlide } from '@/models/Quiz';
@@ -17,7 +17,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P001',
     score: [8, 12],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    
+    collectionName: 'micah',
   },
   {
     answers: [
@@ -30,7 +30,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P002',
     score: [10, 15],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    
+    collectionName: 'micah',
   },
   {
     answers: [{ slideNumber: 1, answer: ['No'], time: '2024-11-18T10:07:00Z' }],
@@ -40,7 +40,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P003',
     score: [5],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    
+    collectionName: 'micah',
   },
   {
     answers: [],
@@ -50,7 +50,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P004',
     score: [],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    
+    collectionName: 'micah',
   },
   {
     answers: [
@@ -63,7 +63,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P005',
     score: [9, 11],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    
+    collectionName: 'micah',
   },
 ];
 
@@ -219,12 +219,11 @@ export function Preview({
       >
         <h1 className="font-display text-6xl">Winner is {winner.name}!</h1>
         <Avatar
-          style={{
-            width: '12rem',
-            height: '12rem',
-          }}
-          {...genConfig(winner.avatar)}
-        />
+          width={'8rem'}
+          height={'8rem'}
+          avatarString={winner.avatar}
+          collectionName={winner.collectionName}
+        ></Avatar>
       </motion.div>
     );
   }
@@ -291,12 +290,11 @@ export function Preview({
                     transition={{ duration: 0.35, ease: 'easeInOut' }}
                   >
                     <Avatar
-                      style={{
-                        width: '8rem',
-                        height: '8rem',
-                      }}
-                      {...genConfig(currentParticipants[0].avatar)}
-                    />
+                      width={'8rem'}
+                      height={'8rem'}
+                      avatarString={currentParticipants[0].avatar}
+                      collectionName={currentParticipants[0].collectionName}
+                    ></Avatar>
                   </motion.div>
 
                   {/* Name and Hearts placed under the timer in the first column */}
@@ -340,12 +338,11 @@ export function Preview({
             }}
           >
             <Avatar
-              style={{
-                width: '6rem',
-                height: '6rem',
-              }}
-              {...genConfig(participant.avatar)}
-            />
+              width={'8rem'}
+              height={'8rem'}
+              avatarString={participant.avatar}
+              collectionName={participant.collectionName}
+            ></Avatar>
             <h3 className="font-display">{participant.name}</h3>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {participantHearts[participant.name] > 0 ? (

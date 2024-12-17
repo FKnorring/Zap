@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Participant, Slide, SlideTypes } from '@/models/Quiz';
 
@@ -85,6 +85,7 @@ function ScoreBoard({ participants, slides, currentSlide }: ScoreBoardProps) {
     Array<{
       name: string;
       avatar: string;
+      collectionName: string;
       totalScore: number;
       lastScoreScore: number;
     }>
@@ -93,6 +94,7 @@ function ScoreBoard({ participants, slides, currentSlide }: ScoreBoardProps) {
     Array<{
       name: string;
       avatar: string;
+      collectionName: string;
       totalScore: number;
       lastScoreScore: number;
     }>
@@ -191,10 +193,7 @@ function ScoreBoard({ participants, slides, currentSlide }: ScoreBoardProps) {
                 <span className="w-[20px] font-display text-component-background text-6xl mr-2">
                   {index + 1}
                 </span>
-                <Avatar
-                  style={{ width: '4rem', height: '4rem' }}
-                  {...genConfig(participant.avatar)}
-                />
+                <Avatar width="4rem" height='4rem' avatarString={participant.avatar} collectionName={participant.collectionName} />
                 <div className="bg-component-background flex items-center justify-between font-display p-4 rounded-lg w-full flex-grow min-w-0">
                   <span className="text-textonwbg-grayonw text-3xl truncate">
                     {participant.name}

@@ -1,17 +1,20 @@
 {
   "correctAnswer": "Det rätta svaret är",
   "correctAnswers": "De rätta svaren är",
+  "presentedByTheHost": "Presenterat av er värd",
+  "winner": "Vinnare",
   "answer": "Svara",
+  "answering": "Svarar",
   "rightAnswer": "Rätt svar",
   "wrongAnswer": "Fel svar",
   "nextUp": "Nästa persons tur att svara:",
-  "getReady": "Var dig redo om ",
+  "getReady": "Var redo om ",
   "knowTheAnswer": "Vet du svaret på nästa fråga? Tryck på knappen!",
   "BOMB": "Tickande bomb",
   "FA": "Snabbast på knappen",
   "FTA": "Fri text",
   "LOCATEIT": "Närmast vinner",
-  "MATCHING": "Matcha rätt kategori",
+  "MATCHING": "Hitta rätt matchning",
   "MCQMA": "Flervalsfråga",
   "MCQSA": "Ett svar gäller",
   "RANK": "Ranka rätt",
@@ -27,5 +30,7 @@
   "add": "Lägg till",
   "embededYT": "YouTube Video",
   "embeded": "Inbyggd",
-  "remove": "Ta bort"
+  "remove": "Ta bort",
+  "used": "Använda",
+  "total": "Totala"
 }

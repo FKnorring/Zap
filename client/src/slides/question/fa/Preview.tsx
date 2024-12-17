@@ -3,7 +3,7 @@ import { FASlide } from '@/models/Quiz';
 import { BaseQuestionRender } from '@/slides/question/base/QuestionRender';
 import { Check, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 
 export function Preview({ slide }: { slide: FASlide }) {
   const { t } = useTranslation(['questions']);
@@ -21,6 +21,7 @@ export function Preview({ slide }: { slide: FASlide }) {
           time: '2024-11-26T14:45:00Z',
         },
       ],
+      collectionName: 'micah',
     },
     {
       name: 'Bob Smith',
@@ -35,6 +36,7 @@ export function Preview({ slide }: { slide: FASlide }) {
           time: '2024-11-26T14:28:00Z',
         },
       ],
+      collectionName: 'micah',
     },
     {
       name: 'Charlie Brown',
@@ -49,6 +51,7 @@ export function Preview({ slide }: { slide: FASlide }) {
           time: '2024-11-26T14:30:00Z',
         },
       ],
+      collectionName: 'micah',
     },
   ];
 
@@ -75,14 +78,12 @@ export function Preview({ slide }: { slide: FASlide }) {
             )}
             <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
               <Avatar
-                style={{
-                  width:
-                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                  height:
-                    index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem',
-                }}
-                {...genConfig(participant.avatar ? participant.avatar : '')}
+                width={index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem'}
+                height={index === 0 ? '10rem' : index === 1 ? '5rem' : '4.5rem'}
+                avatarString={participant.avatar}
+                collectionName={participant.collectionName}
               />
+
               <span
                 className={`${
                   index === 0

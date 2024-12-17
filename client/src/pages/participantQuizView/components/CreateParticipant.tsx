@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-//import Avatar, { genConfig } from 'react-nice-avatar';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useGetAuthenticatedUser from '@/hooks/useGetAuthenticatedUser';
 import { userService } from '@/services/users';
@@ -9,7 +9,7 @@ import { InfoIcon, Dices } from 'lucide-react';
 import Avatar from '@/Avatar';
 
 interface CreateParticipantProps {
-  handleAddParticipant: (name: string, avatar: string) => void;
+  handleAddParticipant: (name: string, avatar: string, collectionName: string) => void;
 }
 
 function createRandomId() {
@@ -70,6 +70,7 @@ export default function CreateParticipant({
   const handleSubmit = (userType: 'me' | 'guest') => {
     const nameToUse = userType === 'me' ? user.username : guestName;
     const avatarToUse = userType === 'me' ? user.avatar : guestAvatar;
+    const collectiontoUse = userType ==="me" ? user.collectionName: "micah"
 
     if (!nameToUse) {
       setShowError(true);
@@ -81,7 +82,7 @@ export default function CreateParticipant({
     }
 
     setAddingUser(true);
-    handleAddParticipant(nameToUse, avatarToUse);
+    handleAddParticipant(nameToUse, avatarToUse,collectiontoUse );
 
     setTimeout(() => {
       setAddingUser(false);
@@ -124,14 +125,14 @@ export default function CreateParticipant({
               className="flex flex-col items-center justify-center space-y-4"
             >
               <Avatar avatarString={guestAvatar} collectionName="micah" />
-              <button
+              <Button
                 onClick={() => setGuestAvatar(createRandomId())}
-                className="m-2 p-2 rounded-3xl bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
+                className="m-2 bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
                 title="Randomize Avatar"
               >
                 <p className="font-display text-black  p-2">New Avatar</p>
                 <Dices className="w-6 h-6 text-black" />
-              </button>
+              </Button>
               <Input
                 placeholder="Guest Name"
                 className="text-[#333333] text-center font-display md:text-lg text-lg py-8 px-12 w-full shadow-lg"
@@ -158,14 +159,14 @@ export default function CreateParticipant({
       ) : (
         <div className="bg-component-background w-full mx-auto rounded-lg flex flex-col items-center justify-center p-6  space-y-4">
           <Avatar avatarString={guestAvatar} collectionName="micah" />
-          <button
+          <Button
             onClick={() => setGuestAvatar(createRandomId())}
-            className="m-2 p-2 rounded-full bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
+            className="m-2 bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
             title="Randomize Avatar"
           >
-            <p className="font-display text-black pr-1">New Avatar</p>
-            <Dices className="w-6 h-6 text-gray-500" />
-          </button>
+            <p className="font-display text-black">New Avatar</p>
+            <Dices className="w-6 h-6 text-black" />
+          </Button>
           <Input
             placeholder="Enter Name"
             className="text-[#333333] text-center font-display md:text-lg text-lg py-8 px-12 w-full shadow-lg"

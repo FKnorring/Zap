@@ -3,5 +3,8 @@
   "answer": "Svara",
   "leave": "Lämna",
   "leaveTitle": "Lämna quiz",
-  "leaveDescription": "Är du säker på att du vill lämna quizzet?"
+  "leaveDescription": "Är du säker på att du vill lämna quizzet?",
+  "waitYourTurn": "Vänta på din tur",
+  "send": "Skicka",
+  "enterAnswer": "Skriv in svar"
 }

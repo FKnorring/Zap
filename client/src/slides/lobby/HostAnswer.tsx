@@ -1,5 +1,5 @@
-import { LobbySlide, Participant } from "@/models/Quiz";
-import { Preview } from "./Preview";
+import { LobbySlide, Participant } from '@/models/Quiz';
+import { Preview } from './Preview';
 
 export function HostAnswer({
   slide,

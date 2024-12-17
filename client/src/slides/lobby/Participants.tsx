@@ -1,5 +1,5 @@
-import { Participant } from "@/models/Quiz";
-import Avatar, { genConfig } from "react-nice-avatar";
+import { Participant } from '@/models/Quiz';
+import Avatar from '@/Avatar';
 import {
   Dialog,
   DialogContent,
@@ -7,12 +7,19 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
-export default function Participants({ participants, removeParticipant }: { participants: Participant[], removeParticipant: (participantId: string) => void }) {
-  const [participantToRemove, setParticipantToRemove] = useState<Participant | null>(null);
+export default function Participants({
+  participants,
+  removeParticipant,
+}: {
+  participants: Participant[];
+  removeParticipant: (participantId: string) => void;
+}) {
+  const [participantToRemove, setParticipantToRemove] =
+    useState<Participant | null>(null);
 
   return (
     <>
@@ -24,8 +31,11 @@ export default function Participants({ participants, removeParticipant }: { part
           role="button"
         >
           <Avatar
-            style={{ width: "4.5rem", height: "4.5rem" }}
-            {...genConfig(participant.avatar ? participant.avatar : "")}
+            avatarString={participant.avatar}
+            collectionName={participant.collectionName}
+            width='6rem'
+            height='6rem'
+            
           />
           <span className="text-2xl font-display truncate mt-2 bg-white text-black px-3 py-1 rounded max-w-32">
             {participant.name}
@@ -33,16 +43,23 @@ export default function Participants({ participants, removeParticipant }: { part
         </div>
       ))}
 
-      <Dialog open={!!participantToRemove} onOpenChange={() => setParticipantToRemove(null)}>
+      <Dialog
+        open={!!participantToRemove}
+        onOpenChange={() => setParticipantToRemove(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Remove Participant</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove {participantToRemove?.name} from the game?
+              Are you sure you want to remove {participantToRemove?.name} from
+              the game?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setParticipantToRemove(null)}>
+            <Button
+              variant="outline"
+              onClick={() => setParticipantToRemove(null)}
+            >
               Cancel
             </Button>
             <Button

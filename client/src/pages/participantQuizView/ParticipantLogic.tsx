@@ -152,14 +152,16 @@ export default function ParticipantLogic() {
 
   const handleAddParticipant = async (
     participantName: string,
-    participantAvatar: string
+    participantAvatar: string,
+    participantCollection: string
   ) => {
-    if (!quizCode || !participantName || !participantAvatar) return;
+    if (!quizCode || !participantName || !participantAvatar || !participantCollection) return;
     try {
       const createdId = await ParticipantService.addParticipant(
         quizCode,
         participantName,
-        participantAvatar
+        participantAvatar,
+        participantCollection
       );
       if (createdId) {
         setCookie('participantId', createdId);

@@ -77,7 +77,12 @@ export function Participant({ slide, answerQuestion }: MatchingViewProps) {
   };
 
   const handleSubmit = () => {
-    answerQuestion(matches);
+    // Include available options as unassigned in the answer
+    const answerWithUnassigned = {
+      ...matches,
+      unassigned: availableOptions
+    };
+    answerQuestion(answerWithUnassigned);
   };
 
   return (

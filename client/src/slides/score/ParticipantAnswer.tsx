@@ -1,6 +1,5 @@
-import { ScoreSlide } from "@/models/Quiz";
-import { Participant } from "./Participant";
+import { Participant } from './Participant';
 
-export function ParticipantAnswer({ slide }: { slide: ScoreSlide }) {
-  return <Participant slide={slide as never} />;
+export function ParticipantAnswer() {
+  return <Participant />;
 }

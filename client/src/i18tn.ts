@@ -29,8 +29,8 @@ i18n
       'homepage',
       'questions',
       'slides',
-      'contentDescriptions',
-      'participants'
+      'slideDescriptions',
+      'participants',
     ],
     defaultNS: 'translation',
     load: 'languageOnly',

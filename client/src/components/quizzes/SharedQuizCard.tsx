@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardTitle } from '@/components/ui/card';
 import { InfoSlide, SharedQuizzes } from '@/models/Quiz';
 import { SlidePreview } from '../quiz-editor/SlidePreview';
+import Avatar from '@/Avatar';
 import {
   Dialog,
   DialogClose,
@@ -14,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { ReactNode } from 'react';
 import { Copy } from 'lucide-react';
-import ReactNiceAvatar, { genConfig } from 'react-nice-avatar';
+
 import { t } from 'i18next';
 
 interface SharedQuizCardProps {
@@ -45,13 +46,12 @@ export function SharedQuizCard({
           <SlidePreview slide={mockInfo as InfoSlide} />
           <div className="font-display absolute bottom-[-10px] left-[-10px] z-50 bg-primary p-1 px-2 rounded text-black flex flex-row items-center gap-1 border">
             <span className="text-lg ">By:</span>
-            <ReactNiceAvatar
-              style={{
-                width: '25px',
-                height: '25px',
-              }}
-              {...genConfig(quiz.userAvatar)}
-            />
+            <Avatar
+              width='1.5625rem'
+              height='1.5625rem'
+              avatarString={quiz.userAvatar}
+              collectionName={quiz.collectionName}
+            ></Avatar>
             <span className="text-sm">{quiz.userName}</span>
           </div>
         </div>

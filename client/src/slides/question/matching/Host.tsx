@@ -20,7 +20,7 @@ export function Host({
               style={{ backgroundColor: getColor(idx) }}
               className="p-8 rounded-lg flex items-center justify-center min-w-96 w-fit"
             >
-              <h3 className="text-7xl font-bold">{label.text}</h3>
+              <h3 className="text-7xl font-bold font-display">{label.text}</h3>
             </div>
           ))}
         </div>

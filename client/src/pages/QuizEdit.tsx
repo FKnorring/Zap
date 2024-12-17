@@ -33,6 +33,7 @@ function QuizEdit() {
     setShowSettings,
     hasUnsavedChanges,
     isSaving,
+    handleSlideSwap,
   } = useQuizEditor(id);
 
   if (error) return <div>Error: {error}</div>;
@@ -65,6 +66,7 @@ function QuizEdit() {
             onSlideDelete={handleSlideDelete}
             onSlideDuplicate={handleSlideDuplicate}
             onSlideMove={handleSlideMove}
+            onSlideSwap={handleSlideSwap}
             onSettingsClick={() => setShowSettings(true)}
             onSaveClick={handleSave}
             hasUnsavedChanges={hasUnsavedChanges}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FTASlide, Participant } from '@/models/Quiz';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { stringSimilarity } from 'string-similarity-js';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -30,6 +30,7 @@ export function HostAnswer({
       return {
         name: participant.name,
         avatar: participant.avatar,
+        collectionName: participant.collectionName,
         id: participant.participantId,
         answer: latestAnswer,
         points: similarity >= 0.97 ? slide.points : 0,
@@ -76,8 +77,10 @@ export function HostAnswer({
           >
             <div className="flex items-center">
               <Avatar
-                style={{ width: '2.5rem', height: '2.5rem' }}
-                {...genConfig(entry.avatar)}
+                width={'2.5rem'}
+                height={'2.5rem'}
+                avatarString={entry.avatar}
+                collectionName={entry.collectionName}
               />
               <h1 className="text-3xl font-display text-black pl-1">
                 {entry.name}

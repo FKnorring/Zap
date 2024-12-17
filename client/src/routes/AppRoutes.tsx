@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import React, { Suspense } from "react";
 import Spinner from "@/components/Spinner";
+import { useTutorialTrigger } from "@/hooks/useTutorialTrigger";
 
 const About = React.lazy(() => import("../pages/About"));
 const Home = React.lazy(() => import("../pages/Home"));
@@ -17,6 +18,8 @@ const HostLogic = React.lazy(() => import("@/pages/HostLogic"));
 
 export function AppRoutes() {
   const { isAuthenticated } = useKindeAuth();
+
+  useTutorialTrigger();
 
   return (
     <Suspense fallback={<Spinner />}>

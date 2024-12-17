@@ -15,7 +15,13 @@ import { useTranslation } from 'react-i18next';
 
 function useQuizzesPage() {
   const {
-    quizzes: { resources: quizzes, isLoading: quizzesLoading, optimisticCreate, optimisticDelete, optimisticUpdate },
+    quizzes: {
+      resources: quizzes,
+      isLoading: quizzesLoading,
+      optimisticCreate,
+      optimisticDelete,
+      optimisticUpdate,
+    },
     user: { user },
     ongoingQuizzes: { resources: ongoingQuizzes },
   } = useAppContext();
@@ -37,26 +43,18 @@ function useQuizzesPage() {
     async (name: string) => {
       if (!user) return;
 
-      const { data: userQuiz } = await quizService.createQuiz({
+      // Create optimistic quiz from userQuiz data
+      const { error } = await optimisticCreate({
         quiz_name: name,
         user_id: user.id,
       });
 
-      if (!userQuiz) {
-        toast.error('Failed to create quiz');
+      if (error) {
+        toast.error('Failed to create quiz' + error.message);
         return;
       }
 
-      // Create optimistic quiz from userQuiz data
-      optimisticCreate({
-        id: userQuiz.quizId,
-        quiz_name: userQuiz.quizName,
-        user_id: userQuiz.userId,
-        isHosted: userQuiz.isHosted,
-        isShared: userQuiz.isShared,
-        created_at: userQuiz.createdAt,
-        updated_at: userQuiz.updatedAt,
-      });
+      toast.success('Quiz created successfully');
     },
     [user, optimisticCreate]
   );
@@ -64,7 +62,7 @@ function useQuizzesPage() {
   const handleDeleteQuiz = useCallback(
     async (quizId: string) => {
       const { error } = await quizService.deleteQuiz(quizId);
-      
+
       if (error) {
         toast.error('Failed to delete quiz');
         return;
@@ -80,8 +78,12 @@ function useQuizzesPage() {
     async (quizId: string, quizName: string) => {
       if (!user) return;
 
-      const { data: isShared, error } = await quizService.shareQuiz(quizId, user, quizName);
-      
+      const { data: isShared, error } = await quizService.shareQuiz(
+        quizId,
+        user,
+        quizName
+      );
+
       if (error) {
         toast.error('Failed to share quiz');
         return;
@@ -99,7 +101,10 @@ function useQuizzesPage() {
     async (quiz: SharedQuizzes) => {
       if (!user) return;
 
-      const { data: newQuiz, error } = await quizService.copyQuiz(quiz, user.id);
+      const { data: newQuiz, error } = await quizService.copyQuiz(
+        quiz,
+        user.id
+      );
 
       if (error || !newQuiz) {
         toast.error('Failed to copy quiz');
@@ -146,7 +151,7 @@ function Quizzes() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-around gap-4 overflow-y-auto p-4">
-      <Card className="w-full max-w-7xl">
+      <Card className="w-full max-w-7xl" id="quiz-manager-container">
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
             <span>{t('homepage:myQuizzes')}</span>
@@ -168,7 +173,7 @@ function Quizzes() {
             </div>
           ) : (
             <QuizList
-              quizzes={quizzes.map(quiz => ({
+              quizzes={quizzes.map((quiz) => ({
                 quizId: quiz.id,
                 quizName: quiz.quiz_name,
                 userId: quiz.user_id,

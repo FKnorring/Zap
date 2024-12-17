@@ -31,7 +31,7 @@ export function RankOptionsInput({
     <div className="space-y-4">
       <div className="flex flex-row items-center space-x-1">
         <ListOrdered size={17} />
-        <Label>{t('rankAnswer')}</Label>
+        <Label>{t('rankAnswers')}</Label>
       </div>
       {(slide as RankSlide).ranking.map((rankItem, index) => (
         <div key={index} className="flex items-center space-x-2">
@@ -43,7 +43,7 @@ export function RankOptionsInput({
               updatedRanking[index] = e.target.value;
               updateSlide(updatedRanking);
             }}
-            placeholder="New answer"
+            placeholder={t('newAnswer')}
           />
           <Button
             variant="destructive"
@@ -65,7 +65,7 @@ export function RankOptionsInput({
             <Input
               value={newRank}
               onChange={(e) => setNewRank(e.target.value)}
-              placeholder="Answer"
+              placeholder={t('answer')}
             />
             <Button
               onClick={() => {

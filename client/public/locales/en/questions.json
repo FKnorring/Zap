@@ -1,14 +1,17 @@
 {
   "correctAnswer": "The correct answer is",
   "correctAnswers": "The correct answers are",
+  "presentedByTheHost": "Presented by the host",
+  "winner": "Winner",
   "answer": "Answer",
+  "answering": "Answering",
   "rightAnswer": "Right Answer",
   "wrongAnswer": "Wrong Answer",
   "nextUp": "Next up to answer:",
   "getReady": "Get ready in ",
   "knowTheAnswer": "Know the answer to the next question? Press the button!",
   "BOMB": "Ticking Time Bomb",
-  "FA": "Fastest Finger",
+  "FA": "Fastest on the Buzzer",
   "FTA": "Free Text Answer",
   "LOCATEIT": "LocateIt",
   "MATCHING": "Meet Your Match",
@@ -24,8 +27,10 @@
   "addAnswer": "Add Answer",
   "lookAtYourScreen": "Look at your screen and rank the options",
   "rankAnswers": "Rank Answers",
-  "add":"Add",
-  "embededYT":"Embed YouTube Video",
-  "embeded":"Embed",
-  "remove":"Remove"
+  "add": "Add",
+  "embededYT": "Embed YouTube Video",
+  "embeded": "Embed",
+  "remove": "Remove",
+  "used": "Used",
+  "total": "Total"
 }

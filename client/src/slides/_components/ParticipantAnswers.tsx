@@ -6,7 +6,7 @@ import {
 } from '@radix-ui/react-popover';
 import { Users } from 'lucide-react';
 import { useState } from 'react';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +14,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 export function ParticipantAnswers({
   participants = [],
@@ -29,7 +29,8 @@ export function ParticipantAnswers({
     (participant) => participant.hasAnswered
   ).length;
   const [isOpen, setIsOpen] = useState(false);
-  const [participantToRemove, setParticipantToRemove] = useState<Participant | null>(null);
+  const [participantToRemove, setParticipantToRemove] =
+    useState<Participant | null>(null);
 
   return (
     <>
@@ -58,11 +59,10 @@ export function ParticipantAnswers({
                 role="button"
               >
                 <Avatar
-                  style={{
-                    width: '22px',
-                    height: '22px',
-                  }}
-                  {...genConfig(participant.avatar)}
+                  width="1.375rem"
+                  height="1.375rem"
+                  avatarString={participant.avatar}
+                  collectionName={participant.collectionName}
                 />
                 {participant.name} -{' '}
                 {participant.hasAnswered ? 'Answered' : 'Not Answered'}
@@ -72,16 +72,23 @@ export function ParticipantAnswers({
         </PopoverContent>
       </Popover>
 
-      <Dialog open={!!participantToRemove} onOpenChange={() => setParticipantToRemove(null)}>
+      <Dialog
+        open={!!participantToRemove}
+        onOpenChange={() => setParticipantToRemove(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Remove Participant</DialogTitle>
             <DialogDescription>
-              Are you sure you want to remove {participantToRemove?.name} from the game?
+              Are you sure you want to remove {participantToRemove?.name} from
+              the game?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setParticipantToRemove(null)}>
+            <Button
+              variant="outline"
+              onClick={() => setParticipantToRemove(null)}
+            >
               Cancel
             </Button>
             <Button

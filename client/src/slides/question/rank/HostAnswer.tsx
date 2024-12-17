@@ -17,7 +17,9 @@ export function HostAnswer({
 
   const answers = participants
     ? participants
-        .filter((participant) => participant.answers.length > 0) // Only consider participants who have answered
+        .filter(
+          (participant) => participant.answers && participant.answers.length > 0
+        ) // Only consider participants who have answered
         .map((participant) => {
           return participant.answers[participant.answers.length - 1]; // Get the latest answer
         })

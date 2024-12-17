@@ -3,6 +3,8 @@ import { BombSlide } from '@/models/Quiz';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import type { Participant } from '@/models/Quiz';
+import { useTranslation } from 'react-i18next';
+
 
 interface BombParticipantProps {
   slide: BombSlide;
@@ -19,6 +21,7 @@ export function Participant({
   isTurn,
 }: BombParticipantProps) {
   const [userAnswer, setUserAnswer] = useState('');
+  const {t} = useTranslation()
 
   // Handle the input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +65,7 @@ export function Participant({
         </div>
 
         <div className="bg-white p-4 rounded-md text-black font-display text-2xl mb-6">
-          <h2 className="text-center">Wait for your turn!!</h2>
+          <h2 className="text-center">{t("participant:waitYourTurn")}</h2>
         </div>
       </div>
     );
@@ -79,21 +82,21 @@ export function Participant({
           <Input
             value={userAnswer}
             onChange={handleInputChange}
-            placeholder="Enter your answer"
+            placeholder={t("participants:enterAnswer")}
             className="mb-4 w-full p-2 border border-gray-300 rounded-md"
           />
           <Button
             onClick={handleCheckAnswer}
             className="w-full p-2 text-white rounded-md hover:bg-blue-600"
           >
-            Check Answer
+            {t("participants:send")}
           </Button>
         </div>
       )}
 
       {participantData && isTurn !== participantData.participantId && (
         <div className="bg-white p-4 rounded-md text-black font-display text-2xl mb-6">
-          <h2 className="text-center">Wait for your turn!!</h2>
+          <h2 className="text-center">{t("participants:waitYourTurn")}</h2>
         </div>
       )}
     </div>

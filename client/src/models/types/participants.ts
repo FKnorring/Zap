@@ -17,4 +17,5 @@ export interface Participant {
   name: string;
   participantId: string;
   score: number[];
+  collectionName: string;
 }

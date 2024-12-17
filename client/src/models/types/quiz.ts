@@ -46,6 +46,7 @@ export interface SharedQuizzes {
   userId: string;
   userName: string;
   userAvatar: string;
+  collectionName: string;
   quizId: string;
   quizName: string;
   sharedAt: string;
@@ -53,7 +54,6 @@ export interface SharedQuizzes {
 
 export enum ShowCorrectAnswerTypes {
   auto = "auto",
-  manual = "manual",
   never = "never",
 }
 

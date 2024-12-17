@@ -1,5 +1,5 @@
 import { Participant, ParticipantAnswer, TempAnswer } from '@/models/Quiz';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 import { Ellipsis } from 'lucide-react';
 
 interface ParticipantTotal {
@@ -8,6 +8,7 @@ interface ParticipantTotal {
   tempAnswer?: TempAnswer;
   hasAnswered: boolean;
   avatar: string;
+  collectionName: string;
   name: string;
   participantId: string;
   score: number[];
@@ -20,10 +21,10 @@ const DisplayPlacement = ({
 }) => {
   const size =
     participants.length === 1
-      ? 'w-32 h-32'
+      ? '8rem'
       : participants.length === 2
-        ? 'w-24 h-24'
-        : 'w-20 h-20';
+        ? '4rem'
+        : '2rem';
 
   const textSize =
     participants.length === 1
@@ -34,13 +35,20 @@ const DisplayPlacement = ({
   return (
     <div className="flex flex-row gap-8 items-center justify-center">
       {participants.slice(0, 3).map((participant) => (
-        <div key={participant.participantId} className="flex flex-col items-center">
-          <Avatar 
-            className={`${size}`}
-            {...genConfig(participant.avatar)}
-          />
+        <div
+          key={participant.participantId}
+          className="flex flex-col items-center"
+        >
+          <Avatar
+            width={size}
+            height={size}
+            avatarString={participant.avatar}
+            collectionName={participant.collectionName}
+          ></Avatar>
           <div className="flex flex-col items-center">
-            <span className={`font-display ${textSize}`}>{participant.name}</span>
+            <span className={`font-display ${textSize}`}>
+              {participant.name}
+            </span>
           </div>
         </div>
       ))}
@@ -50,7 +58,6 @@ const DisplayPlacement = ({
     </div>
   );
 };
-
 
 export default function Results({
   participants,
@@ -94,7 +101,6 @@ export default function Results({
     return result;
   };
 
- 
   // Returns a list with a list of the placements
   const placement = getTopThree(participantsWithTotal);
 
@@ -161,11 +167,17 @@ export default function Results({
             >
               <span className="font-semibold w-8">{index + 4}.</span>
               <Avatar
-                className="w-10 h-10"
-                {...genConfig(participant.avatar)}
-              />
-              <span className="flex-grow text-2xl font-semibold">{participant.name}</span>
-              <span className="font-semibold text-2xl">{participant.total} pts</span>
+                width={"4rem"}
+                height={'4rem'}
+                avatarString={participant.avatar}
+                collectionName={participant.collectionName}
+              ></Avatar>
+              <span className="flex-grow text-2xl font-semibold">
+                {participant.name}
+              </span>
+              <span className="font-semibold text-2xl">
+                {participant.total} pts
+              </span>
             </div>
           ))}
         </div>
