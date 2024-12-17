@@ -8,7 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { SlideOption } from './SlideOption';
 
 interface SlideCreationMenuProps {
-  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
+  onAddSlide: (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => void;
   onCloseMenu?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -38,7 +42,11 @@ const optionGroups = [
 
 interface RenderOptionsProps {
   options: SlideInfo[];
-  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
+  onAddSlide: (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => void;
   onCloseMenu?: () => void;
 }
 
@@ -47,13 +55,18 @@ function RenderOptions({
   onAddSlide,
   onCloseMenu,
 }: RenderOptionsProps) {
-  const { t } = useTranslation(['questions']);
+  const {  t} = useTranslation(['questions']);
 
   return options.map((option) => {
     return (
       <SlideOption
         key={option.value}
         label={t(option.label)}
+        slideType={
+          'questionType' in option
+            ? (option.questionType as QuestionType)
+            : option.slideType
+        }
         icon={option.icon}
         onClick={() => {
           onAddSlide(option.slideType, option.questionType);
