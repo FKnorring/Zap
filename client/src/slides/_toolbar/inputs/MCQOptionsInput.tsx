@@ -1,18 +1,19 @@
-import { MCQMASlide } from "@/models/Quiz";
-import { ToolbarProps } from "@/slides/toolbar";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { MCQMASlide } from '@/models/Quiz';
+import { ToolbarProps } from '@/slides/toolbar';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { MinusIcon, PlusIcon } from 'lucide-react';
 import {
   addOption,
   OptionSlide,
   removeOption,
   updateOption,
-} from "../../question/helpers/options";
-import { max_options } from "@/config/max";
-import { CustomTooltip } from "@/components/ui/custom-tooltip";
+} from '../../question/helpers/options';
+import { max_options } from '@/config/max';
+import { CustomTooltip } from '@/components/ui/custom-tooltip';
+import { useTranslation } from 'react-i18next';
 
 const MAX_OPTIONS = max_options.mcqma;
 
@@ -20,13 +21,14 @@ export function MCQOptionsInput({
   slide,
   onSlideUpdate,
 }: ToolbarProps<MCQMASlide>) {
-  if (!("options" in slide)) return null;
+  if (!('options' in slide)) return null;
 
   const canAdd = slide.options.length < MAX_OPTIONS;
+  const { t } = useTranslation(['quizEditor']);
 
   return (
     <div className="space-y-2">
-      <Label>Options</Label>
+      <Label>{t('options')}</Label>
       <div className="space-y-2">
         {slide.options.map((option) => (
           <div key={option.id} className="flex items-center gap-2">
@@ -51,7 +53,7 @@ export function MCQOptionsInput({
                   onSlideUpdate as (slide: OptionSlide) => void
                 )
               }
-              placeholder="Option text..."
+              placeholder={t('optionText') + '...'}
             />
             <Button
               variant="destructive"
@@ -73,20 +75,20 @@ export function MCQOptionsInput({
             variant="outline"
             className="w-full"
             onClick={() =>
-            addOption(
-              slide as MCQMASlide,
-              onSlideUpdate as (slide: OptionSlide) => void
-            )
-          }
-        >
-          <PlusIcon className="mr-2 h-4 w-4" />
-            Add Option
+              addOption(
+                slide as MCQMASlide,
+                onSlideUpdate as (slide: OptionSlide) => void
+              )
+            }
+          >
+            <PlusIcon className="mr-2 h-4 w-4" />
+            {t('addOption')}
           </Button>
         ) : (
-          <CustomTooltip content="Max options reached">
+          <CustomTooltip content={t('maxOptionsReached')}>
             <Button variant="outline" className="w-full" disabled>
               <PlusIcon className="mr-2 h-4 w-4" />
-              Add Option
+              {t('addOption')}
             </Button>
           </CustomTooltip>
         )}

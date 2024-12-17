@@ -4,6 +4,7 @@ import lisa from '../assets/photos/lisa.jpeg';
 import jacob from '../assets/photos/jacob.jpeg';
 import filip from '../assets/photos/filip.jpeg';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'lucide-react';
 
 export default function About() {
   const { t } = useTranslation();
@@ -76,7 +77,7 @@ export default function About() {
       <h3 className="text-2xl font-bold mb-1 font-display">
         {t('about:goalsTitle')}
       </h3>
-      <p className="mb-4 max-w-xl text-balance">{t('about:goalsText')}</p>
+      <p className="mb-4 w-full ">{t('about:goalsText')}</p>
       <h3 className="text-2xl font-bold mb-1 font-display">
         {t('about:statusTitle')}
       </h3>
@@ -88,6 +89,7 @@ export default function About() {
         className="text-3xl font-display mb-8 hover:text-blue-900"
       >
         {t('about:github')}
+        <Link size={24} className="inline ml-1" />
       </a>
     </div>
   );

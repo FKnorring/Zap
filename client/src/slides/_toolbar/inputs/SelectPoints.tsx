@@ -28,7 +28,7 @@ export function SelectPoints({
     <div className="space-y-1">
       <div className="flex flex-row items-center">
         <Award size={17} />
-        <Label>{t("points")}</Label>
+        <Label>{t('points')}</Label>
       </div>
 
       <Select
@@ -39,9 +39,9 @@ export function SelectPoints({
           <SelectValue placeholder="Select Points" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="0">No Points</SelectItem>
-          <SelectItem value="1000">Default</SelectItem>
-          <SelectItem value="2000">Double Points</SelectItem>
+          <SelectItem value="0">{t('noPoints')}</SelectItem>
+          <SelectItem value="1000">{t('default')}</SelectItem>
+          <SelectItem value="2000">{t('doublePoints')}</SelectItem>
         </SelectContent>
       </Select>
     </div>

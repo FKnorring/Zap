@@ -24,5 +24,10 @@
   "preview": "Förhandsgranska",
   "host": "Presentatör",
   "participant": "Deltagare",
-  "hostAnswer": "Svar"
+  "hostAnswer": "Svar",
+  "thumbs": "Tummar",
+  "micah": "Micah",
+  "adventurerNeutral": "Äventyrare",
+  "avataaarsNeutral": "Avatarer",
+  "botttsNeutral": "Robotar"
 }

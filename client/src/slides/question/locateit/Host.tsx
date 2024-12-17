@@ -2,6 +2,7 @@ import { AwardPointsLocation, LocateItSlide } from '@/models/Quiz';
 import markerIcon from '@/assets/markerIcon.png';
 import NextSlide from '@/slides/_components/NextSlide';
 import { useTranslation } from 'react-i18next';
+import { InfoIcon } from 'lucide-react';
 
 export function Host({
   slide,
@@ -26,12 +27,13 @@ export function Host({
 
         <p className="text-black font-display text-3xl">{slide.content}</p>
       </div>
-      <p className="font-display text-6xl">
+      <p className="font-display text-xl items-center flex">
+        <InfoIcon size={20} className="inline mr-2" />
         {slide.awardPointsLocation == AwardPointsLocation.CLOSEST
           ? t('closestWinsDescription')
           : slide.awardPointsLocation == AwardPointsLocation.DISTANCE
-            ? t('closestWinsDescription')
-            : t('insideRadius')}
+            ? t('distanceDescription')
+            : t('insideRadiusDescription')}
       </p>
       {slide.imageUrl && (
         <div className="flex justify-center">

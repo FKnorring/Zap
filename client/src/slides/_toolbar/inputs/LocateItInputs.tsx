@@ -79,11 +79,11 @@ export function LocateItInputs({
                 {(() => {
                   switch (slide.mapDetails) {
                     case 'NONE':
-                      return 'None';
+                      return t('none');
                     case 'MEDIUM':
-                      return 'Medium';
+                      return t('medium');
                     case 'HIGH':
-                      return 'High';
+                      return t('high');
                     default:
                       return 'Select Map Details';
                   }
@@ -120,13 +120,13 @@ export function LocateItInputs({
                 {(() => {
                   switch (slide.awardPointsLocation) {
                     case 'RADIUS':
-                      return 'Inside Radius';
+                      return t('insideRadius');
                     case 'DISTANCE':
-                      return 'Distance Based';
+                      return t('distance');
                     case 'CLOSEST':
-                      return 'Closest Wins';
+                      return t('closestWins');
                     default:
-                      return 'Select Award Points';
+                      return t('select') + ' ' + t('points');
                   }
                 })()}
               </SelectValue>
@@ -175,7 +175,7 @@ export function LocateItInputs({
                     };
                     onSlideUpdate(updatedSlide);
                   }}
-                  placeholder="Enter the correct answer..."
+                  placeholder={t('enterCorrectAnswer') + '...'}
                 />
               </div>
             )}

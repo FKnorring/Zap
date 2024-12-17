@@ -8,6 +8,7 @@ import { ParticipantService } from '@/services/participant';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { BombIcon } from 'lucide-react';
+import NextSlide from '@/slides/_components/NextSlide';
 
 type HostProps = {
   participants: Participant[];
@@ -34,6 +35,7 @@ export function Host({
   slide,
   quizCode,
   slideNumber,
+  onNextSlide,
   changeTurn,
   updateSlideUsedAnswers,
 }: HostProps) {
@@ -441,9 +443,9 @@ export function Host({
 
   if (currentParticipants && currentParticipants.length > 0 && gameStarted) {
     return (
-      <div className="h-screen flex flex-col items-center justify-start ">
+      <div className="h-screen flex flex-col items-center justify-start gap-16">
         {/* Title moved outside of the motion.div */}
-        <div className="mt-8  rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
+        <div className="mt-16  rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
           <BombIcon size={32} className="ml-4"></BombIcon>
           <h1 className="p-4">{slide.title}</h1>
         </div>
@@ -480,7 +482,7 @@ export function Host({
                     width: '100%', // Ensure full width for content
                   }}
                 >
-                  <div className="m-8 items-center bg-component-background rounded-lg grid grid-cols-2 gap-4 p-4">
+                  <div className="m-8 p-12 items-center bg-component-background rounded-lg grid grid-cols-2 gap-4">
                     {/* Timer stays in the first column */}
                     <div className="flex-col justify-center items-center font-display">
                       <h2 className=" text-black text-5xl">{time}</h2>
@@ -518,14 +520,14 @@ export function Host({
                       <Avatar
                         avatarString={currentParticipants[0].avatar}
                         collectionName={currentParticipants[0].collectionName}
-                        width="2rem"
-                        height="2rem"
+                        width="8em"
+                        height="8rem"
                       />
                     </motion.div>
                   </div>
 
                   <div
-                    className={`p-4 mt-6 rounded-md text-black font-display text-4xl  ${
+                    className={`p-8 mt-16 rounded-md text-black font-display text-6xl  ${
                       userAnswer === ''
                         ? 'bg-white' // White background for empty answer
                         : isCorrect === 'true'
@@ -557,21 +559,18 @@ export function Host({
               {usedAnswers.length}/{answers.length}
             </h1>
           </div>
-
-          <motion.div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '4rem',
-              width: '100%',
-
-              overflow: 'hidden',
-            }}
-          >
-            {currentParticipants
-              .slice(1, currentParticipants.length)
-              .map((participant) => (
+          <div className="relative flex items-center justify-center w-full">
+            <motion.div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '4rem',
+                width: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              {currentParticipants.slice(1, 10).map((participant) => (
                 <motion.div
                   key={participant.name}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -593,8 +592,8 @@ export function Host({
                   <Avatar
                     avatarString={participant.avatar}
                     collectionName={participant.collectionName}
-                    width="2rem"
-                    height="2rem"
+                    width="6rem"
+                    height="6rem"
                   />
                   <h3 className="font-display">{participant.name}</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -616,8 +615,10 @@ export function Host({
                   </div>
                 </motion.div>
               ))}
-          </motion.div>
+            </motion.div>
+          </div>
         </motion.div>
+        <NextSlide onClick={onNextSlide} />
       </div>
     );
   }

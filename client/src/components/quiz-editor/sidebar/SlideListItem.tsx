@@ -3,40 +3,53 @@ import { SlidePreview } from '../SlidePreview';
 import { SlideActions } from './SlideActions';
 import { getSlideComponents } from '@/slides/utils';
 import { useTranslation } from 'react-i18next';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useSlideSidebarContext } from './SlideSidebarContext';
 
 interface SlideListItemProps {
   slide: Slide;
   index: number;
   totalSlides: number;
-  activeSlideId: string | null;
-  onSlideSelect: (slideId: string) => void;
-  onSlideDelete: (slideId: string) => void;
-  onSlideDuplicate: (slideId: string) => void;
-  onSlideMove: (slideId: string, direction: 'up' | 'down') => void;
-  backgroundColor: string;
-  primaryColor: string;
-  secondaryColor: string;
 }
 
 export function SlideListItem({
   slide,
   index,
   totalSlides,
-  activeSlideId,
-  onSlideSelect,
-  onSlideDelete,
-  onSlideDuplicate,
-  onSlideMove,
-  backgroundColor,
-  primaryColor,
-  secondaryColor,
 }: SlideListItemProps) {
   const { t } = useTranslation(['questions']);
   const slideComponent = getSlideComponents(slide);
+  const {
+    activeSlideId,
+    onSlideSelect,
+    backgroundColor,
+    primaryColor,
+    secondaryColor,
+  } = useSlideSidebarContext();
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: slide.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
 
   return (
     <div
-      className="group relative mb-2"
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="relative group cursor-grab active:cursor-grabbing mb-2"
       onClick={() => onSlideSelect(slide.id)}
       tabIndex={0}
       role="button"
@@ -67,9 +80,6 @@ export function SlideListItem({
       <SlideActions
         index={index}
         totalSlides={totalSlides}
-        onSlideMove={onSlideMove}
-        onSlideDuplicate={onSlideDuplicate}
-        onSlideDelete={onSlideDelete}
         slideId={slide.id}
       />
     </div>

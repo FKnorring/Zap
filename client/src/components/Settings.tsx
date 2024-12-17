@@ -38,7 +38,7 @@ export default function Settings() {
       <PopoverContent className="w-[220px] p-3 ">
         <div className="grid gap-2">
           <Collapsible open={isLanguageOpen} onOpenChange={setIsLanguageOpen}>
-            <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-4 py-2 font-display hover:bg-primary/90 rounded">
+            <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-2 py-2 font-display hover:bg-primary/90 rounded">
               <ChevronDown
                 className="w-4 h-4 mr-2"
                 strokeWidth={3}
@@ -50,7 +50,7 @@ export default function Settings() {
               {t('general:language')}
             </CollapsibleTrigger>
 
-            <CollapsibleContent className="px-6 py-1 rounded">
+            <CollapsibleContent className="px-4 py-3 rounded bg-gray-200">
               <div className="grid gap-2 font-display ">
                 <RadioGroup defaultValue={i18n.language}>
                   <div className="flex items-center space-x-2">
@@ -83,9 +83,9 @@ export default function Settings() {
                 open={isAppearanceOpen}
                 onOpenChange={setIsAppearanceOpen}
               >
-                <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-4 py-2 font-display hover:bg-primary/90 rounded">
+                <CollapsibleTrigger className="flex flex-row w-full items-center text-left px-2 py-2 font-display hover:bg-primary/90 rounded">
                   <ChevronDown
-                    className="w-4 h-4 mr-2"
+                    className="w-4 h-4 ml-0 mr-2"
                     strokeWidth={3}
                     style={{
                       transition: 'transform 0.2s ease',
@@ -94,7 +94,7 @@ export default function Settings() {
                   />
                   {t('general:appearance')}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="px-2 py-2 bg-gray-50 rounded">
+                <CollapsibleContent className="px-2 py-2 bg-gray-200 rounded">
                   <div className="grid gap-2">
                     <Profile />
                   </div>

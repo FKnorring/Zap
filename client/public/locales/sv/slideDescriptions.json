@@ -1,0 +1,12 @@
+{
+  "MCQSA": "Ett svar gäller: Välj ett rätt svar, alla spelare som får rätt får poäng.",
+  "MCQMA": "Flervalsfråga: Välj bland flera rätta alternativ. För att få poäng måste spelaren välja alla rätta svar utan misstag.",
+  "FTA": "Fri text: Deltagarna skriver sina svar, och du kan tilldela poäng baserat på svaren.",
+  "FA": "Snabbast på knappen: Den spelare som trycker på knappen först får svara. Den som först svarar rätt får poäng.",
+  "RANK": "Ranka rätt: Sätt alternativen i rätt ordning. Spelaren blir tilldelad poäng baserat på antal rätta svar.",
+  "MATCHING": "Hitta rätt matchning: Koppla ihop rätt föremål med rätt kategori. Spelaren blir tilldelad poäng baserat på antal rätta svar.",
+  "LOCATEIT": "Locate It: Ange rätt plats på kartan. Här kan du välja hur du vill dela ut poängen lite längre ner i instsällningarna.",
+  "BOMB": "Tickande bomb: Spelarna måste svara innan deras timer tar slut, och de kan bara ge unika svar.",
+  "info": "Information: En möjlighet för dig att lägga in en paus.",
+  "score": "Poängtavla: Visar aktuella poängställning."
+}

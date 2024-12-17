@@ -13,9 +13,11 @@ class QuizService extends BaseService<Quiz> {
     this.userQuizzesRef = "userQuizzes";
   }
 
-  async createQuiz(quiz: Partial<Quiz>): Promise<FirebaseResponse<UserQuizzes>> {
+  async create(quiz: Partial<Quiz>, const_id?: string): Promise<FirebaseResponse<Quiz>> {
     if(!quiz.user_id || !quiz.quiz_name) return { data: null, error: new Error('User ID is required') };
-    const quizId = nanoid();
+    const quizId = const_id || nanoid();
+
+    const now = new Date().toISOString().toLocaleString();
 
     const userQuizRef = ref(database, `userQuizzes/${quizId}`);
     const userQuiz = {
@@ -24,26 +26,30 @@ class QuizService extends BaseService<Quiz> {
       quizName: quiz.quiz_name,
       isHosted: false,
       isShared: false,
-      createdAt: new Date().toISOString().toLocaleString(),
-      updatedAt: new Date().toISOString().toLocaleString(),
+      createdAt: now,
+      updatedAt: now,
     }
     
     const quizRef = ref(database, `quizzes/${quizId}`);
-    await set(quizRef, {
+    const quizData = {
       id: quizId,
-      created_at: new Date().toISOString().toLocaleString(),
-      updated_at: new Date().toISOString().toLocaleString(),
+      ...quiz,
+      created_at: now,
+      updated_at: now,
       settings: {
         ...quizDefaults
       }
-    })
-    
-    return await set(userQuizRef, userQuiz).then(() => {
-      return { data: { ...userQuiz }, error: null };
-    }).catch((error) => {
-      return { data: null, error: error as Error };
-    });
+    };
 
+    try {
+      await Promise.all([
+        set(quizRef, quizData),
+        set(userQuizRef, userQuiz)
+      ]);
+      return { data: quizData as Quiz, error: null };
+    } catch (error) {
+      return { data: null, error: error as Error };
+    }
   }
 
   async getById(id: string): Promise<FirebaseResponse<Quiz>> {
@@ -209,6 +215,7 @@ class QuizService extends BaseService<Quiz> {
         quizId: quizId,
         quizName: quizName,
         sharedAt: new Date().toLocaleString(),
+        collectionName: 'micah',
       };
 
       await set(sharedQuizRef, newShared);

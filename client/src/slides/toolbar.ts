@@ -160,7 +160,22 @@ export const toolbarConfigs = {
   ],
 
   LOCATEIT: [
-    ...baseToolbarConfig,
+    {
+      field: 'title',
+      label: 'Title',
+      component: TitleInput,
+    },
+
+    {
+      field: 'imageUrl',
+      label: 'Image',
+      component: ImageInput,
+    },
+    {
+      field: 'backgroundStyle',
+      label: 'Background',
+      component: BackgroundInput,
+    },
     ...baseQuestionToolbarConfig,
     {
       field: 'location' as keyof FTASlide,

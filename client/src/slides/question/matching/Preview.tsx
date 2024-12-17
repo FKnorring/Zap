@@ -19,6 +19,9 @@ export function Preview({ slide }: { slide: MatchingSlide }) {
             title={label.text}
             options={label.correctOptions}
             background={getColor(idx)}
+            answers={[]}
+            labelId={label.id}
+            totalParticipants={0}
           />
         ))}
         {unAssignedOptions.length > 0 && (
@@ -26,6 +29,9 @@ export function Preview({ slide }: { slide: MatchingSlide }) {
             title="No Match!"
             options={unAssignedOptions}
             background="rgb(107 114 128)"
+            answers={[]}
+            labelId="unassigned"
+            totalParticipants={0}
           />
         )}
       </div>

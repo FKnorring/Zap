@@ -21,10 +21,10 @@ const DisplayPlacement = ({
 }) => {
   const size =
     participants.length === 1
-      ? '32'
+      ? '8rem'
       : participants.length === 2
-        ? '24'
-        : '20';
+        ? '4rem'
+        : '2rem';
 
   const textSize =
     participants.length === 1
@@ -167,8 +167,8 @@ export default function Results({
             >
               <span className="font-semibold w-8">{index + 4}.</span>
               <Avatar
-                width={'10'}
-                height={'10'}
+                width={"4rem"}
+                height={'4rem'}
                 avatarString={participant.avatar}
                 collectionName={participant.collectionName}
               ></Avatar>

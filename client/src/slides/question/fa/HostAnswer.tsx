@@ -1,7 +1,7 @@
 import { FASlide, Participant } from '@/models/Quiz';
 import NextSlide from '@/slides/_components/NextSlide';
 import { useTranslation } from 'react-i18next';
-import Avatar, { genConfig } from 'react-nice-avatar';
+import Avatar from '@/Avatar';
 
 export function HostAnswer({
   slide,
@@ -41,12 +41,9 @@ export function HostAnswer({
             </span>
             <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
               <Avatar
-                style={{
-                  width: '10rem',
-                  height: '10rem',
-                }}
-                {...genConfig(winner.avatar)}
-              />
+                avatarString={winner.avatar}
+                collectionName={winner.collectionName}
+              ></Avatar>
               <span className={'text-5xl font-bold font-display'}>
                 {winner.name}
               </span>

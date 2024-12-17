@@ -125,14 +125,14 @@ export default function CreateParticipant({
               className="flex flex-col items-center justify-center space-y-4"
             >
               <Avatar avatarString={guestAvatar} collectionName="micah" />
-              <button
+              <Button
                 onClick={() => setGuestAvatar(createRandomId())}
-                className="m-2 p-2 rounded-3xl bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
+                className="m-2 bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
                 title="Randomize Avatar"
               >
                 <p className="font-display text-black  p-2">New Avatar</p>
                 <Dices className="w-6 h-6 text-black" />
-              </button>
+              </Button>
               <Input
                 placeholder="Guest Name"
                 className="text-[#333333] text-center font-display md:text-lg text-lg py-8 px-12 w-full shadow-lg"
@@ -159,14 +159,14 @@ export default function CreateParticipant({
       ) : (
         <div className="bg-component-background w-full mx-auto rounded-lg flex flex-col items-center justify-center p-6  space-y-4">
           <Avatar avatarString={guestAvatar} collectionName="micah" />
-          <button
+          <Button
             onClick={() => setGuestAvatar(createRandomId())}
-            className="m-2 p-2 rounded-full bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
+            className="m-2 bg-yellow-300 hover:bg-yellow-400 flex items-center justify-center"
             title="Randomize Avatar"
           >
-            <p className="font-display text-black pr-1">New Avatar</p>
-            <Dices className="w-6 h-6 text-gray-500" />
-          </button>
+            <p className="font-display text-black">New Avatar</p>
+            <Dices className="w-6 h-6 text-black" />
+          </Button>
           <Input
             placeholder="Enter Name"
             className="text-[#333333] text-center font-display md:text-lg text-lg py-8 px-12 w-full shadow-lg"

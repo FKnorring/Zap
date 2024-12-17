@@ -33,8 +33,8 @@ export default function Participants({
           <Avatar
             avatarString={participant.avatar}
             collectionName={participant.collectionName}
-            width='4rem'
-            height='4rem'
+            width='6rem'
+            height='6rem'
             
           />
           <span className="text-2xl font-display truncate mt-2 bg-white text-black px-3 py-1 rounded max-w-32">

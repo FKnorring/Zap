@@ -12,7 +12,7 @@ export default function ParticipantCard({
         avatarString={participant.avatar}
         collectionName={participant.collectionName}
         width="2rem"
-        height="2rem"
+        height="2em"
       />
       <span className="text-sm font-display">{participant.name}</span>
     </div>

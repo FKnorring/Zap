@@ -1,48 +1,55 @@
-import type { Slide } from '@/models/Quiz';
 import { SlideListItem } from './SlideListItem';
 import { SlideInsertArea } from './SlideInsertArea';
-import { useTranslation } from 'react-i18next';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { useSlideSidebarContext } from './SlideSidebarContext';
 
-interface SlideListProps {
-  slides: Slide[];
-  activeSlideId: string | null;
-  onSlideSelect: (slideId: string) => void;
-  onSlideDelete: (slideId: string) => void;
-  onSlideDuplicate: (slideId: string) => void;
-  onSlideMove: (slideId: string, direction: 'up' | 'down') => void;
-  onAddSlide: (type: string, questionType?: string, index?: number) => void;
-  backgroundColor: string;
-  primaryColor: string;
-  secondaryColor: string;
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-  insertIndex: number | null;
-  handleMouseEnter: (index: number | null) => void;
-  handleMouseLeave: () => void;
-  handleMenuMouseEnter: () => void;
-  handleMenuMouseLeave: () => void;
-}
+export function SlideList() {
+  const {
+    slides,
+    onAddSlide,
+    isOpen,
+    setIsOpen,
+    insertIndex,
+    handleMouseEnter,
+    handleMouseLeave,
+    handleMenuMouseEnter,
+    handleMenuMouseLeave,
+    onSlideSwap,
+  } = useSlideSidebarContext();
 
-export function SlideList({
-  slides,
-  activeSlideId,
-  onSlideSelect,
-  onSlideDelete,
-  onSlideDuplicate,
-  onSlideMove,
-  onAddSlide,
-  backgroundColor,
-  primaryColor,
-  secondaryColor,
-  isOpen,
-  setIsOpen,
-  insertIndex,
-  handleMouseEnter,
-  handleMouseLeave,
-  handleMenuMouseEnter,
-  handleMenuMouseLeave,
-}: SlideListProps) {
-  const { t } = useTranslation(['questions']);
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    
+    if (!active || !over) return;
+    
+    if (active.id !== over.id) {
+      onSlideSwap(String(active.id), String(over.id));
+    }
+  };
 
   return (
     <div className="flex-1 overflow-y-auto px-3 pt-1 slides-container">
@@ -59,37 +66,42 @@ export function SlideList({
           onAddSlide={onAddSlide}
         />
 
-        {slides.map((slide, index) => (
-          <div key={slide.id}>
-            <SlideListItem
-              slide={slide}
-              index={index}
-              totalSlides={slides.length}
-              activeSlideId={activeSlideId}
-              onSlideSelect={onSlideSelect}
-              onSlideDelete={onSlideDelete}
-              onSlideDuplicate={onSlideDuplicate}
-              onSlideMove={onSlideMove}
-              backgroundColor={backgroundColor}
-              primaryColor={primaryColor}
-              secondaryColor={secondaryColor}
-            />
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={slides.map(slide => slide.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {slides.map((slide, index) => (
+              <>
+                <SlideListItem
+                  key={slide.id}
+                  slide={slide}
+                  index={index}
+                  totalSlides={slides.length}
+                />
 
-            {/* Insert area after each slide */}
-            {index < slides.length - 1 && (
-              <SlideInsertArea
-                isOpen={isOpen && insertIndex === index + 1}
-                setIsOpen={setIsOpen}
-                index={index + 1}
-                onMouseEnter={() => handleMouseEnter(index + 1)}
-                onMouseLeave={handleMouseLeave}
-                onMenuMouseEnter={handleMenuMouseEnter}
-                onMenuMouseLeave={handleMenuMouseLeave}
-                onAddSlide={onAddSlide}
-              />
-            )}
-          </div>
-        ))}
+                {/* Insert area after each slide */}
+                {index < slides.length - 1 && (
+                  <SlideInsertArea
+                    key={`insert-${slide.id}`}
+                    isOpen={isOpen && insertIndex === index + 1}
+                    setIsOpen={setIsOpen}
+                    index={index + 1}
+                    onMouseEnter={() => handleMouseEnter(index + 1)}
+                    onMouseLeave={handleMouseLeave}
+                    onMenuMouseEnter={handleMenuMouseEnter}
+                    onMenuMouseLeave={handleMenuMouseLeave}
+                    onAddSlide={onAddSlide}
+                  />
+                )}
+              </>
+            ))}
+          </SortableContext>
+        </DndContext>
 
         {/* New Slide Button at the end */}
         <SlideInsertArea

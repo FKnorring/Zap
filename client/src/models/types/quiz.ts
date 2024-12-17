@@ -54,7 +54,6 @@ export interface SharedQuizzes {
 
 export enum ShowCorrectAnswerTypes {
   auto = "auto",
-  manual = "manual",
   never = "never",
 }
 

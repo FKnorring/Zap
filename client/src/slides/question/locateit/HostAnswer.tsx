@@ -13,7 +13,6 @@ import Avatar from '@/Avatar';
 import { Polyline } from './_polyline';
 import NextSlide from '@/slides/_components/NextSlide';
 
-
 const mockData: Participant[] = [
   {
     participantId: 'DsMCalNtbSK8vCnEpnT59',
@@ -77,7 +76,7 @@ export function HostAnswer({
     return {
       name: participant.name,
       avatar: participant.avatar,
-      collectionName:participant.collectionName,
+      collectionName: participant.collectionName,
       id: participant.participantId,
       lat: Number(latestAnswer[0]),
       lng: Number(latestAnswer[1]),
@@ -149,7 +148,12 @@ export function HostAnswer({
                       </p>
                     </div>
                   </InfoWindow>
-                  <Avatar avatarString={participant.avatar} collectionName={participant.collectionName}></Avatar>
+                  <Avatar
+                    avatarString={participant.avatar}
+                    collectionName={participant.collectionName}
+                    height="3rem"
+                    width="3rem"
+                  />
                 </AdvancedMarker>
                 <Polyline
                   path={[

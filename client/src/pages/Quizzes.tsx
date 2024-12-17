@@ -37,26 +37,18 @@ function useQuizzesPage() {
     async (name: string) => {
       if (!user) return;
 
-      const { data: userQuiz } = await quizService.createQuiz({
+      // Create optimistic quiz from userQuiz data
+      const { error } = await optimisticCreate({
         quiz_name: name,
         user_id: user.id,
       });
 
-      if (!userQuiz) {
-        toast.error('Failed to create quiz');
+      if (error) {
+        toast.error('Failed to create quiz' + error.message);
         return;
       }
 
-      // Create optimistic quiz from userQuiz data
-      optimisticCreate({
-        id: userQuiz.quizId,
-        quiz_name: userQuiz.quizName,
-        user_id: userQuiz.userId,
-        isHosted: userQuiz.isHosted,
-        isShared: userQuiz.isShared,
-        created_at: userQuiz.createdAt,
-        updated_at: userQuiz.updatedAt,
-      });
+      toast.success('Quiz created successfully');
     },
     [user, optimisticCreate]
   );

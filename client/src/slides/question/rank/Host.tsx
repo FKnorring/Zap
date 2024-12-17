@@ -1,5 +1,6 @@
 import { RankSlide, Participant } from '@/models/Quiz';
 import NextSlide from '@/slides/_components/NextSlide';
+import { SlideContent } from '@/slides/_components/SlideContent';
 import SlideTitleSpecial from '@/slides/_components/SlideTitleSpecial';
 import { getSlideComponents } from '@/slides/utils';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +24,13 @@ export function Host({
           icon={SlideComponent.Info.icon}
         />
       </div>
-      <span className="font-display text-6xl">{t('lookAtYourScreen')}</span>
+      <SlideContent content={slide.content} />
+      <div>
+        
+      </div>
+      <span className="font-display text-6xl mt-32">
+        {t('lookAtYourScreen')}
+      </span>
       {slide.imageUrl && (
         <div className="flex justify-center">
           <div className="relative flex items-center justify-center">
