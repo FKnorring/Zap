@@ -103,8 +103,23 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
 
   const startTutorial = useCallback(
     (tutorial: Tutorial) => {
+      // Don't start if tutorials are disabled
       if (user?.tutorialsDisabled) return;
+
+      // Don't start if already completed
       if (user?.completedTutorials?.includes(tutorial.id)) return;
+
+      // Check prerequisites
+      if (tutorial.prerequisites?.length) {
+        const missingPrerequisites = tutorial.prerequisites.filter(
+          (prereqId) => !user?.completedTutorials?.includes(prereqId)
+        );
+        if (missingPrerequisites.length > 0) {
+          console.log('Missing prerequisites:', missingPrerequisites);
+          return;
+        }
+      }
+
       dispatch({ type: 'START_TUTORIAL', payload: tutorial });
     },
     [user?.tutorialsDisabled, user?.completedTutorials]
@@ -158,8 +173,23 @@ export function TutorialProvider({ children }: { children: React.ReactNode }) {
 
   const addToQueue = useCallback(
     (tutorial: Tutorial) => {
+      // Don't queue if tutorials are disabled
       if (user?.tutorialsDisabled) return;
+
+      // Don't queue if already completed
       if (user?.completedTutorials?.includes(tutorial.id)) return;
+
+      // Check prerequisites
+      if (tutorial.prerequisites?.length) {
+        const missingPrerequisites = tutorial.prerequisites.filter(
+          (prereqId) => !user?.completedTutorials?.includes(prereqId)
+        );
+        if (missingPrerequisites.length > 0) {
+          console.log('Missing prerequisites for queue:', missingPrerequisites);
+          return;
+        }
+      }
+
       dispatch({ type: 'ADD_TO_QUEUE', payload: tutorial });
     },
     [user?.tutorialsDisabled, user?.completedTutorials]

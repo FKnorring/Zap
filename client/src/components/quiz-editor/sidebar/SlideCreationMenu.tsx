@@ -8,7 +8,11 @@ import { useTranslation } from 'react-i18next';
 import { SlideOption } from './SlideOption';
 
 interface SlideCreationMenuProps {
-  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
+  onAddSlide: (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => void;
   onCloseMenu?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
@@ -38,7 +42,11 @@ const optionGroups = [
 
 interface RenderOptionsProps {
   options: SlideInfo[];
-  onAddSlide: (type: SlideType, questionType?: QuestionType, index?: number) => void;
+  onAddSlide: (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => void;
   onCloseMenu?: () => void;
 }
 
@@ -75,6 +83,7 @@ export function SlideCreationMenu({
 
   return (
     <PopoverContent
+      id="slide-creation-menu"
       side="right"
       className="w-fit"
       ref={containerRef}

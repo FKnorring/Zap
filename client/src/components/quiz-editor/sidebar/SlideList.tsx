@@ -43,9 +43,9 @@ export function SlideList() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    
+
     if (!active || !over) return;
-    
+
     if (active.id !== over.id) {
       onSlideSwap(String(active.id), String(over.id));
     }
@@ -72,7 +72,7 @@ export function SlideList() {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={slides.map(slide => slide.id)}
+            items={slides.map((slide) => slide.id)}
             strategy={verticalListSortingStrategy}
           >
             {slides.map((slide, index) => (
@@ -118,4 +118,4 @@ export function SlideList() {
       </div>
     </div>
   );
-} 
+}

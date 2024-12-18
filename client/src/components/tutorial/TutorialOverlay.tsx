@@ -115,13 +115,13 @@ export function TutorialOverlay({ disabled }: TutorialOverlayProps) {
           className={cn(
             'absolute z-50',
             activeStep.placement === 'top' &&
-              'bottom-3/4 left-1/2 -translate-x-1/2',
+              'top-1/3 left-1/2 -translate-x-1/2',
             activeStep.placement === 'bottom' &&
-              'top-3/4 left-1/2 -translate-x-1/2',
+              'top-2/3 left-1/2 -translate-x-1/2',
             activeStep.placement === 'left' &&
-              'right-3/4 top-1/2 -translate-y-1/2',
+              'left-1/3 top-1/2 -translate-y-1/2',
             activeStep.placement === 'right' &&
-              'left-3/4 top-1/2 -translate-y-1/2'
+              'left-2/3 top-1/2 -translate-y-1/2'
           )}
         >
           <DialogHeader>

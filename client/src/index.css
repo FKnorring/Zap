@@ -8,9 +8,7 @@ body {
   overflow: hidden;
 }
 
-
 @layer base {
-
   .font-display {
     font-family: 'Londrina Solid', sans-serif;
   }
@@ -19,8 +17,10 @@ body {
     paint-order: stroke fill;
     display: inline-block;
     letter-spacing: 1px;
-    -webkit-text-stroke: 10px black;
-    text-shadow: 5px 5px 0 black, -5px -5px 0 hsl(var(--primary));
+    -webkit-text-stroke: 0.1em black;
+    text-shadow:
+      0.05em 0.05em 0 black,
+      -0.05em -0.05em 0 hsl(var(--primary));
   }
 
   :root {
@@ -83,13 +83,13 @@ body {
 
 /* Add these color utilities */
 .bg-gold {
-  background-color: #FFD700;
+  background-color: #ffd700;
 }
 
 .bg-silver {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 
 .bg-bronze {
-  background-color: #CD7F32;
+  background-color: #cd7f32;
 }

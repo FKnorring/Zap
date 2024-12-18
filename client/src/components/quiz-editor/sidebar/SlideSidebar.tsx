@@ -6,7 +6,11 @@ import { SlideSidebarProvider } from './SlideSidebarContext';
 interface SlideSidebarProps {
   quizName: string;
   slides: Slide[];
-  onAddSlide: (type: SlideTypes, questionType?: QuestionTypes, index?: number) => void;
+  onAddSlide: (
+    type: SlideTypes,
+    questionType?: QuestionTypes,
+    index?: number
+  ) => void;
   activeSlideId: string | null;
   onSlideSelect: (slideId: string) => void;
   onSlideDelete: (slideId: string) => void;
@@ -31,4 +35,4 @@ export function SlideSidebar(props: SlideSidebarProps) {
       </aside>
     </SlideSidebarProvider>
   );
-} 
+}

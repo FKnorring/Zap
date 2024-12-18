@@ -33,7 +33,7 @@ export function SlideInsertArea({
   if (isEndButton) {
     return (
       <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger id="add-slide-button" asChild>
           <div
             className="bg-white border-grey-300 aspect-video border-2 border-dashed rounded flex items-center justify-center cursor-pointer
               hover:border-primary hover:bg-primary/5 transition-colors mt-2"
@@ -76,4 +76,4 @@ export function SlideInsertArea({
       />
     </Popover>
   );
-} 
+}

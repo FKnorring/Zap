@@ -45,6 +45,7 @@ export function SlideListItem({
 
   return (
     <div
+      id={index === 0 ? 'first-slide' : undefined}
       ref={setNodeRef}
       style={style}
       {...attributes}
@@ -64,11 +65,13 @@ export function SlideListItem({
       <h1 className="font-bold text-black text-sm mb-1">
         {index + 1}. {t(slideComponent.Info.label)}
       </h1>
-      <div className={`cursor-pointer rounded overflow-hidden ${
-        activeSlideId === slide.id
-          ? 'border-2 border-primary ring-2 ring-primary'
-          : 'border border-gray-200 hover:border-primary/50'
-      }`}>
+      <div
+        className={`cursor-pointer rounded overflow-hidden ${
+          activeSlideId === slide.id
+            ? 'border-2 border-primary ring-2 ring-primary'
+            : 'border border-gray-200 hover:border-primary/50'
+        }`}
+      >
         <SlidePreview
           slide={slide}
           backgroundColor={backgroundColor}
@@ -84,4 +87,4 @@ export function SlideListItem({
       />
     </div>
   );
-} 
+}
