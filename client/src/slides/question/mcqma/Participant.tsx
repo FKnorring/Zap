@@ -34,7 +34,7 @@ export function Participant({ slide, answerQuestion }: McqmaViewProps) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full p-10 select-none">
-      <h1 className="text-5xl font-display font-bold text-center justify-center mb-8">
+      <h1 className=" text-3xl lg:text-5xl font-display font-bold text-center justify-center mb-8">
         {slide.title}
       </h1>
       <div className="grid grid-cols-2 gap-6 w-full">

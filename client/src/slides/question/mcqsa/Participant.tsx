@@ -16,7 +16,7 @@ interface McqsaViewProps {
 export function Participant({ slide, answerQuestion }: McqsaViewProps) {
   return (
     <div className="flex flex-col items-center justify-center h-full p-10">
-      <h1 className="text-5xl font-display font-bold text-center mb-8">
+      <h1 className="lg:text-5xl text-4xl font-display font-bold text-center mb-8">
         {slide.title}
       </h1>
       <div className="grid grid-cols-2 gap-6 w-full max-w-3xl">
@@ -30,7 +30,7 @@ export function Participant({ slide, answerQuestion }: McqsaViewProps) {
               backgroundColor: getColor(index),
               cursor: 'pointer',
             }}
-            className="flex items-center justify-center text-2xl text-white font-display h-24 rounded-lg hover:ring-4 hover:ring-white"
+            className="flex items-center justify-center text-2xl  text-white font-display h-32 rounded-lg hover:ring-4 hover:ring-white"
           >
             {option.text}
           </Button>
