@@ -32,5 +32,15 @@
   "micah": "Micah",
   "adventurerNeutral": "Adventurer",
   "avataaarsNeutral": "Avatars",
-  "botttsNeutral": "Robots"
+  "botttsNeutral": "Robots",
+  "team": "Team",
+  "numberOfTeams":"Number Of Teams",
+  "teamTitle":"Enter player names, separated by commas or newlines.",
+  "playerNames":"Player Names",
+  "teamGenerator":"Team Generator",
+  "clear":"Clear",
+  "Go":"Go!",
+  "areYouSureDel":"Are you sure you want to delete?",
+  "deletePlayerText":"This will remove all player names and team data.",
+  "confirm":"Confirm"
 }

@@ -165,7 +165,7 @@ function Profile() {
           ></ArrowBigRight>
         </div>
 
-        <div className="grid w-full items-center justify-center items-center gap-1">
+        <div className="grid w-full items-center justify-center  gap-1">
           <Label htmlFor="username">{t('general:username')}</Label>
           <Input
             placeholder={t('general:username')}

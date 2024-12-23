@@ -3,8 +3,10 @@
   "welcomeText": "Välkommen till vår Om-sida. Här kan du lära dig mer om vårt företag och vår mission.",
   "goalsTitle": "Projektets mål",
   "who": "Vilka är vi?",
-  "goalsText": "Vi är ett team av studenter från Uppsala Universitet som vill ge dig ett roligt och enkelt sätt att skapa interaktiva quiz! Födda ur vår kurs i mjukvaruutveckling, är vårt uppdrag enkelt: göra quizskapande kul för alla. Utforska våra färdiga mallar och skapa något fantastiskt på bara några minuter!",
+  "team": "Laget",
+  "goalsText": "Vårt mål är att förenkla quizvärdskap, göra det mer engagerande och ge dig större flexibilitet med anpassningsbara frågetyper. Med en användarvänlig plattform och flexibla mallar har det aldrig varit enklare att skapa ett quiz som passar just dina behov!",
   "statusTitle": "Projektstatus",
-  "statusText": "Du kan nu skapa quiz, dela dem med dina vänner och se hur de klarar sig! Vi arbetar ständigt med nya funktioner och förbättringar, så håll utkik efter fler uppdateringar.",
-  "github": "Kolla in vårt GitHub-repository!"
+  "statusText": "Du kan nu skapa, dela och spela quiz med dina vänner! Vi har dessutom lagt till många nya frågetyper, så sätt igång och börja skapa eller spela redan idag!",
+  "github": "Kolla in vårt GitHub-repository!",
+  "introText": "Vi är en grupp studenter från Uppsala universitet som just nu går en 15-poängskurs där vi utforskar ett ämne som vi själva valt. För vårt projekt skapar vi en interaktiv quiz-app som heter Zap!"
 }

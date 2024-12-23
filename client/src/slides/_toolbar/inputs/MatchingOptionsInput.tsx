@@ -209,6 +209,7 @@ export function MatchingOptionsInput({
             value={newOption}
             onChange={(e) => setNewOption(e.target.value)}
             placeholder={t('newOption')}
+            maxLength={25}
           />
           <Button
             onClick={() => {

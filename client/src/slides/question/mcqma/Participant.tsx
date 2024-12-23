@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { MCQMASlide } from "@/models/Quiz";
-import { getColor } from "@/slides/question/base/QuizColors";
+import { useState } from 'react';
+import { MCQMASlide } from '@/models/Quiz';
+import { getColor } from '@/slides/question/base/QuizColors';
+import { Button } from '@/components/ui/button';
 
 interface Options {
   id: string;
@@ -20,38 +21,53 @@ export function Participant({ slide, answerQuestion }: McqmaViewProps) {
       (prev) =>
         prev.includes(index)
           ? prev.filter((i) => i !== index) // Remove if already selected
-          : [...prev, index], // Add if not selected
+          : [...prev, index] // Add if not selected
     );
   };
 
   const handleSubmit = () => {
     const selectedAnswers = selectedIndexes.map(
-      (index) => slide.options[index].text,
+      (index) => slide.options[index].text
     );
     answerQuestion(selectedAnswers);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-10">
-      <h1 className="text-5xl font-display font-bold text-center mb-8 ">
+    <div className="flex flex-col items-center justify-center h-full p-10 select-none">
+      <h1 className="text-5xl font-display font-bold text-center justify-center mb-8">
         {slide.title}
       </h1>
-      <div className="grid grid-cols-2 gap-6 w-full max-w-3xl">
-        {slide.options.map((option: Options, index: number) => (
-          <div
-            key={option.id}
-            onClick={() => toggleOption(index)}
-            style={{
-              backgroundColor: getColor(index),
-              cursor: "pointer",
-            }}
-            className={`flex items-center justify-center text-2xl text-white font-display h-24 rounded-lg  ${
-              selectedIndexes.includes(index) ? "ring-4 ring-white" : ""
-            }`}
-          >
-            {option.text}
-          </div>
-        ))}
+      <div className="grid grid-cols-2 gap-6 w-full">
+        {slide.options.map((option: Options, index: number) => {
+          const isShortText = option.text.length < 10;
+
+          return (
+            <Button
+              key={option.id}
+              onClick={() => toggleOption(index)}
+              style={{
+                backgroundColor: getColor(index),
+              }}
+              className={`flex items-center justify-center text-white font-display h-32 w-full rounded-lg ${
+                selectedIndexes.includes(index) ? 'ring-4 ring-white' : ''
+              }`}
+            >
+              <span
+                className="overflow-hidden whitespace-normal break-words text-center px-2"
+                style={{
+                  fontSize: isShortText ? '1.5rem' : '1rem', // Bigger font for shorter text
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2, // Limits to 2 lines
+                  WebkitBoxOrient: 'vertical',
+                  wordBreak: 'break-word', // Handle long unbreakable words
+                  hyphens: 'auto', // Add hyphenation if supported
+                }}
+              >
+                {option.text}
+              </span>
+            </Button>
+          );
+        })}
       </div>
       <button
         onClick={handleSubmit}

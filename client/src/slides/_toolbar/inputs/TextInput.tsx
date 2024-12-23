@@ -30,6 +30,7 @@ export default function TextInput<T extends Slide>({
       {textArea ? (
         <Textarea
           id={id}
+          maxLength={150}
           value={value}
           onChange={(e) => onSlideUpdate({ ...slide, [field]: e.target.value })}
           placeholder={placeholder}
@@ -37,6 +38,7 @@ export default function TextInput<T extends Slide>({
         />
       ) : (
         <Input
+          maxLength={75}
           id={id}
           value={value}
           onChange={(e) => onSlideUpdate({ ...slide, [field]: e.target.value })}

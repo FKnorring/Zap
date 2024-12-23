@@ -43,6 +43,8 @@ export function Header() {
   const inLobby = location.pathname.endsWith('/lobby');
   const inGame = location.pathname.startsWith('/play');
 
+  const [isLargeScreen] = useState(window.innerWidth >= 1024); // Assuming 1024px is the breakpoint for large screens
+
   if (inLobby && !showHeader) {
     return null;
   }
@@ -50,12 +52,12 @@ export function Header() {
   return (
     <header
       className={cn(
-        'bg-black/40 md:block transition-opacity duration-200 border-b-2 border-b-primary shadow shadow-black/20 z-50',
+        'bg-black/40 md:block transition-opacity duration-200 border-b-2  border-b-primary shadow shadow-black/20 z-50',
         inLobby && 'absolute top-0 left-0 right-0',
         inGame && 'hidden'
       )}
     >
-      <div className="container flex h-16 items-center px-1">
+      <div className="container flex h-16 items-center px-1 overflow-hidden">
         <div className={cn('mr-0 md:flex w-full', inGame && 'hidden')}>
           <nav className="flex items-center space-x-6 font-medium w-full justify-between">
             <Link
@@ -65,6 +67,7 @@ export function Header() {
               <Zap className="text-yellow-400" size={32} />
               <span className="fancy-wrap">Zap!</span>
             </Link>
+
             <div className="flex items-center font-display gap-1">
               <Link to="/play">
                 <Button
@@ -74,14 +77,16 @@ export function Header() {
                   {t('general:play')}
                 </Button>
               </Link>
-              <Link to="/">
-                <Button
-                  variant={location.pathname === '/' ? 'default' : 'ghost'}
-                  className="text-lg"
-                >
-                  {t('general:home')}
-                </Button>
-              </Link>
+              {isLargeScreen && (
+                <Link to="/">
+                  <Button
+                    variant={location.pathname === '/' ? 'default' : 'ghost'}
+                    className="text-lg"
+                  >
+                    {t('general:home')}
+                  </Button>
+                </Link>
+              )}
               <Link to="/about">
                 <Button
                   variant={location.pathname === '/about' ? 'default' : 'ghost'}
@@ -90,7 +95,15 @@ export function Header() {
                   {t('general:about')}
                 </Button>
               </Link>
-              {!isAuthenticated && (
+              <Link to="/team">
+                <Button
+                  variant={location.pathname === '/team' ? 'default' : 'ghost'}
+                  className="text-lg"
+                >
+                  {t('general:team')}
+                </Button>
+              </Link>
+              {!isAuthenticated && isLargeScreen && (
                 <>
                   <Button
                     variant="ghost"

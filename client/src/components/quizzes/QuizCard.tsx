@@ -43,7 +43,7 @@ export function QuizCard({ quiz, onClick, children }: QuizCardProps) {
     id: '1',
   };
   return (
-    <Card className={`${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
+    <Card className={`${onClick ? 'cursor-pointer' : ''} bg-gray-300`} onClick={onClick} >
       <CardHeader>
         <div className="flex items-center gap-2">
           <CardTitle className="text-lg mr-auto">{quiz.quizName}</CardTitle>

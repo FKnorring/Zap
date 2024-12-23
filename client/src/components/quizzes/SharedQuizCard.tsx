@@ -37,7 +37,7 @@ export function SharedQuizCard({
   };
 
   return (
-    <Card className={`${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
+    <Card className={`${onClick ? 'cursor-pointer' : ''} bg-gray-300`} onClick={onClick}>
       <CardContent>
         <CardTitle className="text-lg mr-auto pb-1 pt-5">
           {quiz.quizName}

@@ -32,5 +32,15 @@
   "micah": "Micah",
   "adventurerNeutral": "Äventyrare",
   "avataaarsNeutral": "Avatarer",
-  "botttsNeutral": "Robotar"
+  "botttsNeutral": "Robotar",
+  "team": "Lag",
+  "numberOfTeams": "Antal Lag",
+  "teamTitle": "Ange spelarnamn, separerade med kommatecken eller radbrytningar.",
+  "playerNames": "Spelarnamn",
+  "teamGenerator": "Lagskaparen",
+  "clear": "Ränsa",
+  "Go": "Slumpa!",
+  "areYouSureDel": "Är du säker att du vill radera?",
+  "deletePlayerText": "Det kommer ta bort alla spelardata.",
+  "confirm": "Bekräfta"
 }

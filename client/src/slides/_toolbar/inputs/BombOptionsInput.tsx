@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { max_options } from '@/config/max';
 import { useTranslation } from 'react-i18next';
+import { HeartIcon, Timer } from 'lucide-react';
 
 export function BombOptionsInput({
   slide,
@@ -45,7 +46,11 @@ export function BombOptionsInput({
     <div className="space-y-6">
       {/* Hearts and Initial Time */}
       <div className="space-y-2">
-        <Label>{t('initialTime')}</Label>
+        <div className="flex items-center space-x-1">
+          <Timer size={17} />
+          <Label>{t('initialTime')}</Label>
+        </div>
+
         <Input
           type="number"
           value={slide.initialTime}
@@ -54,7 +59,10 @@ export function BombOptionsInput({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('hearts')}</Label>
+        <div className="flex items-center space-x-1">
+          <HeartIcon fill="#FF4545" color="#FF4545" />
+          <Label>{t('lives')}</Label>
+        </div>
         <Input
           type="number"
           value={slide.hearts}
@@ -100,12 +108,14 @@ export function BombOptionsInput({
           <p>{t('noAnswer')}</p> // Optional message if there are no answers
         )}
 
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 m-4">
           <Input
             value={newAnswer}
             onChange={(e) => setNewAnswer(e.target.value)}
-            placeholder="New Answers (comma-separated)"
+            placeholder={t('ans1ans2')}
           />
+        </div>
+        <div className='justify-center flex'>
           <Button
             onClick={() => {
               if (newAnswer.trim() !== '') {

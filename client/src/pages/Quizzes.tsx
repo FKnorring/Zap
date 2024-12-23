@@ -151,9 +151,9 @@ function Quizzes() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-around gap-4 overflow-y-auto p-4">
-      <Card className="w-full max-w-7xl" id="quiz-manager-container">
+      <Card className=" w-full max-w-7xl" id="quiz-manager-container">
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className="flex justify-between text-3xl items-center font-display">
             <span>{t('homepage:myQuizzes')}</span>
             {ongoingQuiz && (
               <Button
@@ -166,7 +166,7 @@ function Quizzes() {
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
           </CardTitle>
         </CardHeader>
-        <CardContent className="min-h-[300px]">
+        <CardContent className=" min-h-[300px]">
           {quizzesLoading ? (
             <div className="flex justify-center items-center h-[300px] w-full">
               <Loader2 className="animate-spin" />
@@ -193,7 +193,9 @@ function Quizzes() {
         <CardHeader>
           <CardTitle>
             <div className="flex items-center gap-4">
-              <span className="m-0">{t('homepage:sharedQuizzes')}</span>
+              <span className="font-display m-0">
+                {t('homepage:sharedQuizzes')}
+              </span>
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-muted-foreground" />
                 <Input

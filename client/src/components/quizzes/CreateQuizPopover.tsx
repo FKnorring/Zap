@@ -43,9 +43,9 @@ function CreateQuizPopover({ onCreateQuiz }: CreateQuizPopoverProps) {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button id="create-quiz-button">
-          <span className="flex items-center gap-2">
+          <span className="flex items-center gap-2 p-4 text-2xl">
             {t('homepage:createQuiz')}
-            <Plus />
+            
           </span>
         </Button>
       </PopoverTrigger>

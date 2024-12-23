@@ -101,6 +101,7 @@ function QuizList({
             id={index === 0 ? 'first-quiz-card' : undefined}
           >
             <QuizCard
+            
               quiz={quiz}
               onClick={() => navigate(`/quizzes/${quiz.quizId}/edit`)}
             >

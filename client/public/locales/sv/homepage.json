@@ -12,5 +12,10 @@
   "noSlides": "Inga slides än",
   "deleteQuizDescription": "Är du säker att du vill radera: ",
   "copyDescription": "När du kopierar quizet kommer du kunna redigera det och göra det till ditt eget.",
-  "collection": "Kollektion"
+  "collection": "Kollektion",
+  "questionTypes": "Nya och spännande frågetyper!",
+  "playNow": "Spela nu!",
+  "signIn": "Logga in",
+  "signUp": "Registrera",
+   "avatarText": "Registrera dig för att välja bland 100 avatarer!"
 }

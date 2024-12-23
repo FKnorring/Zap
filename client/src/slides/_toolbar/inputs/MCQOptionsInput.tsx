@@ -45,6 +45,7 @@ export function MCQOptionsInput({
             />
             <Input
               value={option.text}
+              maxLength={30}
               onChange={(e) =>
                 updateOption(
                   slide as MCQMASlide,
