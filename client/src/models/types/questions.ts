@@ -9,7 +9,8 @@ export enum QuestionTypes {
   RANK = "RANK",
   MATCHING = "MATCHING",
   LOCATEIT = "LOCATEIT",
-  BOMB = "BOMB"
+  BOMB = "BOMB",
+  JEOPARDY = "JEOPARDY"
 }
 
 export type QuestionType = QuestionTypes;
@@ -22,7 +23,8 @@ export enum AnswerTypes {
   time = "time",
   matching = "matching",
   location = "location",
-  bomb = "bomb"
+  bomb = "bomb",
+  jeopardy = "jeopardy"
 }
 
 export type answerType = AnswerTypes;
@@ -132,6 +134,24 @@ export interface BombSlide extends QuestionSlideBase {
   usedAnswers: string[];
 }
 
+export interface JeopardyCategory {
+  id: string;
+  name: string;
+  questions: Array<{
+    id: string;
+    answer: string;
+    question: string;
+  }>;
+}
+
+export interface JeopardySlide extends QuestionSlideBase {
+  questionType: QuestionTypes.JEOPARDY;
+  answerType: AnswerTypes.jeopardy;
+  categories: JeopardyCategory[];
+  minScore: number;
+  maxScore: number;
+}
+
 export type QuestionSlide =
   | MCQSASlide
   | MCQMASlide
@@ -141,3 +161,4 @@ export type QuestionSlide =
   | LocateItSlide
   | MatchingSlide
   | BombSlide
+  | JeopardySlide

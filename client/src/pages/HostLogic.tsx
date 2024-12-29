@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { SlideTypes } from '@/models/Quiz';
+import { QuestionTypes, SlideTypes } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
 import Countdown from 'react-countdown';
 import EndScreen from '@/slides/_specials/endscreen/EndScreen';
@@ -14,6 +14,7 @@ import {
 } from '@/utils/localstorage';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { global_values } from '@/config/values';
 
 function HostLogic() {
   const { id } = useParams();
@@ -57,7 +58,11 @@ function HostLogic() {
       }
     }
     // If no valid stored end date, set a new one
-    const newEndDate = currentTime + slide.timeLimit * 1000;
+    let newEndDate = currentTime + slide.timeLimit * 1000;
+    if (slide.questionType === QuestionTypes.MCQSA) {
+      newEndDate += global_values.waiting_time;
+    }
+
     setCountdownEndDate(newEndDate);
     setLocalStorageValue('quiz_timer', newEndDate);
   }, [ongoingQuiz, getCurrentSlide]);
@@ -81,7 +86,6 @@ function HostLogic() {
       />
     );
   }
-
   const SlideComponent = getSlideComponents(slide);
 
   const RenderTimer = () => {
@@ -105,6 +109,13 @@ function HostLogic() {
                   const totalSeconds = Math.ceil(total / 1000);
                   const displayMinutes = Math.floor(totalSeconds / 60);
                   const displaySeconds = totalSeconds % 60;
+
+                  if (
+                    slide.questionType === QuestionTypes.MCQSA &&
+                    totalSeconds > slide.timeLimit
+                  ) {
+                    return null; // Hide timer in waiting portion
+                  }
 
                   // Format the display string
                   const formattedTime =
@@ -169,6 +180,7 @@ function HostLogic() {
             slideNumber={ongoingQuiz.currentSlide}
             changeTurn={changeTurn}
             updateSlideUsedAnswers={updateSlideUsedAnswers}
+            currentSlideTime={ongoingQuiz.currentSlideTime}
           />
           {!inLobby && (
             <ParticipantAnswers

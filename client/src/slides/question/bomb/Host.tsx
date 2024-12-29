@@ -155,8 +155,8 @@ export function Host({
 
         if (
           lastTempAnswer &&
-          answers.includes(lastTempAnswer.toUpperCase()) &&
-          !usedAnswers.includes(lastTempAnswer.toUpperCase()) &&
+          answers.includes(lastTempAnswer.toUpperCase().trim()) &&
+          !usedAnswers.includes(lastTempAnswer.toUpperCase().trim()) &&
           currentParticipant.participantId == isTurn
         ) {
           setIsCorrect('true');
@@ -165,7 +165,6 @@ export function Host({
             const updatedAnswers = [...prev, lastTempAnswer.toUpperCase()];
 
             if (answers.length === updatedAnswers.length) {
-              console.log('inne I FKNIN LOOPEN');
               sendAnswersToDatabase(
                 aliveParticipants,
                 deadParticipants,
@@ -214,14 +213,14 @@ export function Host({
           }, 1200);
         } else if (
           lastTempAnswer &&
-          !answers.includes(lastTempAnswer.toUpperCase())
+          !answers.includes(lastTempAnswer.toUpperCase().trim())
         ) {
           setIsCorrect('false');
           setUserAnswer(lastTempAnswer);
         } else if (
           lastTempAnswer &&
-          answers.includes(lastTempAnswer.toUpperCase()) &&
-          usedAnswers.includes(lastTempAnswer.toUpperCase())
+          answers.includes(lastTempAnswer.toUpperCase().trim()) &&
+          usedAnswers.includes(lastTempAnswer.toUpperCase().trim())
         ) {
           setIsCorrect('used');
           setUserAnswer(lastTempAnswer);

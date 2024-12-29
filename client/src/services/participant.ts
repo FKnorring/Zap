@@ -221,6 +221,7 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
     null
   );
   const [isTurn,setListenIsTurn] = useState("")
+  const [currentSlideTime,setCurrentSlideTime] = useState<string>("")
 
   useEffect(() => {
     const slideRef = ref(database, `ongoingQuizzes/${quizCode}/currentSlide`);
@@ -232,8 +233,8 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       database,
       `ongoingQuizzes/${quizCode}/isShowingCorrectAnswer`
     );
-
     const isTurnRef = ref(database,`ongoingQuizzes/${quizCode}/isTurn`)
+    const slideTimeRef = ref(database,`ongoingQuizzes/${quizCode}/currentSlideTime`)
     
 
     const handleSlideChange = (snapshot: DataSnapshot) => {
@@ -252,20 +253,26 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       setListenIsTurn(snapshot.exists() ? snapshot.val() : false);
     };
 
+    const handleSlideTimeChange = (snapshot: DataSnapshot) => {
+      setCurrentSlideTime(snapshot.exists() ? snapshot.val() : false);
+    };
+
 
 
     onValue(slideRef, handleSlideChange);
     onValue(participantRef, handleParticipantChange);
     onValue(showAnswerRef, handleShowAnswerChange);
-    onValue(isTurnRef, handleIsTurnChange)
+    onValue(isTurnRef, handleIsTurnChange);
+    onValue(slideTimeRef,handleSlideTimeChange);
 
     return () => {
       off(slideRef, 'value', handleSlideChange);
       off(participantRef, 'value', handleParticipantChange);
       off(showAnswerRef, 'value', handleShowAnswerChange);
-      off(isTurnRef,'value', handleIsTurnChange)
+      off(isTurnRef,'value', handleIsTurnChange);
+      off(slideTimeRef,'value',handleSlideTimeChange);
     };
   }, [quizCode, participantId]);
 
-  return { currentSlide, participantData, showAnswer, isTurn };
+  return { currentSlide, participantData, showAnswer, isTurn,currentSlideTime };
 };

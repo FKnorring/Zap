@@ -32,6 +32,7 @@ function QuizView({
   answerTempQuestion,
   isTurn,
   showAnswer,
+  currentSlideTime,
 }: {
   questions: Slide[] | undefined;
   currentSlide: number;
@@ -40,6 +41,7 @@ function QuizView({
   answerTempQuestion: (answer: string) => Promise<void>;
   isTurn: string;
   showAnswer: boolean;
+  currentSlideTime: string;
 }) {
   if (!questions || !participantData) return <Spinner />;
   if (currentSlide === 0) return <LobbyView />;
@@ -62,7 +64,8 @@ function QuizView({
     participantData.hasAnswered ||
     (participantData.tempAnswer &&
       'questionType' in currentQuestion &&
-      currentQuestion.questionType !== QuestionTypes.BOMB)
+      currentQuestion.questionType !== QuestionTypes.BOMB &&
+      currentQuestion.questionType !== QuestionTypes.JEOPARDY)
   )
     return <HasAnsweredView />;
 
@@ -73,6 +76,7 @@ function QuizView({
       answerTempQuestion={answerTempQuestion as never}
       participantData={participantData}
       isTurn={isTurn}
+      currentSlideTime={currentSlideTime}
     />
   );
 }
@@ -87,10 +91,13 @@ export default function ParticipantLogic() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { currentSlide, participantData, showAnswer, isTurn } = useGameStatus(
-    quizCode as string,
-    participantId as string
-  );
+  const {
+    currentSlide,
+    participantData,
+    showAnswer,
+    isTurn,
+    currentSlideTime,
+  } = useGameStatus(quizCode as string, participantId as string);
 
   // Fetch quiz and participant data
   useEffect(() => {
@@ -274,6 +281,7 @@ export default function ParticipantLogic() {
           showAnswer={showAnswer}
           answerTempQuestion={answerTempQuestion}
           isTurn={isTurn}
+          currentSlideTime={currentSlideTime}
         />
       </div>
 

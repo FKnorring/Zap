@@ -6,5 +6,6 @@
   "leaveDescription": "Are you sure you want to leave the quiz?",
   "waitYourTurn": "Wait for your turn!",
   "send": "Send",
-  "enterAnswer": "Enter answer"
+  "enterAnswer": "Enter answer",
+  "questionWillStart": "Get ready!"
 }

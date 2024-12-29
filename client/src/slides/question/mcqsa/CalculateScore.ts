@@ -1,5 +1,6 @@
 import { MCQSASlide } from "@/models/Quiz";
 import { CalculateScoreProps } from "@/slides";
+import { global_values } from "@/config/values";
 
 export function CalculateScore({
   slide,
@@ -26,8 +27,11 @@ export function CalculateScore({
     const wasCorrect = options.find((option) => option.isCorrect)?.text === latestAnswer.answer[0];
     if (!wasCorrect) return 0;
     const questionAsked = new Date(currentSlideTime)
+    const questionAskedDelay = questionAsked.getTime() + global_values.waiting_time
     const questionAnswered = new Date(latestAnswer.time)
-    const timeTaken =  (questionAnswered.getTime()-questionAsked.getTime()) / 1000
+    const timeTaken =  (questionAnswered.getTime()-questionAskedDelay) / 1000
+    console.log(timeTaken)
+
     return Math.floor(( 1 - (( timeTaken / slide.timeLimit ) / 2 )) * slide.points);
   });
 }

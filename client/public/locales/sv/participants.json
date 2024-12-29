@@ -6,5 +6,6 @@
   "leaveDescription": "Är du säker på att du vill lämna quizzet?",
   "waitYourTurn": "Vänta på din tur",
   "send": "Skicka",
-  "enterAnswer": "Skriv in svar"
+  "enterAnswer": "Skriv in svar",
+  "questionWillStart": "Gör dig redo!"
 }

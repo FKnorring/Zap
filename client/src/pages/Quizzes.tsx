@@ -153,7 +153,7 @@ function Quizzes() {
     <div className="flex-1 flex flex-col items-center justify-around gap-4 overflow-y-auto p-4">
       <Card className=" w-full max-w-7xl" id="quiz-manager-container">
         <CardHeader>
-          <CardTitle className="flex justify-between text-3xl items-center font-display">
+          <CardTitle className="flex justify-between text-2xl items-center">
             <span>{t('homepage:myQuizzes')}</span>
             {ongoingQuiz && (
               <Button
@@ -193,7 +193,7 @@ function Quizzes() {
         <CardHeader>
           <CardTitle>
             <div className="flex items-center gap-4">
-              <span className="font-display m-0">
+              <span className="m-0">
                 {t('homepage:sharedQuizzes')}
               </span>
               <div className="flex items-center gap-2">

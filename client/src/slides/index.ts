@@ -11,6 +11,8 @@ import * as Rank from "./question/rank";
 import * as Matching from "./question/matching";
 import * as LocateIt from "./question/locateit";
 import * as Bomb from "./question/bomb";
+import * as BulletPoint from "./bullet-point";
+import * as Jeopardy from "./question/jeopardy";
 
 interface SlideInfo {
   value: string;
@@ -37,4 +39,4 @@ interface QuestionSlideInfo<T extends QuestionSlide> extends SlideInfo {
 
 export type { SlideInfo, QuestionSlideInfo, CalculateScoreProps };
 
-export { Info, Score, Lobby, MCQSA, MCQMA, FTA, Rank, FA, Matching, LocateIt, Bomb };
+export { Info, Score, Lobby, MCQSA, MCQMA, FTA, Rank, FA, Matching, LocateIt, Bomb, BulletPoint, Jeopardy };
