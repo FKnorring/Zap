@@ -61,6 +61,7 @@ function QuizList({
               quizId: quiz.quizId,
               quizHost: quiz.userId,
               participants: {},
+              currentSlideTime: new Date().toISOString(),
               startedAt: new Date().toISOString().toLocaleString(),
             },
             quizCode
@@ -101,7 +102,6 @@ function QuizList({
             id={index === 0 ? 'first-quiz-card' : undefined}
           >
             <QuizCard
-            
               quiz={quiz}
               onClick={() => navigate(`/quizzes/${quiz.quizId}/edit`)}
             >

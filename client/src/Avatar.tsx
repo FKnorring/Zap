@@ -51,8 +51,6 @@ const Avatar = ({
   // Conditionally apply transformation for specific class name (e.g., 'adventurer')
   const isAdventurer = collectionName === 'adventurer';
 
-  console.log(avatarString, avatarCollections);
-
   return (
     <div className="flex flex-col items-center">
       <div

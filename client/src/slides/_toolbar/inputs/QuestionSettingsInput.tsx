@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
 import { Eye, Timer } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -69,16 +68,48 @@ export function QuestionSettingsInput({
           <Timer size={17} />
           <Label>{t('timeLimit')}</Label>
         </div>
-        <Input
-          type="number"
-          value={questionSlide.timeLimit}
-          onChange={(e) =>
+        <Select
+          value={questionSlide.timeLimit.toString()}
+          onValueChange={(e) =>
             onSlideUpdate({
               ...questionSlide,
-              timeLimit: parseInt(e.target.value),
+              timeLimit: parseInt(e),
             })
           }
-        />
+        >
+          <SelectTrigger>
+            <SelectValue>{t(`timelimit.${slide.timeLimit}`)}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0">
+              <h3>{t(`timelimit.0`)}</h3>
+            </SelectItem>
+            <SelectItem value="10">
+              <h3>{t(`timelimit.10`)}</h3>
+            </SelectItem>
+            <SelectItem value="20">
+              <h3>{t(`timelimit.20`)}</h3>
+            </SelectItem>
+            <SelectItem value="30">
+              <h3>{t(`timelimit.30`)}</h3>
+            </SelectItem>
+            <SelectItem value="45">
+              <h3>{t(`timelimit.45`)}</h3>
+            </SelectItem>
+            <SelectItem value="60">
+              <h3>{t(`timelimit.60`)}</h3>
+            </SelectItem>
+            <SelectItem value="90">
+              <h3>{t(`timelimit.90`)}</h3>
+            </SelectItem>
+            <SelectItem value="120">
+              <h3>{t(`timelimit.120`)}</h3>
+            </SelectItem>
+            <SelectItem value="180">
+              <h3>{t(`timelimit.180`)}</h3>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

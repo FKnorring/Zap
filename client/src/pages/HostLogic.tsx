@@ -63,6 +63,7 @@ function HostLogic() {
   }, [ongoingQuiz, getCurrentSlide]);
 
   const handleComplete = () => {
+    if (slide?.id !== currentSlideId) return;
     const complete = removeLocalStorageValue('quiz_timer');
     if (complete) nextSlide();
   };

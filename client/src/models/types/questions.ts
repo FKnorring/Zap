@@ -58,6 +58,13 @@ export enum AwardPointsLocation {
 
 export type awardPointsLocation = AwardPointsLocation;
 
+export enum MCQSAPointsAwarding {
+  TIME = "TIME", // 0-100% points based on time
+  CORRECT = "CORRECT", // Full points if correct
+}
+
+export type mcqsaPointsAwarding = MCQSAPointsAwarding;
+
 export interface LocateItSlide extends QuestionSlideBase {
   location: {
     lat: number;
@@ -78,6 +85,7 @@ export interface MCQSASlide extends QuestionSlideBase {
     isCorrect: boolean;
   }>;
   answerType: AnswerTypes.singleString;
+  pointsAwarding: mcqsaPointsAwarding;
 }
 
 export interface MCQMASlide extends QuestionSlideBase {

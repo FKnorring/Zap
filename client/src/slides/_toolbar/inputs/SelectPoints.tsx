@@ -32,8 +32,8 @@ export function SelectPoints({
       </div>
 
       <Select
-        value={slide.points.toString()} // Current points value as string
-        onValueChange={(value) => handlePointsChange(Number(value))} // Convert value to number before updating
+        value={slide.points.toString()}
+        onValueChange={(value) => handlePointsChange(Number(value))}
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select Points" />

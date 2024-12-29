@@ -23,8 +23,10 @@ export function MCQOptionsInput({
 }: ToolbarProps<MCQMASlide>) {
   if (!('options' in slide)) return null;
 
-  const canAdd = slide.options.length < MAX_OPTIONS;
   const { t } = useTranslation(['quizEditor']);
+  const canAdd = slide.options.length < MAX_OPTIONS;
+
+  const totalChecked = slide.options.filter((opt) => opt.isCorrect).length;
 
   return (
     <div className="space-y-2">
@@ -34,14 +36,19 @@ export function MCQOptionsInput({
           <div key={option.id} className="flex items-center gap-2">
             <Switch
               checked={option.isCorrect}
-              onCheckedChange={(checked: boolean) =>
+              onCheckedChange={(checked: boolean) => {
+                // If user tries to uncheck the only checked option, do nothing
+                if (!checked && totalChecked === 1 && option.isCorrect) {
+                  return;
+                }
+
                 updateOption(
                   slide,
                   option.id,
                   { isCorrect: checked },
                   onSlideUpdate as (slide: OptionSlide) => void
-                )
-              }
+                );
+              }}
             />
             <Input
               value={option.text}

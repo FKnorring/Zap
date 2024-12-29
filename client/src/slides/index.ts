@@ -26,6 +26,7 @@ interface SlideInfo {
 interface CalculateScoreProps<T extends QuestionSlide> {
   slide: T;
   participants: Participant[];
+  currentSlideTime?: string;
 }
 
 interface QuestionSlideInfo<T extends QuestionSlide> extends SlideInfo {

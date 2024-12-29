@@ -21,7 +21,7 @@ import { AnswerText } from './_toolbar/inputs/AnswerInput';
 import { SelectPoints } from './_toolbar/inputs/SelectPoints';
 import { LocateItInputs } from './_toolbar/inputs/LocateItInputs';
 import { MatchingOptionsInput } from './_toolbar/inputs/MatchingOptionsInput';
-
+import { MCQSAPoints } from './_toolbar/inputs/MCQSAPoints';
 import { BombOptionsInput } from './_toolbar/inputs/BombOptionsInput';
 
 export interface ToolbarProps<T extends Slide> {
@@ -112,6 +112,11 @@ export const toolbarConfigs = {
   MCQSA: [
     ...baseToolbarConfig,
     ...baseQuestionToolbarConfig,
+    {
+      field: 'pointsAwarding' as keyof MCQSASlide,
+      label: 'Points Awarding',
+      component: MCQSAPoints,
+    },
     {
       field: 'options' as keyof MCQSASlide,
       label: 'Options',

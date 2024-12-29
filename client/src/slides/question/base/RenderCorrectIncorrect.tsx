@@ -14,12 +14,12 @@ const inspirationalQuotes = [
   "You've got to LOCK-IN 🔒",
 ];
 
-const partiallyCorrectQuotes = [
+/*const partiallyCorrectQuotes = [
   "Almost there! You're on the right track. 🎯",
   "Not bad, but there's room for improvement! 📈",
   "You're getting warmer! Keep pushing! 🌡️",
-  "Half right is better than all wrong! 💫",
-];
+  'Half right is better than all wrong! 💫',
+];*/
 
 const noStreakLost = ['At least you did not have a streak to loose! 🎉'];
 
@@ -32,7 +32,7 @@ export default function ParticipantCorrect({
 }) {
   const score = [...participant.score].reverse();
   const latestScore = score[0];
-  
+
   const getAnswerState = () => {
     if (latestScore === 0) return 'incorrect';
     if (latestScore < 500) return 'partial';
@@ -40,7 +40,7 @@ export default function ParticipantCorrect({
   };
 
   const answerState = getAnswerState();
-  
+
   let streak = 0;
   for (const s of score) {
     if (s === 0) break;
@@ -71,23 +71,31 @@ export default function ParticipantCorrect({
       icon: <AlertCircle width={70} height={70} />,
       title: 'Almost There!',
       message: `Answer Streak: ${streak}`,
-      quote: partiallyCorrectQuotes[Math.floor(Math.random() * partiallyCorrectQuotes.length)],
+      quote: `+ ${latestScore}`,
     },
     incorrect: {
       bgColor: 'bg-red-500',
       icon: <X width={70} height={70} />,
       title: 'Wrong!',
       message: lostStreak === 0 ? '' : `Lost A Streak of ${lostStreak} 💀`,
-      quote: lostStreak === 0
-        ? noStreakLost[0]
-        : inspirationalQuotes[Math.floor(Math.random() * inspirationalQuotes.length)],
+      quote:
+        lostStreak === 0
+          ? noStreakLost[0]
+          : inspirationalQuotes[
+              Math.floor(Math.random() * inspirationalQuotes.length)
+            ],
     },
   };
 
   const config = stateConfig[answerState];
 
   return (
-    <div className={cn('flex flex-col items-center justify-center h-full pb-10', config.bgColor)}>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center h-full pb-10',
+        config.bgColor
+      )}
+    >
       {children}
       <h1 className="text-3xl font-display text-center">{config.title}</h1>
       {config.icon}

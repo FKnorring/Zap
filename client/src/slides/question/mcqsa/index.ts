@@ -5,7 +5,7 @@ export * from './Host';
 export * from './HostAnswer';
 export * from './CalculateScore';
 
-import { QuestionTypes, SlideTypes, AnswerTypes } from '@/models/Quiz';
+import { QuestionTypes, SlideTypes, AnswerTypes,MCQSAPointsAwarding } from '@/models/Quiz';
 import { CircleDotIcon } from "lucide-react";
 import { SlideInfo } from '../..';
 import { nanoid } from 'nanoid'
@@ -24,5 +24,6 @@ export const Info: SlideInfo = {
     })),
     answerType: AnswerTypes.singleString,
     points: 1000,
+    pointsAwarding: MCQSAPointsAwarding.CORRECT,
   },
 } as const; 

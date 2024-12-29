@@ -63,6 +63,7 @@ export interface OngoingQuiz {
   isTurn: string;
   isShowingCorrectAnswer: boolean;
   currentSlide: number;
+  currentSlideTime: string;
   quiz: Quiz;
   quizId: string;
   quizHost: string;
