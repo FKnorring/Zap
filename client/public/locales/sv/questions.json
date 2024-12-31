@@ -33,5 +33,11 @@
   "embeded": "Inbyggd",
   "remove": "Ta bort",
   "used": "Använda",
-  "total": "Totala"
+  "total": "Totala",
+  "CLOSEST": "Pricka talet",
+  "closest": {
+    "enterGuess": "Ange din gissning",
+    "submitGuess": "Skicka gissning",
+    "difference": "Skillnad"
+  }
 }

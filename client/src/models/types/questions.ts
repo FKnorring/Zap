@@ -10,7 +10,8 @@ export enum QuestionTypes {
   MATCHING = "MATCHING",
   LOCATEIT = "LOCATEIT",
   BOMB = "BOMB",
-  JEOPARDY = "JEOPARDY"
+  JEOPARDY = "JEOPARDY",
+  CLOSEST = "CLOSEST"
 }
 
 export type QuestionType = QuestionTypes;
@@ -24,7 +25,8 @@ export enum AnswerTypes {
   matching = "matching",
   location = "location",
   bomb = "bomb",
-  jeopardy = "jeopardy"
+  jeopardy = "jeopardy",
+  number = "number"
 }
 
 export type answerType = AnswerTypes;
@@ -150,6 +152,14 @@ export interface JeopardySlide extends QuestionSlideBase {
   categories: JeopardyCategory[];
   minScore: number;
   maxScore: number;
+  mainTimeLimit: number;
+  answerTimeLimit: number;
+}
+
+export interface ClosestSlide extends QuestionSlideBase {
+  questionType: QuestionTypes.CLOSEST;
+  answerType: AnswerTypes.number;
+  correctAnswer: number;
 }
 
 export type QuestionSlide =
@@ -162,3 +172,4 @@ export type QuestionSlide =
   | MatchingSlide
   | BombSlide
   | JeopardySlide
+  | ClosestSlide

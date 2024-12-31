@@ -10,6 +10,7 @@ import {
   Matching,
   FA,
   LocateIt, Bomb,
+  Closest,
   BulletPoint,
   Jeopardy,
 } from "./";
@@ -55,6 +56,8 @@ export function getSlideComponentsFromType(
           return Bomb;  
         case "JEOPARDY":
           return Jeopardy;
+        case "CLOSEST":
+          return Closest;
         default:
           throw new Error(`Unknown question type: ${questionType}`);
       }

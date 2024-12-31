@@ -111,7 +111,7 @@ function useQuizzesPage() {
         return;
       }
 
-      optimisticCreate(newQuiz);
+      optimisticCreate(newQuiz, newQuiz.id);
       toast.success('Quiz copied successfully');
     },
     [user, optimisticCreate]
@@ -166,7 +166,7 @@ function Quizzes() {
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
           </CardTitle>
         </CardHeader>
-        <CardContent className=" min-h-[300px]">
+        <CardContent className="min-h-[300px]">
           {quizzesLoading ? (
             <div className="flex justify-center items-center h-[300px] w-full">
               <Loader2 className="animate-spin" />

@@ -23,10 +23,10 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4" key={slide.id}>
         {config.map(({ component: Component, field }) => (
           <Component
-            key={String(field)}
+            key={String(field) + slide.id}
             slide={slide as never}
             onSlideUpdate={onSlideUpdate}
           />

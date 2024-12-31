@@ -7,7 +7,8 @@ export function Render({ slide }: { slide: BulletPointSlide }) {
     const bulletPointsSection = (
         <div className="flex flex-col justify-center max-w-screen-lg px-8">
             <ul className="list-none" style={{ gap: `${slide.pointSpacing}px` }}>
-                {slide.points.map((point, index) => (
+                
+                {slide.points && slide.points.map((point, index) => (
                     <li 
                         key={index} 
                         className="flex items-center space-x-3"

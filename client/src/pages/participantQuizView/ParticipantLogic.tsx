@@ -30,7 +30,7 @@ function QuizView({
   participantData,
   answerQuestion,
   answerTempQuestion,
-  isTurn,
+  turn,
   showAnswer,
   currentSlideTime,
 }: {
@@ -39,10 +39,20 @@ function QuizView({
   participantData: Participant;
   answerQuestion: (answer: string[]) => Promise<void>;
   answerTempQuestion: (answer: string) => Promise<void>;
-  isTurn: string;
+  turn: string;
   showAnswer: boolean;
   currentSlideTime: string;
 }) {
+  const [flash, setFlash] = useState(false);
+
+  useEffect(() => {
+    if (currentSlide > 0) {
+      setFlash(true);
+      const timer = setTimeout(() => setFlash(false), 150); // Flash duration
+      return () => clearTimeout(timer);
+    }
+  }, [currentSlide]);
+
   if (!questions || !participantData) return <Spinner />;
   if (currentSlide === 0) return <LobbyView />;
   if (currentSlide > questions.length) return <QuizEndedView />;
@@ -70,14 +80,19 @@ function QuizView({
     return <HasAnsweredView />;
 
   return (
-    <SlideComponent.Participant
-      slide={currentQuestion as never}
-      answerQuestion={answerQuestion as never}
-      answerTempQuestion={answerTempQuestion as never}
-      participantData={participantData}
-      isTurn={isTurn}
-      currentSlideTime={currentSlideTime}
-    />
+    <>
+      {flash && (
+        <div className="fixed inset-0 bg-white/60 animate-flash pointer-events-none z-50" />
+      )}
+      <SlideComponent.Participant
+        slide={currentQuestion as never}
+        answerQuestion={answerQuestion as never}
+        answerTempQuestion={answerTempQuestion as never}
+        participantData={participantData}
+        turn={turn}
+        currentSlideTime={currentSlideTime}
+      />
+    </>
   );
 }
 
@@ -95,7 +110,7 @@ export default function ParticipantLogic() {
     currentSlide,
     participantData,
     showAnswer,
-    isTurn,
+    turn,
     currentSlideTime,
   } = useGameStatus(quizCode as string, participantId as string);
 
@@ -280,7 +295,7 @@ export default function ParticipantLogic() {
           answerQuestion={answerQuestion}
           showAnswer={showAnswer}
           answerTempQuestion={answerTempQuestion}
-          isTurn={isTurn}
+          turn={turn}
           currentSlideTime={currentSlideTime}
         />
       </div>

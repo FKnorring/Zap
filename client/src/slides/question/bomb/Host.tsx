@@ -57,7 +57,7 @@ export function Host({
   const [deadParticipants, setDeadParticipants] = useState<string[]>([]);
   const [aliveParticipants, setAliveParticipants] = useState<Participant[]>([]);
 
-  const [isTurn, setIsturn] = useState('');
+  const [turn, setTurn] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [gameStarted, setGameStarted] = useState(false);
@@ -88,7 +88,7 @@ export function Host({
     try {
       await changeTurn(participantId, quizCode);
 
-      setIsturn(participantId);
+      setTurn(participantId);
     } catch (error) {
       console.error('Error while changing turn:', error);
     }
@@ -157,7 +157,7 @@ export function Host({
           lastTempAnswer &&
           answers.includes(lastTempAnswer.toUpperCase().trim()) &&
           !usedAnswers.includes(lastTempAnswer.toUpperCase().trim()) &&
-          currentParticipant.participantId == isTurn
+          currentParticipant.participantId == turn
         ) {
           setIsCorrect('true');
 

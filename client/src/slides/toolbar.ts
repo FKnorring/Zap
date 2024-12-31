@@ -28,6 +28,9 @@ import { BulletPointSlideInput } from './_toolbar/inputs/BulletPointSlideInput';
 import { BulletPointStyleInput } from './_toolbar/inputs/BulletPointStyleInput';
 import { JeopardyInput } from './_toolbar/inputs/JeopardyInput';
 import { JeopardyScoreInput } from './_toolbar/inputs/JeopardyScoreInput';
+import { JeopardyTimeLimits } from './_toolbar/inputs/JeopardyTimeLimits';
+import { JeopardyAIInput } from './_toolbar/inputs/JeopardyAIInput';
+import { ClosestInput } from "./_toolbar/inputs/ClosestInput";
 
 export interface ToolbarProps<T extends Slide> {
   slide: T;
@@ -248,14 +251,14 @@ export const toolbarConfigs = {
 
   JEOPARDY: [
     {
-      field: 'title',
-      label: 'Title',
-      component: TitleInput,
-    },
-    {
       field: 'categories',
       label: 'Categories',
       component: JeopardyInput,
+    },
+    {
+      field: 'AIcategories',
+      label: 'AI Category Generator',
+      component: JeopardyAIInput,
     },
     {
       field: 'minScore',
@@ -263,9 +266,23 @@ export const toolbarConfigs = {
       component: JeopardyScoreInput,
     },
     {
+      field: 'mainTimeLimit',
+      label: 'Time Limits',
+      component: JeopardyTimeLimits,
+    },
+    {
       field: 'backgroundStyle',
       label: 'Background',
       component: BackgroundInput,
+    },
+  ],
+
+  CLOSEST: [
+    ...baseToolbarConfig,
+    {
+      field: 'correctAnswer',
+      label: 'Correct Answer',
+      component: ClosestInput,
     },
     ...baseQuestionToolbarConfig,
   ],

@@ -1,0 +1,5 @@
+{
+  "correctAnswer": "Correct Answer",
+  "closestAnswerInfo": "Enter the target number that players need to guess. Points will be awarded to the player with the closest guess.",
+  "invalidNumberError": "Please enter a valid number"
+} 

@@ -263,8 +263,8 @@ export const useHostLogic = (id: string | undefined) => {
       // Reference the specific quiz path in the database
       const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
 
-      // Update only the 'isTurn' field
-      await update(quizRef, { isTurn: participantId });
+      // Update only the 'turn' field
+      await update(quizRef, { turn: participantId });
 
       console.log(`Turn successfully updated to participant ${participantId}.`);
     } catch (error) {

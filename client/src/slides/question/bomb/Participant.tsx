@@ -11,14 +11,14 @@ interface BombParticipantProps {
   answerQuestion: (answer: string[]) => void;
   answerTempQuestion: (answer: string) => boolean;
   participantData: Participant;
-  isTurn: string;
+  turn: string;
 }
 
 export function Participant({
   slide,
   answerTempQuestion,
   participantData,
-  isTurn,
+  turn,
 }: BombParticipantProps) {
   const [userAnswer, setUserAnswer] = useState('');
   const {t} = useTranslation()
@@ -77,7 +77,7 @@ export function Participant({
         {slide.title}
       </h1>
 
-      {participantData && isTurn === participantData.participantId && (
+      {participantData && turn === participantData.participantId && (
         <div className="bg-white p-4 rounded-md text-black font-display text-2xl mb-6">
           <Input
             value={userAnswer}
@@ -94,7 +94,7 @@ export function Participant({
         </div>
       )}
 
-      {participantData && isTurn !== participantData.participantId && (
+      {participantData && turn !== participantData.participantId && (
         <div className="bg-white p-4 rounded-md text-black font-display text-2xl mb-6">
           <h2 className="text-center">{t("participants:waitYourTurn")}</h2>
         </div>

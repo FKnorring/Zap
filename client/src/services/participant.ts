@@ -58,7 +58,7 @@ export const ParticipantService = {
       avatar,
       participantId,
       collectionName,
-      isTurn: false,
+      turn: false,
     };
 
     try {
@@ -220,7 +220,7 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
   const [participantData, setParticipantData] = useState<Participant | null>(
     null
   );
-  const [isTurn,setListenIsTurn] = useState("")
+  const [turn,setListenTurn] = useState("")
   const [currentSlideTime,setCurrentSlideTime] = useState<string>("")
 
   useEffect(() => {
@@ -233,7 +233,7 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       database,
       `ongoingQuizzes/${quizCode}/isShowingCorrectAnswer`
     );
-    const isTurnRef = ref(database,`ongoingQuizzes/${quizCode}/isTurn`)
+    const turnRef = ref(database,`ongoingQuizzes/${quizCode}/turn`)
     const slideTimeRef = ref(database,`ongoingQuizzes/${quizCode}/currentSlideTime`)
     
 
@@ -249,8 +249,8 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       setShowAnswer(snapshot.exists() ? snapshot.val() : false);
     };
 
-    const handleIsTurnChange = (snapshot: DataSnapshot) => {
-      setListenIsTurn(snapshot.exists() ? snapshot.val() : false);
+    const handleTurnChange = (snapshot: DataSnapshot) => {
+      setListenTurn(snapshot.exists() ? snapshot.val() : false);
     };
 
     const handleSlideTimeChange = (snapshot: DataSnapshot) => {
@@ -262,17 +262,17 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
     onValue(slideRef, handleSlideChange);
     onValue(participantRef, handleParticipantChange);
     onValue(showAnswerRef, handleShowAnswerChange);
-    onValue(isTurnRef, handleIsTurnChange);
+    onValue(turnRef, handleTurnChange);
     onValue(slideTimeRef,handleSlideTimeChange);
 
     return () => {
       off(slideRef, 'value', handleSlideChange);
       off(participantRef, 'value', handleParticipantChange);
       off(showAnswerRef, 'value', handleShowAnswerChange);
-      off(isTurnRef,'value', handleIsTurnChange);
+      off(turnRef,'value', handleTurnChange);
       off(slideTimeRef,'value',handleSlideTimeChange);
     };
   }, [quizCode, participantId]);
 
-  return { currentSlide, participantData, showAnswer, isTurn,currentSlideTime };
+  return { currentSlide, participantData, showAnswer, turn,currentSlideTime };
 };

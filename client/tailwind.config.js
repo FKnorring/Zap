@@ -69,6 +69,10 @@ export default {
   				'40%, 60%': {
   					transform: 'translate3d(1.5px, 0, 0)'
   				}
+  			},
+  			flash: {
+  				'0%': { opacity: '0.25' },
+  				'100%': { opacity: '0' },
   			}
   		},
   		animation: {
@@ -77,7 +81,8 @@ export default {
   			shake: 'shake 0.6s cubic-bezier(.36,.07,.19,.97) both',
   			'zoom-in': 'zoom-in 0.5s ease-in-out',
   			'collapsible-down': 'collapsible-down 0.2s ease-out',
-  			'collapsible-up': 'collapsible-up 0.2s ease-out'
+  			'collapsible-up': 'collapsible-up 0.2s ease-out',
+  			flash: 'flash 150ms ease-out forwards'
   		},
   		colors: {
   			primary: 'hsl(var(--primary))',

@@ -1,0 +1,5 @@
+{
+  "correctAnswer": "Rätt svar",
+  "closestAnswerInfo": "Ange målnumret som spelarna ska gissa. Poäng tilldelas spelaren med närmast gissning.",
+  "invalidNumberError": "Vänligen ange ett giltigt nummer"
+} 
