@@ -30,9 +30,7 @@ import { Separator } from '@/components/ui/separator';
 export default function Settings() {
   const { t, i18n } = useTranslation();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const [isAppearanceOpen, setIsAppearanceOpen] = useState(false);
-  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
+  const [whichOpen, setWhichOpen] = useState('');
   const { isAuthenticated, logout } = useKindeAuth();
   const {
     user: { user, updateUser },
@@ -86,7 +84,14 @@ export default function Settings() {
               <Separator className=" w-full" />
             </>
           )}
-          <Collapsible open={isLanguageOpen} onOpenChange={setIsLanguageOpen}>
+          <Collapsible
+            open={whichOpen === 'language'}
+            onClick={() =>
+              whichOpen === 'language'
+                ? setWhichOpen('')
+                : setWhichOpen('language')
+            }
+          >
             <CollapsibleTrigger className="flex flex-row w-full items-center px-2 py-2 font-display hover:bg-primary/90 rounded justify-between">
               <div className="flex items-center">
                 <Languages className="w-4 h-4 mr-2" strokeWidth={3} />
@@ -98,7 +103,8 @@ export default function Settings() {
                 strokeWidth={3}
                 style={{
                   transition: 'transform 0.2s ease',
-                  transform: isLanguageOpen ? 'rotate(180deg)' : 'none',
+                  transform:
+                    whichOpen === 'language' ? 'rotate(180deg)' : 'none',
                 }}
               />
             </CollapsibleTrigger>
@@ -133,8 +139,12 @@ export default function Settings() {
           {isAuthenticated && (
             <>
               <Collapsible
-                open={isAppearanceOpen}
-                onOpenChange={setIsAppearanceOpen}
+                open={whichOpen === 'appearance'}
+                onClick={() =>
+                  whichOpen === 'appearance'
+                    ? setWhichOpen('')
+                    : setWhichOpen('appearance')
+                }
               >
                 <CollapsibleTrigger className="flex flex-row w-full items-center px-2 py-2 font-display hover:bg-primary/90 rounded justify-between">
                   <div className="flex items-center">
@@ -147,7 +157,8 @@ export default function Settings() {
                     strokeWidth={3}
                     style={{
                       transition: 'transform 0.2s ease',
-                      transform: isAppearanceOpen ? 'rotate(180deg)' : 'none',
+                      transform:
+                        whichOpen === 'appearance' ? 'rotate(180deg)' : 'none',
                     }}
                   />
                 </CollapsibleTrigger>
@@ -159,8 +170,12 @@ export default function Settings() {
               </Collapsible>
 
               <Collapsible
-                open={isTutorialOpen}
-                onOpenChange={setIsTutorialOpen}
+                open={whichOpen === 'tutorial'}
+                onClick={() =>
+                  whichOpen === 'tutorial'
+                    ? setWhichOpen('')
+                    : setWhichOpen('tutorial')
+                }
               >
                 <CollapsibleTrigger className="flex flex-row w-full items-center px-2 py-2 font-display hover:bg-primary/90 rounded justify-between">
                   <div className="flex items-center">
@@ -176,7 +191,8 @@ export default function Settings() {
                     strokeWidth={3}
                     style={{
                       transition: 'transform 0.2s ease',
-                      transform: isTutorialOpen ? 'rotate(180deg)' : 'none',
+                      transform:
+                        whichOpen === 'tutorial' ? 'rotate(180deg)' : 'none',
                     }}
                   />
                 </CollapsibleTrigger>

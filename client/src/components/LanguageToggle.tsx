@@ -7,8 +7,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/lib/utils';
 
-export default function LanguageToggle() {
+interface LanguageToggleProps {
+  fixed?: boolean;
+}
+
+export default function LanguageToggle({ fixed = true }: LanguageToggleProps) {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const { t } = useTranslation(['general']);
@@ -24,7 +29,9 @@ export default function LanguageToggle() {
         <Button
           variant="ghost"
           size="sm"
-          className="fixed top-4 right-4 z-50 bg-white text-black p-2 h-7"
+          className={cn(
+            fixed && 'fixed top-4 right-4 z-50 bg-white text-black p-2 h-7'
+          )}
         >
           {i18n.language.toUpperCase()}
           <Languages className="h-4 w-4" />

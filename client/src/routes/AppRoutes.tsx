@@ -5,7 +5,7 @@ import Spinner from '@/components/Spinner';
 import { useTutorialTrigger } from '@/hooks/useTutorialTrigger';
 
 const About = React.lazy(() => import('../pages/About'));
-const Home = React.lazy(() => import('../pages/Home'));
+const Home = React.lazy(() => import('../pages/home/Home'));
 const Tools = React.lazy(() => import('../pages/Tools'));
 const Quizzes = React.lazy(() => import('../pages/Quizzes'));
 const JoinQuiz = React.lazy(() => import('@/pages/JoinQuiz'));

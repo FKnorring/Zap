@@ -17,5 +17,19 @@
   "playNow": "Spela nu!",
   "signIn": "Logga in",
   "signUp": "Registrera",
-   "avatarText": "Välj bland 100 avatarer!"
+  "avatarText": "Välj bland 100 avatarer!",
+  "slogan": "Kreativt, Enkelt, Unikt",
+  "inspotext": "Skapa oförglömliga quiz och evenemang med Zap! Oavsett om det är online teambuilding, live interaktiva spel, isbrytare eller engagerande lektioner, gör Zap det enkelt att koppla samman och entusiasmera din publik—när som helst, var som helst.",
+  "getStarted": "Get Started!",
+  "stepTitles": {
+    "0": "Bygg det, quiz det, vinn det!",
+    "1": "Bjud in dina vänner!",
+    "2": "Titta på när spänningen byggs upp & njut av roligheten!"
+  },
+
+  "stepText": {
+    "0": "Kom igång med Zap genom att skapa quiz och spelkvälls-slides. Lägg till olika interaktiva utmaningar för att hålla dina vänner engagerade, allt inom en enkel app.",
+    "1": "Dina vänner kan delta i roligheterna på vilken enhet som helst, genom att bara skanna en QR-kod eller använda en länk—inga appar behövs!",
+    "2": "Följ svaren, poängen och resultaten när de utvecklas, och bygg upp spänningen tills en vinnare koras."
+  }
 }
