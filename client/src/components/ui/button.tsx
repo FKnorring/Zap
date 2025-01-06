@@ -39,6 +39,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isInteractive?: boolean;
+  interactiveStyles?: string;
   inGrid?: boolean;
 }
 
@@ -50,6 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       asChild = false,
       isInteractive = false,
+      interactiveStyles = '',
       inGrid = false,
       ...props
     },
@@ -62,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <motion.div
           whileTap={{ scale: 0.85 }}
-          className={inGrid ? 'grid' : 'inline-block'}
+          className={cn(interactiveStyles, inGrid ? 'grid' : 'inline-block')}
           whileHover={{ scale: 1.05 }}
         >
           <Comp

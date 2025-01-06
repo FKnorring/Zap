@@ -19,12 +19,15 @@ export function Host({
   currentSlideTime: string;
 }) {
   const showQuestionTime =
-    new Date(currentSlideTime).getTime() + global_values.waiting_time;
+    Number(currentSlideTime) + global_values.waiting_time;
 
   const [isTimeToShow, setIsTimeToShow] = useState(
-    Date.now() >= showQuestionTime
+    new Date().getTime() >= showQuestionTime
   );
 
+  if (currentSlideTime !== null && typeof currentSlideTime === 'object') {
+    return null;
+  }
   // Countdown UI
   if (!isTimeToShow) {
     return (

@@ -3,7 +3,7 @@ export * from './ParticipantAnswer';
 export * from './Participant';
 export * from './Host';
 export * from './HostAnswer';
-export * from './CalculateAnswer';
+export * from './CalculateScore';
 
 import { Grid3X3 } from "lucide-react";
 import { AnswerTypes, QuestionTypes, ShowCorrectAnswerTypes, SlideTypes } from "@/models/Quiz";
@@ -110,7 +110,7 @@ export const Info: SlideInfo = {
     questionType: QuestionTypes.JEOPARDY,
     answerType: AnswerTypes.jeopardy,
     mainTimeLimit: 10,
-    answerTimeLimit: 5,
+    answerTimeLimit: 6,
     points: 100,
     showCorrectAnswer: ShowCorrectAnswerTypes.auto,
     categories: defaultCategories,

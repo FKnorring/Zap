@@ -119,7 +119,6 @@ function Profile() {
   };
 
   // Get the currently selected collection style
-
   const selectedCollectionName = collectionNames[collectionIndex];
 
   return (
@@ -128,7 +127,7 @@ function Profile() {
         {/* Use the Avatar component */}
         <div className="flex-1 h-[200px] w-full flex items-center justify-center">
           <ArrowBigLeft
-            fill="gray"
+            fill="grey"
             size={'48'}
             onClick={leftAvatarChange}
             className="cursor-pointer"

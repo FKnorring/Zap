@@ -8,7 +8,6 @@ export function CalculateScore({
   currentSlideTime,
 }: CalculateScoreProps<MCQSASlide>) {
   const { options } = slide;
-  console.log(currentSlideTime)
 
   // If they choose to award points for correct answers or if they choose TIME but no timelimit was set
   if(slide.pointsAwarding === 'CORRECT' || slide.timeLimit === 0) {

@@ -7,7 +7,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'; // Ensure you import SelectContent and SelectValue
 import { MCQSASlide } from '@/models/Quiz';
-import { mcqsaPointsAwarding } from '@/models/types/questions';
+import {
+  MCQSAPointsAwarding,
+  mcqsaPointsAwarding,
+} from '@/models/types/questions';
 import { Trophy, InfoIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -63,12 +66,13 @@ export function MCQSAPoints({
           </SelectItem>
         </SelectContent>
       </Select>
-      {slide.timeLimit === 0 && (
-        <div className="flex flex-row items-center space-x-1 ">
-          <InfoIcon size={16} className="text-red-400" />
-          <p className="text-red-400 text-sm">{t('time.noLimit')}</p>
-        </div>
-      )}
+      {slide.pointsAwarding === MCQSAPointsAwarding.TIME &&
+        slide.timeLimit === 0 && (
+          <div className="flex flex-row items-center space-x-1 ">
+            <InfoIcon size={16} className="text-red-400" />
+            <p className="text-red-400 text-sm">{t('time.noLimit')}</p>
+          </div>
+        )}
     </div>
   );
 }

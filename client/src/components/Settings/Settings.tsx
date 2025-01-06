@@ -11,7 +11,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { useTranslation } from 'react-i18next';
-import Profile from '@/pages/User/Profile';
+import Profile from '@/components/Settings/Profile';
 import {
   ChevronDown,
   CircleUserRound,

@@ -90,7 +90,7 @@ export function Participant({
 
   // Question UI
   return (
-    <div className="flex flex-col items-center justify-center h-full p-10">
+    <div className="flex flex-col items-center justify-center h-full p-6">
       <h1 className="lg:text-5xl text-4xl font-display font-bold text-center mb-8">
         {slide.title}
       </h1>

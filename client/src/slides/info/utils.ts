@@ -1,10 +1,43 @@
+// List of allowed YouTube hostnames
+const ALLOWED_YOUTUBE_HOSTS = new Set([
+  'youtube.com',
+  'www.youtube.com',
+  'youtu.be',
+  'www.youtu.be'
+]);
+
 export const validateYoutubeUrl = (url: string) => {
   if (!url) return false;
 
-  // Regex to match various YouTube URL formats
-  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{11})([&\w=?-]*)?$/;
+  try {
+    const urlObj = new URL(url.includes('http') ? url : `https://${url}`);
+    if (!ALLOWED_YOUTUBE_HOSTS.has(urlObj.hostname)) {
+      return false;
+    }
 
-  return youtubeRegex.test(url);
+    // For youtube.com, must have /watch with v parameter or /embed/ path
+    if (urlObj.hostname.endsWith('youtube.com')) {
+      if (urlObj.pathname === '/watch') {
+        const videoId = new URLSearchParams(urlObj.search).get('v');
+        return Boolean(videoId?.match(/^[\w-]{11}$/));
+      }
+      if (urlObj.pathname.startsWith('/embed/')) {
+        const videoId = urlObj.pathname.split('/embed/')[1];
+        return Boolean(videoId?.match(/^[\w-]{11}$/));
+      }
+      return false;
+    }
+
+    // For youtu.be, must be direct video ID in path
+    if (urlObj.hostname.endsWith('youtu.be')) {
+      const videoId = urlObj.pathname.slice(1);
+      return Boolean(videoId?.match(/^[\w-]{11}$/));
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
 }
 
 export const extractYoutubeId = (url: string) => {
@@ -12,22 +45,35 @@ export const extractYoutubeId = (url: string) => {
 
   try {
     const urlObj = new URL(url.includes('http') ? url : `https://${url}`);
-    if (urlObj.hostname.includes('youtube.com')) {
-      const params = new URLSearchParams(urlObj.search);
-      return params.get('v'); // Extract video ID from "v" parameter
+    
+    if (!ALLOWED_YOUTUBE_HOSTS.has(urlObj.hostname)) {
+      return "";
     }
-    if (urlObj.hostname.includes('youtu.be')) {
-      return urlObj.pathname.slice(1); // Extract video ID from the pathname
+
+    // Handle youtube.com formats
+    if (urlObj.hostname.endsWith('youtube.com')) {
+      if (urlObj.pathname === '/watch') {
+        const videoId = new URLSearchParams(urlObj.search).get('v');
+        return videoId?.match(/^[\w-]{11}$/) ? videoId : "";
+      }
+      if (urlObj.pathname.startsWith('/embed/')) {
+        const videoId = urlObj.pathname.split('/embed/')[1];
+        return videoId?.match(/^[\w-]{11}$/) ? videoId : "";
+      }
+      return "";
     }
-    if (urlObj.hostname.includes('youtube.com') && urlObj.pathname.includes('/embed/')) {
-      return urlObj.pathname.split('/embed/')[1]; // Extract video ID from the embed URL
+
+    // Handle youtu.be format
+    if (urlObj.hostname.endsWith('youtu.be')) {
+      const videoId = urlObj.pathname.slice(1);
+      return videoId?.match(/^[\w-]{11}$/) ? videoId : "";
     }
+
+    return "";
   } catch (error) {
     console.error('Failed to extract YouTube video ID', error);
     return "";
   }
-
-  return ""
 }
 
 export const getYoutubeEmbedUrl = (url: string) => {
@@ -39,3 +85,4 @@ export const getYoutubeThumbnailUrl = (url: string) => {
   const videoId = extractYoutubeId(url);
   return videoId ? `https://img.youtube.com/vi/${videoId}/sddefault.jpg` : "";
 }
+

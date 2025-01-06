@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import PlayButton from './PlayButton';
 import EndButton from './EndButton';
 import { flags } from '@/config/features';
+import { serverTimestamp } from 'firebase/database';
 interface Team {
   id: string;
   name: string;
@@ -152,7 +153,7 @@ export default function Render({
         },
         {} as Record<string, { name: string; participants: string[] }>
       ),
-      currentSlideTime: new Date().toISOString(),
+      currentSlideTime: serverTimestamp() as unknown as string,
     });
     onNextSlide();
   };

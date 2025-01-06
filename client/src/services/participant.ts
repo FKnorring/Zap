@@ -7,6 +7,7 @@ import {
   set,
   update,
   DataSnapshot,
+  serverTimestamp,
 } from 'firebase/database';
 import { database } from '@/firebase';
 import { Participant, Slide } from '@/models/Quiz';
@@ -99,7 +100,7 @@ export const ParticipantService = {
     const participantData = participantSnap.val();
     const updatedAnswers = [
       ...(participantData.answers || []),
-      { slideNumber, answer, time: new Date().toISOString() },
+      { slideNumber, answer, time: serverTimestamp() },
     ];
 
     try {

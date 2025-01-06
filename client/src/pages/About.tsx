@@ -103,9 +103,9 @@ export default function About() {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center bg-[#172030]  text-white p-4">
+    <div className="flex flex-col  bg-[#172030] text-white p-4 h-screen overflow-auto pt-10">
       {/* Outer container (non-scrollable) */}
-      <div className="w-full max-w-4xl  bg-gradient-to-b to-black mb-10">
+      <div className="w-full max-w-4xl  bg-gradient-to-b to-black mb-2">
         {/* About Text Section */}
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold font-display mb-4">
@@ -114,10 +114,7 @@ export default function About() {
         </div>
 
         {/* Inner container (scrollable) */}
-        <div
-          className="overflow-y-auto from-gray-800 to-bg bg-gradient-to-b"
-          style={{ maxHeight: 'calc(100vh - 200px)' }}
-        >
+        <div className="from-gray-800 to-bg bg-gradient-to-b">
           <div className="bg-white/10 p-4 rounded-lg shadow-lg w-full mb-4">
             <p className="text-base text-gray-300 font-display">
               {t('about:introText')}

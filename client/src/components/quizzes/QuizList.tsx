@@ -4,7 +4,7 @@ import { QuizCard, MyQuizButtons } from './QuizCard';
 import { toast } from 'sonner';
 import { useAppContext } from '@/contexts/App/context';
 import { database } from '@/firebase';
-import { ref, get } from 'firebase/database';
+import { ref, get, serverTimestamp } from 'firebase/database';
 
 interface QuizListProps {
   quizzes: UserQuizzes[];
@@ -61,7 +61,7 @@ function QuizList({
               quizId: quiz.quizId,
               quizHost: quiz.userId,
               participants: {},
-              currentSlideTime: new Date().toISOString(),
+              currentSlideTime: serverTimestamp() as unknown as string,
               startedAt: new Date().toISOString().toLocaleString(),
             },
             quizCode

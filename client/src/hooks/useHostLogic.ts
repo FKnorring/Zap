@@ -12,7 +12,8 @@ import {
 } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
 import { database } from '@/firebase';
-import { ref, update } from 'firebase/database';
+import { ref, update,serverTimestamp,get } from 'firebase/database';
+
 
 export interface LatestScore {
   id: string;
@@ -75,7 +76,7 @@ export const useHostLogic = (id: string | undefined) => {
   );
 
   const updateScores = async (slide: Slide, showAnswer: boolean) => {
-    console.log('Inne i updatescore');
+    if(!ongoingQuiz) return {};
     if (slide.type !== SlideTypes.question) return {};
     const questionSlide = slide as QuestionSlide;
     if (questionSlide.questionType == QuestionTypes.FTA) return {};
@@ -86,7 +87,7 @@ export const useHostLogic = (id: string | undefined) => {
       const points = slidecomponent.CalculateScore({
         slide: slide as never,
         participants,
-        currentSlideTime: ongoingQuiz?.currentSlideTime,
+        currentSlideTime: ongoingQuiz.currentSlideTime,
       });
 
       const updateParticipants = await handleAddPoints(
@@ -96,7 +97,6 @@ export const useHostLogic = (id: string | undefined) => {
         })),
         showAnswer
       );
-      console.log('innan return');
       return updateParticipants;
     } else return ongoingQuiz?.participants ? ongoingQuiz.participants : {};
   };
@@ -118,9 +118,7 @@ export const useHostLogic = (id: string | undefined) => {
         hasAnswered: false,
       };
     });
-    console.log('changeSlide', changeSlide);
     if(changeSlide) {
-      console.log('changeSlide');
       await optimisticUpdate(ongoingQuiz!.id, {
         ...ongoingQuiz,
         participants,
@@ -227,8 +225,18 @@ export const useHostLogic = (id: string | undefined) => {
         ? ongoingQuiz.currentSlide
         : ongoingQuiz.currentSlide + 1,
       participants: updatedParticipants,
-      currentSlideTime: showAnswer ? ongoingQuiz.currentSlideTime : new Date().toISOString(),
+      currentSlideTime: showAnswer ? ongoingQuiz.currentSlideTime : serverTimestamp() as unknown as string,
     });
+
+    if(!showAnswer){
+      const timeRef = ref(database, `ongoingQuizzes/${ongoingQuiz.id}/currentSlideTime`);
+      const timeSnap = await get(timeRef);
+      const time = timeSnap.val();
+      optimisticUpdate(ongoingQuiz.id, {
+        currentSlideTime: time,
+      },
+      true);
+    }
   };
 
   const getCurrentSlide = (): Slide | null => {
@@ -285,9 +293,6 @@ export const useHostLogic = (id: string | undefined) => {
       console.error('Quiz data or slides are missing.');
       throw new Error('Invalid quiz data.');
     }
-
-    console.log('Used answers:', usedAnswers);
-
     try {
       // Get the slide to update
       const slide = ongoingQuiz.quiz.slides[ongoingQuiz.currentSlide - 1];
@@ -352,7 +357,7 @@ export const useHostLogic = (id: string | undefined) => {
     };
     checkAnswers();
   }, [ongoingQuiz, allAnswered]);
-
+  
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (

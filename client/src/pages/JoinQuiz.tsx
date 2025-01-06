@@ -6,10 +6,13 @@ import { ParticipantService } from '@/services/participant';
 import { useNavigate } from 'react-router-dom';
 import { GameShackTitle } from '@/components/GameShackTitle';
 import { Card, CardContent } from '@/components/ui/card';
+import LanguageSelect from '@/components/LanguageToggle';
+import { useTranslation } from 'react-i18next';
 
-export default function StartScreen() {
+export default function JoinQuiz() {
   const [quizCode, setQuizCode] = useState('');
   const [showError, setShowError] = useState(false);
+  const { t } = useTranslation(['participants']);
 
   const navigate = useNavigate();
 
@@ -35,36 +38,37 @@ export default function StartScreen() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 ">
-      {/* Centered Content */}
-      <GameShackTitle className='mb-10' />
+    <div className="flex flex-col items-center justify-center h-screen p-8 ">
+      <LanguageSelect />
+      <GameShackTitle className="mb-10" />
       <div>
         <Card className="pt-8 z-50">
           <CardContent className="flex flex-col gap-4">
             <Input
-              placeholder="Quiz Code"
+              placeholder={t('quizCode')}
               onBlur={() =>
                 setTimeout(() => {
                   window.scrollTo({ top: -1, behavior: 'smooth' });
                 }, 1)
               }
               className={`text-[#333333] text-center font-display py-8 w-full 
-              text-4xl md:text-5xl lg:text-3xl 
+              text-4xl md:text-5xl lg:text-3xl border-2
               ${showError && 'border-red-500 animate-shake'}`}
               value={quizCode}
               onChange={handleInputChange}
             />
             {showError && (
               <div className="flex justify-start items-center w-full text-red-500">
-                <InfoIcon className="w-5 h-5 mr-1 animate-shake" />
-                <p className="font-display">Invalid Code</p>
+                <InfoIcon className="w-5 h-5 mr-1" />
+                <p className="font-display">{t('invalidCode')}</p>
               </div>
             )}
             <Button
               onClick={checkCode}
-              className="bg-[#333333] text-3xl text-[#fefefe] hover:bg-[#86D293] py-8 px-12 font-display w-full"
+              isInteractive
+              className="bg-green-500 text-3xl text-[#fefefe] hover:bg-green-300 py-8 px-12 font-display w-full [&_svg]:!size-5"
             >
-              Join Game
+              {t('joinQuiz')}
             </Button>
           </CardContent>
         </Card>

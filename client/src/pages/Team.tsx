@@ -1,196 +1,328 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { Trash2, Shuffle } from 'lucide-react';
+import { DynamicInputList, InputItem } from '@/components/ui/dynamic-input-list';
+import { Slider } from "@/components/ui/slider";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
-import { getColor } from '@/slides/question/base/QuizColors';
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useTools } from '@/contexts/Tools/context';
+
+interface TeamItem extends InputItem {
+  team?: number;
+}
 
 export default function Team() {
   const { t } = useTranslation();
-  const [amountOfTeams, setAmountOfTeams] = useState<number>(0);
-  const [playerNames, setPlayerNames] = useState<string>('');
+  const { currentItems, setCurrentItems } = useTools();
+  const [items, setItems] = useState<TeamItem[]>(
+    currentItems.length > 0 
+      ? currentItems.map((item: InputItem) => ({ ...item, team: undefined }))
+      : [{ id: '1', text: '', team: undefined }]
+  );
+  const [numberOfTeams, setNumberOfTeams] = useState(2);
   const [teams, setTeams] = useState<string[][]>([]);
-  const [open, setOpen] = useState<boolean>(false); // For modal visibility
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [isShuffling, setIsShuffling] = useState(false);
+  const [shuffledNames, setShuffledNames] = useState<string[]>([]);
 
-  const handleGenerateTeams = (): void => {
-    if (!playerNames.trim()) {
-      alert('Please enter player names.');
-      return;
+  // Add effect to watch for changes in currentItems
+  useEffect(() => {
+    const newItems = currentItems.map((item: InputItem) => ({ ...item, team: undefined }));
+    setItems(newItems);
+    
+    // Reset teams if items are cleared
+    if (currentItems.length === 1 && currentItems[0].text === '') {
+      setTeams([]);
+      setShuffledNames([]);
     }
-    if (amountOfTeams <= 0) {
-      alert('Please select the number of teams.');
-      return;
-    }
+  }, [currentItems]);
 
-    const players = playerNames
-      .split(/[\s,]+/g)
-      .map((name) => name.trim())
-      .filter((name) => name.length > 0);
-
-    if (players.length < amountOfTeams) {
-      alert('Not enough players for the selected number of teams.');
-      return;
-    }
+  const generateTeams = (players: string[], teamCount: number) => {
+    if (players.length < teamCount) return [];
 
     const shuffledPlayers = [...players].sort(() => Math.random() - 0.5);
     const generatedTeams: string[][] = Array.from(
-      { length: amountOfTeams },
+      { length: teamCount },
       () => []
     );
 
     shuffledPlayers.forEach((player, index) => {
-      generatedTeams[index % amountOfTeams].push(player);
+      generatedTeams[index % teamCount].push(player);
     });
 
-    setTeams(generatedTeams);
+    return generatedTeams;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target;
-    setPlayerNames(value);
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = 'auto';
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+  // Update teams whenever items or numberOfTeams changes
+  useEffect(() => {
+    const validPlayers = items
+      .filter(item => item.text !== '')
+      .map(item => item.text);
+
+    if (validPlayers.length >= 2) {
+      const newTeams = generateTeams(validPlayers, numberOfTeams);
+      setTeams(newTeams);
+      setShuffledNames(validPlayers);
+    } else {
+      setTeams([]);
+      setShuffledNames([]);
+    }
+  }, [items, numberOfTeams]);
+
+  // Update max number of teams based on number of players
+  useEffect(() => {
+    const validItems = items.filter(item => item.text !== '');
+    if (validItems.length < numberOfTeams) {
+      setNumberOfTeams(Math.max(2, validItems.length));
+    }
+  }, [items]);
+
+  const handleInputChange = (id: string, value: string) => {
+    const newItems = items.map(item =>
+      item.id === id ? { ...item, text: value } : item
+    );
+
+    if (newItems[newItems.length - 1]?.text !== '') {
+      newItems.push({
+        id: Date.now().toString(),
+        text: '',
+        team: undefined
+      });
+    }
+
+    const finalItems = newItems.map(item => ({
+      ...item,
+      team: item.text !== '' ? item.team : undefined
+    }));
+
+    setItems(finalItems);
+    setCurrentItems(finalItems);
+  };
+
+  const handleQuickAdd = (values: string[]) => {
+    const newItems = values.map((text, index) => ({
+      id: Date.now() + index.toString(),
+      text,
+      team: undefined
+    }));
+
+    newItems.push({
+      id: Date.now() + values.length.toString(),
+      text: '',
+      team: undefined
+    });
+
+    setItems(newItems);
+    setCurrentItems(newItems);
+  };
+
+  const removeItem = (id: string) => {
+    if (items.length <= 1) return;
+    
+    const newItems = items.filter(item => item.id !== id);
+    if (newItems.every(item => item.text !== '')) {
+      newItems.push({
+        id: Date.now().toString(),
+        text: '',
+        team: undefined
+      });
+    }
+
+    setItems(newItems);
+    setCurrentItems(newItems);
+  };
+
+  const clearItems = () => {
+    const newItems = [{ id: Date.now().toString(), text: '', team: undefined }];
+    setItems(newItems);
+    setCurrentItems(newItems);
+    setTeams([]);
+    setShuffledNames([]);
+  };
+
+  const randomizeTeams = async () => {
+    const validPlayers = items
+      .filter(item => item.text !== '')
+      .map(item => item.text);
+
+    if (validPlayers.length >= 2) {
+      setIsShuffling(true);
+      setTeams([]);
+
+      // Animate shuffling names for 1.5 seconds
+      const shuffleInterval = setInterval(() => {
+        const shuffled = [...validPlayers].sort(() => Math.random() - 0.5);
+        setShuffledNames(shuffled);
+      }, 100);
+
+      // After animation, show final teams
+      setTimeout(() => {
+        clearInterval(shuffleInterval);
+        const newTeams = generateTeams(validPlayers, numberOfTeams);
+        setTeams(newTeams);
+        setIsShuffling(false);
+      }, 1500);
     }
   };
 
-  const handleClear = () => {
-    setPlayerNames('');
-    setAmountOfTeams(0);
-    setTeams([]);
-    setOpen(false); // Close the modal
-  };
+  const validItemsCount = items.filter(item => item.text !== '').length;
+  const maxTeams = Math.max(2, validItemsCount);
 
   return (
-    <div className="flex flex-col items-center justify-start overflow-hidden">
-      <div className="text-center mt-4">
-        <h1 className="font-display text-4xl">{t('general:teamGenerator')}</h1>
-        <p className="m-2 text-center text-lg md:text-xl text-gray-300 font-display">
-          {t('general:teamTitle')}
-        </p>
-      </div>
-      <div
-        className="flex-1 flex flex-col items-center justify-start overflow-y-auto "
-        style={{ maxHeight: 'calc(90vh - 200px)' }}
-      >
-        <div className="">
-          <Card className="mt-4 p-4 w-[350px]">
-            <CardContent>
-              <form>
-                <div className="grid w-full items-center gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <Label className="font-display text-2xl" htmlFor="name">
-                      {t('general:playerNames')}
-                    </Label>
-                    <textarea
-                      id="name"
-                      placeholder="player1,player2..."
-                      value={playerNames}
-                      onChange={handleInputChange}
-                      ref={textAreaRef}
-                      rows={1} // Start with a single row
-                      className="resize-none w-full p-2 border rounded"
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-1.5">
-                    <Label className="font-display text-2xl" htmlFor="teams">
-                      {t('general:numberOfTeams')}
-                    </Label>
-                    <Select
-                      value={amountOfTeams.toString()}
-                      onValueChange={(value) => setAmountOfTeams(Number(value))}
+    <div className="container mx-auto p-4">
+      <div className="grid md:grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-4">
+                <Label className="text-lg">{t('general:playerNames')}</Label>
+                <div className="flex items-center gap-2">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={clearItems}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          {t('general:clear')}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{t('general:tools.clearTooltip')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  {teams.length > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={randomizeTeams}
+                      disabled={isShuffling}
                     >
-                      <SelectTrigger id="teams">
-                        <SelectValue placeholder="Select" />
-                      </SelectTrigger>
-                      <SelectContent position="popper">
-                        {[...Array(10).keys()].map((num) => (
-                          <SelectItem
-                            key={num + 1}
-                            value={(num + 1).toString()}
-                          >
-                            {num + 1}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                      <Shuffle className={`w-4 h-4 mr-2 ${isShuffling ? 'animate-spin' : ''}`} />
+                      {t('general:randomize')}
+                    </Button>
+                  )}
                 </div>
-              </form>
+              </div>
+
+              <div className="my-6 space-y-4">
+                <div className="flex justify-between items-center">
+                  <Label>{t('general:numberOfTeams')}</Label>
+                  <span className="font-bold">{numberOfTeams}</span>
+                </div>
+                <Slider
+                  value={[numberOfTeams]}
+                  onValueChange={(value) => setNumberOfTeams(value[0])}
+                  min={2}
+                  max={maxTeams}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+
+              <DynamicInputList
+                items={items}
+                showAdvanced={false}
+                showColors={false}
+                onItemChange={handleInputChange}
+                onItemRemove={removeItem}
+                inputPlaceholder={t('general:teamTitle')}
+                quickAddPlaceholder="Player1, Player2, Player3..."
+                onQuickAdd={handleQuickAdd}
+                listLabel={t('general:playerNames')}
+                quickAddLabel={t('general:spinWheel.quickAdd')}
+              />
             </CardContent>
-            <CardFooter className="flex justify-between">
-              {/* Button to trigger modal */}
-              <Dialog open={open} onOpenChange={setOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline">{t('general:clear')}</Button>
-                </DialogTrigger>
-
-                {/* Modal for confirmation */}
-                <DialogContent>
-                  <DialogTitle>{t('general:areYouSureDel')}</DialogTitle>
-                  <DialogDescription>
-                    {t('general:deletePlayerText')}
-                  </DialogDescription>
-                  <DialogFooter>
-                    <Button variant="outline" onClick={() => setOpen(false)}>
-                      {t("general:cancel")}
-                    </Button>
-                    <Button onClick={handleClear}>
-                      {t('general:confirm')}
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-
-              <Button onClick={handleGenerateTeams}>{t('general:Go')}</Button>
-            </CardFooter>
           </Card>
         </div>
 
-        {/* Teams Container with Scroll */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-10 w-full ">
-          {teams.map((team, index) => (
-            <Card
-              key={index}
-              className="w-[300px] shadow-lg border-white border-2"
-              style={{ backgroundColor: getColor(index) }}
-            >
-              <CardHeader>
-                <CardTitle>Team {index + 1}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul>
-                  {team.map((player, idx) => (
-                    <li className="font-display text-xl" key={idx}>
-                      {player}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="space-y-4">
+          <AnimatePresence mode="wait">
+            {isShuffling ? (
+              <motion.div
+                key="shuffling"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid gap-4"
+              >
+                <Card>
+                  <CardContent className="pt-6">
+                    <h3 className="text-lg font-bold mb-4">
+                      {t('general:randomizing')}...
+                    </h3>
+                    <motion.ul 
+                      className="space-y-1"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      {shuffledNames.map((name, index) => (
+                        <motion.li
+                          key={index}
+                          className="text-xl"
+                          initial={{ x: -20, opacity: 0 }}
+                          animate={{ 
+                            x: 0, 
+                            opacity: 1,
+                            transition: { delay: index * 0.05 }
+                          }}
+                        >
+                          {name}
+                        </motion.li>
+                      ))}
+                    </motion.ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ) : teams.length > 0 && (
+              <motion.div
+                key="teams"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="grid gap-4"
+              >
+                {teams.map((team, index) => (
+                  <Card key={index}>
+                    <CardContent className="pt-6">
+                      <h3 className="text-lg font-bold mb-2">
+                        {t('general:team')} {index + 1}
+                      </h3>
+                      <ul 
+                        className="grid grid-cols-3 gap-x-4 gap-y-1 auto-rows-min grid-flow-col"
+                        style={{
+                          gridTemplateRows: 'repeat(2, minmax(0, auto))',
+                          gridAutoFlow: team.length > 6 ? 'row' : 'column'
+                        }}
+                      >
+                        {team.map((player, playerIndex) => (
+                          <motion.li
+                            key={playerIndex}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: playerIndex * 0.1 }}
+                            className="text-2xl font-bold truncate"
+                          >
+                            {player}
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>

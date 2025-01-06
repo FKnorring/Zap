@@ -66,7 +66,7 @@ export function Participant({ slide, participantData, turn, answerTempQuestion }
     // Buzzer state - anyone can answer
     if (turn === 'BUZZER') {
       return (
-        <BuzzerButton onClick={() => answerTempQuestion('')}>
+        <BuzzerButton onClick={() => answerTempQuestion(participantData.participantId)}>
           {t('participant.answer')}
         </BuzzerButton>
       );

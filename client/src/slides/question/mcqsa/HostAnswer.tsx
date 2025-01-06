@@ -1,8 +1,8 @@
-import { MCQSASlide, Participant } from "@/models/Quiz";
-import { CheckCircle2, CircleX } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getColor } from "../base/QuizColors";
-import NextSlide from "@/slides/_components/NextSlide";
+import { MCQSASlide, Participant } from '@/models/Quiz';
+import { CheckCircle2, CircleX } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { getColor } from '../base/QuizColors';
+import NextSlide from '@/slides/_components/NextSlide';
 
 export function HostAnswer({
   slide,
@@ -15,8 +15,6 @@ export function HostAnswer({
   isPreview?: boolean;
   onNextSlide: () => void;
 }) {
-  console.log(participants);
-
   const AnswerCount = () => {
     const calculateAnswerCounts = () => {
       return slide.options.map((option) => {
@@ -76,20 +74,20 @@ export function HostAnswer({
     return (
       <div
         className={cn(
-          "grid gap-6 w-full",
+          'grid gap-6 w-full',
           `grid-cols-${Math.ceil(slide.options.length / 2)}`
         )}
-        style={{ gridAutoRows: "1fr" }}
+        style={{ gridAutoRows: '1fr' }}
       >
         {slide.options.map((option, index) => (
           <div
             key={option.id}
             className={cn(
-              "flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full",
+              'flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full',
               {
-                "bg-white/10 backdrop-blur outline outline-white/50":
+                'bg-white/10 backdrop-blur outline outline-white/50':
                   !option.isCorrect,
-                "ring-4 ring-white": option.isCorrect,
+                'ring-4 ring-white': option.isCorrect,
               }
             )}
             style={{

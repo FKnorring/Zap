@@ -1,43 +1,37 @@
 import { Participant } from '@/models/Quiz';
 import { Check, X, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
-const inspirationalQuotes = [
-  "Failure isn't the end—it's just the beginning. 💥",
-  'Even the brightest minds stumble. Don’t be afraid to fail. 💡',
-  'Mistakes aren’t failures, they’re fuel for your fire. 🔥',
-  'Perseverance isn’t just about winning; it’s about proving them wrong. 😈',
-  'One misstep won’t define you—your comeback will. 💪',
-  'Success is built on the ruins of failure. Rise from the ashes. 🔥',
-  'Falling is easy. Getting back up? That’s where you become unstoppable. ⚡',
-  "You've got to get back to the grind-set mindset 😈",
-  "You've got to LOCK-IN 🔒",
-];
-
-/*const partiallyCorrectQuotes = [
-  "Almost there! You're on the right track. 🎯",
-  "Not bad, but there's room for improvement! 📈",
-  "You're getting warmer! Keep pushing! 🌡️",
-  'Half right is better than all wrong! 💫',
-];*/
-
-const noStreakLost = ['At least you did not have a streak to loose! 🎉'];
-
-export default function ParticipantCorrect({
-  children,
-  participant,
-}: {
+interface Props {
   children?: React.ReactNode;
   participant: Participant;
-}) {
-  const score = [...participant.score].reverse();
-  const latestScore = score[0];
+}
 
-  const getAnswerState = () => {
+export default function ParticipantCorrect({ children, participant }: Props) {
+  const { i18n, t } = useTranslation('participants');
+
+  const resources = i18n.getResourceBundle(i18n.language, 'participants');
+  // Gen random inspirational quote
+  const inspQuotesObj = resources.insperationalQuotes || {};
+  const inspKeys = Object.keys(inspQuotesObj);
+  const randomKey = inspKeys[Math.floor(Math.random() * inspKeys.length)];
+  const randomInspQuote = inspQuotesObj[randomKey];
+  // Gen no streak lost message
+  const noStreakLostObj = resources.noStreakLost || {};
+  const noStreakKeys = Object.keys(noStreakLostObj);
+  const randomNoStreakKey =
+    noStreakKeys[Math.floor(Math.random() * noStreakKeys.length)];
+  const noStreakMsg = noStreakLostObj[randomNoStreakKey];
+
+  const score = [...participant.score].reverse();
+  const latestScore = score[0] ?? 0;
+
+  function getAnswerState() {
     if (latestScore === 0) return 'incorrect';
     if (latestScore < 500) return 'partial';
     return 'correct';
-  };
+  }
 
   const answerState = getAnswerState();
 
@@ -62,28 +56,23 @@ export default function ParticipantCorrect({
     correct: {
       bgColor: 'bg-green-500',
       icon: <Check width={70} height={70} />,
-      title: 'Correct!',
-      message: `Answer Streak: ${streak}`,
+      title: t('correct'),
+      message: `${t('answerStreak')} ${streak}`,
       quote: `+ ${latestScore}`,
     },
     partial: {
       bgColor: 'bg-yellow-500',
       icon: <AlertCircle width={70} height={70} />,
-      title: 'Almost There!',
-      message: `Answer Streak: ${streak}`,
+      title: t('almost'),
+      message: `${t('answerStreak')} ${streak}`,
       quote: `+ ${latestScore}`,
     },
     incorrect: {
       bgColor: 'bg-red-500',
       icon: <X width={70} height={70} />,
-      title: 'Wrong!',
-      message: lostStreak === 0 ? '' : `Lost A Streak of ${lostStreak} 💀`,
-      quote:
-        lostStreak === 0
-          ? noStreakLost[0]
-          : inspirationalQuotes[
-              Math.floor(Math.random() * inspirationalQuotes.length)
-            ],
+      title: t('wrong'),
+      message: lostStreak === 0 ? '' : `${t('lostStreak')} ${lostStreak} 💀`,
+      quote: lostStreak === 0 ? noStreakMsg : randomInspQuote,
     },
   };
 
