@@ -45,7 +45,7 @@ function QuizEdit() {
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex overflow-hidden ">
       <div id="quiz-editor-container" />
       <QuizBackground
         primaryColor={quiz.primary_color}
@@ -57,7 +57,7 @@ function QuizEdit() {
         <ResizablePanel
           defaultSize={20}
           minSize={12}
-          maxSize={20}
+          maxSize={24}
           id="quiz-sidebar"
         >
           <SlideSidebar
@@ -97,17 +97,21 @@ function QuizEdit() {
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={20} minSize={15} id="quiz-toolbar">
-          {showSettings ? (
-            <QuizSettingsToolbar quiz={quiz} onUpdate={handleQuizUpdate} />
-          ) : activeSlide ? (
-            <Toolbar slide={activeSlide} onSlideUpdate={handleSlideUpdate} />
-          ) : (
-            <div className="h-full flex items-center justify-center text-muted-foreground bg-secondary/90">
-              Select a slide
-            </div>
-          )}
-        </ResizablePanel>
+        {activeSlide && (
+          <ResizablePanel
+            className="bg-white"
+            defaultSize={20}
+            minSize={12}
+            maxSize={30}
+            id="quiz-toolbar"
+          >
+            {showSettings ? (
+              <QuizSettingsToolbar quiz={quiz} onUpdate={handleQuizUpdate} />
+            ) : (
+              <Toolbar slide={activeSlide} onSlideUpdate={handleSlideUpdate} />
+            )}
+          </ResizablePanel>
+        )}
       </ResizablePanelGroup>
     </div>
   );

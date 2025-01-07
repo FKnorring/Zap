@@ -114,7 +114,7 @@ export function Participant({ slide, answerQuestion }: RankViewProps) {
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <div className="flex flex-col items-center justify-center w-full p-4">
+      <div className="flex flex-col items-center justify-center h-screen w-full p-4">
         <div className="flex flex-col items-center w-full max-w-md space-y-4">
           <div className="bg-white items-center rounded text-wrap p-3 max-w-4/5 flex flex-row space-x-1">
             <SlideComponent.Info.icon className="w-8 h-8 text-black" />

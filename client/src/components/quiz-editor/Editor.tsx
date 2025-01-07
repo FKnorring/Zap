@@ -25,29 +25,45 @@ export function Editor({
 
   if (!slide) {
     return (
-      <div className="h-full flex items-center justify-center text-muted font-medium">
+      <div className=" bg-gray-100 h-full text-4xl font-display text-black flex items-center justify-center">
         {t('quizEditor:selectSlide')}
       </div>
     );
   }
 
   return (
-    <div className="p-4 h-full flex flex-col">
+    <div className="p-4 h-full flex flex-col bg-white">
       <div className="flex items-center justify-center space-x-4">
         <Tabs
           value={whichPreview}
           onValueChange={setWhichPreview}
-          className="pb-2"
+          className="pb-4 "
         >
           <TabsList>
-            <TabsTrigger value="Preview">{t('general:preview')}</TabsTrigger>
-            <TabsTrigger value="Host">{t('general:host')}</TabsTrigger>
+            <TabsTrigger
+              className={`text-xl font-display ${whichPreview === 'Preview' ? 'bg-primary text-white' : ''}`}
+              value="Preview"
+            >
+              {t('general:preview')}
+            </TabsTrigger>
+            <TabsTrigger
+              className={`text-xl font-display ${whichPreview === 'Host' ? 'bg-primary text-white' : ''}`}
+              value="Host"
+            >
+              {t('general:host')}
+            </TabsTrigger>
             {slide.type !== SlideTypes.info && (
               <>
-                <TabsTrigger value="Participant">
+                <TabsTrigger
+                  className={`text-xl font-display ${whichPreview === 'Participant' ? 'bg-primary text-white' : ''}`}
+                  value="Participant"
+                >
                   {t('general:participant')}
                 </TabsTrigger>
-                <TabsTrigger value="HostAnswer">
+                <TabsTrigger
+                  className={`text-xl font-display ${whichPreview === 'HostAnswer' ? 'bg-primary text-white' : ''}`}
+                  value="HostAnswer"
+                >
                   {t('general:hostAnswer')}
                 </TabsTrigger>
               </>
@@ -56,10 +72,10 @@ export function Editor({
         </Tabs>
       </div>
 
-      <div className="flex-1 flex items-center justify-center bg-card/30 rounded-lg p-4">
+      <div className="flex-1 flex items-center justify-center bg-gray-200 rounded-lg p-4">
         <div
           className={cn(
-            'w-full',
+            'w-full boarder-2 rounded-lg',
             whichPreview === 'Participant' ? 'max-w-md' : 'max-w-4xl'
           )}
         >

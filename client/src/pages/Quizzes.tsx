@@ -4,7 +4,7 @@ import CreateQuizPopover from '@/components/quizzes/CreateQuizPopover';
 import QuizList from '@/components/quizzes/QuizList';
 import SharedQuizList from '@/components/quizzes/SharedQuizList';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { SharedQuizzes } from '@/models/Quiz';
 import { useAppContext } from '@/contexts/App/context';
@@ -12,8 +12,6 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { quizService } from '@/services/quizzes';
 import { useTranslation } from 'react-i18next';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/ui/AppSidebar';
 
 function useQuizzesPage() {
   const {
@@ -152,22 +150,20 @@ function Quizzes() {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <div className="flex-1 flex flex-row items-center justify-around overflow-y-auto   bg-[#FFFFFF]">
-        <div className="flex-1 flex flex-col items-center justify-around gap-4 mt-20 bg-[#FFFFFF]">
-          <div className=" ml-20 mb-5 flex flex-col self-start  font-display text-5xl  text-black mt-4">
-            <span className="m-4">{t('homepage:myQuizzes')}</span>
-
+    <div className="h-screen overflow-y-auto bg-white p-10">
+      <div className="flex flex-col items-center w-full bg-white px-4 py-8 h-full ">
+        {/* My Quizzes Section */}
+        <div className="w-full flex-col ">
+          <div className="mb-2 flex flex-row items-center justify-between">
+            <h1 className="font-display text-5xl text-black mb-4">
+              {t('homepage:myQuizzes')}
+            </h1>
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
           </div>
 
-          <Card
-            className=" w-full max-w-7xl  bg-[#F9F8FE] p-8"
-            id="quiz-manager-container shadow-lg"
-          >
+          <Card className="bg-[#F9F8FE] shadow-lg">
             <CardHeader>
-              <CardTitle className="flex justify-center font-display text-3xl items-center">
+              <CardTitle className="flex justify-between items-center">
                 {ongoingQuiz && (
                   <Button
                     variant="outline"
@@ -180,7 +176,7 @@ function Quizzes() {
             </CardHeader>
             <CardContent className="min-h-[300px]">
               {quizzesLoading ? (
-                <div className="flex justify-center items-center h-[300px] w-full">
+                <div className="flex justify-center items-center h-[300px]">
                   <Loader2 className="animate-spin" />
                 </div>
               ) : (
@@ -200,25 +196,50 @@ function Quizzes() {
               )}
             </CardContent>
           </Card>
+        </div>
 
-          <div className="flex justify-center font-display text-5xl items-center text-black">
-            <span className="m-0">{t('homepage:sharedQuizzes')}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Search className="w-4 h-4 text-muted-foreground" />
+        {/* Shared Quizzes Section */}
+        <div className="w-full  mt-8">
+          <div className="mb-2 flex justify-between items-center flex-row">
+            <h1 className="font-display text-5xl text-black mb-2">
+              {t('homepage:sharedQuizzes')}
+            </h1>
             <Input
               type="search"
               placeholder={t('homepage:searchShared')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-lg"
+              className="max-w-sm font-display text-black"
+              aria-label={t('homepage:searchShared')}
             />
           </div>
-          <Card className="w-full max-w-7xl bg-[#F9F8FE]">
-            <CardHeader className="flex items-center "></CardHeader>
+          <Card className="bg-[#F9F8FE] shadow-lg">
             <CardContent className="min-h-[300px]">
               {sharedQuizzesLoading ? (
-                <div className="flex justify-center items-center h-[300px] w-full">
+                <div className="flex justify-center items-center h-[300px]">
+                  <Loader2 className="animate-spin" />
+                </div>
+              ) : (
+                <SharedQuizList
+                  quizzes={sharedQuizzes}
+                  onCopyQuiz={handleCopyQuiz}
+                  searchTerm={searchTerm}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="w-full  mt-8 mb-8 pb-8">
+          <div className="mb-2">
+            <h1 className="font-display text-5xl text-black mb-2">
+              {t('homepage:templates')}
+            </h1>
+          </div>
+          <Card className="bg-[#F9F8FE] shadow-lg">
+            <CardContent className="min-h-[300px]">
+              {sharedQuizzesLoading ? (
+                <div className="flex justify-center items-center h-[300px]">
                   <Loader2 className="animate-spin" />
                 </div>
               ) : (
@@ -232,7 +253,7 @@ function Quizzes() {
           </Card>
         </div>
       </div>
-    </SidebarProvider>
+    </div>
   );
 }
 

@@ -1,4 +1,5 @@
 import slideView from '@/assets/editorImages/slideView.png';
+import lobby from '@/assets/questionImages/lobby.png';
 import { useTranslation } from 'react-i18next';
 
 const HowItWorks = () => {
@@ -49,7 +50,7 @@ const HowItWorks = () => {
             {/* Card Box with Title and Text */}
             <div className="flex-1 w-1/2">
               <img
-                src={slideView}
+                src={lobby}
                 alt="Placeholder 1"
                 className="w-full h-auto rounded-lg shadow-md"
               />

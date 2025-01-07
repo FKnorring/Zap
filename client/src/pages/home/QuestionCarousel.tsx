@@ -6,11 +6,13 @@ import {
   type CarouselApi,
 } from '@/components/ui/carousel';
 import dallebomb from '@/assets/questionImagesAI/dallebomb.webp';
-import dallebutton from '@/assets/questionImagesAI/dallebutton.webp';
-import dalleflag1 from '@/assets/questionImagesAI/dalleflag1.webp';
-import dallematch from '@/assets/questionImagesAI/dalleMatch.webp';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import jeopardy from '@/assets/questionImages/jeopardy.png';
+import fa from '@/assets/questionImages/fa.png';
+import locateit from '@/assets/questionImages/locateit.png';
+import match from '@/assets/questionImages/match.png';
+import rank from '@/assets/questionImages/rank.png';
 
 export default function QuestionCarousel() {
   const [api, setApi] = React.useState<CarouselApi>();
@@ -30,24 +32,34 @@ export default function QuestionCarousel() {
 
   const images = [
     {
-      img: dallebomb,
-      title: t('questions:BOMB'),
-      text: t('homepage:questionDescriptions.bomb'),
-    },
-    {
-      img: dalleflag1,
+      img: locateit,
       title: t('questions:LOCATEIT'),
       text: t('homepage:questionDescriptions.locateit'),
     },
     {
-      img: dallebutton,
+      img: fa,
       title: t('questions:FA'),
       text: t('homepage:questionDescriptions.fastest'),
     },
     {
-      img: dallematch,
+      img: match,
       title: t('questions:MATCHING'),
       text: t('homepage:questionDescriptions.matching'),
+    },
+    {
+      img: jeopardy,
+      title: t('questions:JEOPARDY'),
+      text: t('homepage:questionDescriptions.jeopardy'),
+    },
+    {
+      img: rank,
+      title: t('questions:RANK'),
+      text: t('homepage:questionDescriptions.rank'),
+    },
+    {
+      img: dallebomb,
+      title: t('questions:BOMB'),
+      text: t('homepage:questionDescriptions.bomb'),
     },
   ];
 
@@ -64,11 +76,11 @@ export default function QuestionCarousel() {
               return (
                 <CarouselItem key={index}>
                   <div className="flex justify-center flex-col items-center m-4 relative group">
-                    <div className="rounded-lg shadow-md w-[300px] md:w-[500px] overflow-hidden relative">
+                    <div className="rounded-lg shadow-md w-[330px] md:w-[500px] lg:w-[800px] overflow-hidden relative">
                       <img
                         src={image.img}
                         alt={`Slide ${index + 1}`}
-                        className="w-full h-[200px] md:h-[300px] object-fit"
+                        className="w-full h-[180px] md:h-[280px] lg:h-[438px] object-fit"
                       />
                       <div className="flex flex-col bg-white h-[130px]">
                         <p className="text-lg font-display text-left pl-2 text-black md:text-xl">

@@ -21,7 +21,7 @@ const DESKTOP_HEIGHT = 1080;
 const PHONE_WIDTH = 375;
 const PHONE_HEIGHT = 812;
 
-export function SlidePreview({
+export function   SlidePreview({
   slide,
   className,
   backgroundColor = "#000B58",
@@ -92,7 +92,7 @@ export function SlidePreview({
           transform: `scale(${scale})`,
         }}
       >
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center boarder-2 rounded-lg">
           {Slide && <Slide slide={slide} onSlideUpdate={onSlideUpdate} />}
         </div>
       </div>

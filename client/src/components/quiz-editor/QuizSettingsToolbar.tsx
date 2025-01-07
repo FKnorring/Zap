@@ -48,7 +48,7 @@ export function QuizSettingsToolbar({
   const { t } = useTranslation();
 
   return (
-    <div className="h-full bg-secondary/90 p-4 flex flex-col gap-4 overflow-y-auto text-black">
+    <div className="h-full p-4 flex flex-col gap-4 overflow-y-auto text-black">
       <div className="space-y-2">
         <Label>{t('quizEditor:quizName')}</Label>
         <Input

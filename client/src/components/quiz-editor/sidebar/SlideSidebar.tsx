@@ -29,7 +29,7 @@ interface SlideSidebarProps {
 export function SlideSidebar(props: SlideSidebarProps) {
   return (
     <SlideSidebarProvider {...props}>
-      <aside className="min-w-[200px] bg-card/90 h-full border-r shadow-md flex flex-col overflow-hidden">
+      <aside className="min-w-[200px] bg-white h-full border-r  shadow-md flex flex-col overflow-hidden">
         <SidebarHeader />
         <SlideList />
       </aside>

@@ -12,14 +12,14 @@ export function Toolbar({ slide, onSlideUpdate }: ToolbarProps) {
   const config = getToolbarConfig(slide);
 
   return (
-    <div className="h-full bg-card/90 p-4 flex flex-col gap-4 overflow-y-auto text-black">
+    <div className="h-full  p-4 flex flex-col gap-4 overflow-y-auto text-black">
       <div className="flex items-center gap-2 text-muted-foreground justify-between">
         <div className="flex text-left gap-2 items-center">
-          <SlideComponent.Info.icon className="h-4 w-4" />
-          <span className="text-sm">{SlideComponent.Info.label}</span>
+          <SlideComponent.Info.icon color='black' strokeWidth={2}  className="h-6 w-6 " />
+          <span className="text-xl text-black font-display">{SlideComponent.Info.label}</span>
         </div>
         <div className="text-right items-center flex">
-          <InfoBox slide={slide} onSlideUpdate={onSlideUpdate} />
+          <InfoBox  slide={slide} onSlideUpdate={onSlideUpdate} />
         </div>
       </div>
 

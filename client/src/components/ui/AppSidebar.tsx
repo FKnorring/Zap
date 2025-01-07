@@ -1,4 +1,4 @@
-import {  Home, Inbox, Search, Settings, Flame} from 'lucide-react';
+import {  Home, Inbox,  Flame} from 'lucide-react';
 import { WiggleText } from '@/components/WiggleText';
 <Flame />
 import {
@@ -17,8 +17,6 @@ const items = [
   { title: 'Home', url: '/#', icon: Home },
   { title: 'Shared Quizzes', url: '#', icon: Inbox },
   { title: 'Trending', url: '#', icon: Flame },
-  { title: 'Search', url: '#', icon: Search },
-  { title: 'Settings', url: '#', icon: Settings },
 ];
 
 export function AppLayout() {
@@ -48,7 +46,7 @@ export function AppLayout() {
 
 export function AppSidebar() {
   return (
-    <Sidebar className="mt-16 bg-[#FFFFFF] w-1/6">
+    <Sidebar className="mt-16 bg-[#FFFFFF]">
       <SidebarContent>
         <SidebarGroup>
           <div className="flex items-center justify-center mb-10">

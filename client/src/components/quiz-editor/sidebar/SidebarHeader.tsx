@@ -18,12 +18,12 @@ export function SidebarHeader() {
     <div className="p-3">
       <span className="flex items-center justify-between gap-2">
         <div className="relative flex items-center gap-2">
-          <h2 className="text-xl font-bold text-secondary-foreground">
+          <h2 className="text-xl font-display text-secondary-foreground">
             {quizName}
           </h2>
           {hasUnsavedChanges && (
-            <span className="absolute top-6 text-xs text-muted-foreground">
-              (unsaved changes)
+            <span className=" top-6 text-md font-bold text-muted-foreground text-red-600">
+              (Unsaved changes)
             </span>
           )}
         </div>

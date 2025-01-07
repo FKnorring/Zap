@@ -4,6 +4,7 @@
   "createQuiz": "Create Quiz",
   "startQuiz": "Start Quiz",
   "sharedQuizzes": "Shared Quizzes",
+  "templates": "Templates",
   "searchShared": "Search Shared Quizzes",
   "quizName": "Quiz name",
   "create": "Create",
@@ -34,10 +35,13 @@
     "2": "Follow the action, track the scores, and watch as the tension builds, leading to a dramatic finish and the crowning of a winner."
   },
   "questionCarouselText": "Our question types",
+  "readmore": "Read more about us!",
   "questionDescriptions": {
     "bomb": "In Ticking Timebomb, players take turns answering questions within a set time. If time runs out, you lose a life. The last player standing wins!",
     "locateit": "Think you know geography? Pin the right location on the world map! Choose from various difficulty levels, ranging from landmarks to precise locations, and test your knowledge with different settings!",
     "matching": "In Meet Your Match, players try to match different options to labels. The player with the most correct matches wins!",
-    "fastest": "In Fastest, players try to be the first to answer a question. The first player to answer correctly wins!"
+    "fastest": "In Fastest, players try to be the first to answer a question. The first player to answer correctly wins!",
+    "rank": "In Rank, players rank a list of items in the correct order. The player with the most correct rankings wins!",
+    "jeopardy": "In Jeopardy, players answer questions to earn points. The player with the most points at the end wins!"
   }
 }

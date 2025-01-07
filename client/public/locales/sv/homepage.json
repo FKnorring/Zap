@@ -3,6 +3,7 @@
   "gotoOngoing": "Gå till pågående Quiz",
   "createQuiz": "Skapa Quiz",
   "startQuiz": "Starta Quiz",
+  "templates": "Mallar",
   "sharedQuizzes": "Delade Quiz",
   "searchShared": "Sök delade quiz...",
   "quizName": "Quiz namn",
@@ -33,10 +34,13 @@
     "2": "Följ svaren, poängen och resultaten när de utvecklas, och bygg upp spänningen tills en vinnare koras."
   },
   "questionCarouselText": "Våra frågetyper",
+   "readmore": "Läs mer om oss!",
   "questionDescriptions": {
     "bomb": "I Ticking Timebomb turas spelarna om att svara på frågor inom en bestämd tid. Om tiden tar slut förlorar du ett liv. Den sista spelaren som står kvar vinner!",
     "locateit": "Tror du att du kan geografi? Peka ut rätt plats på världskartan! Välj mellan olika svårighetsgrader, från landmärken till exakta platser, och testa din kunskap med olika inställningar!",
     "matching": "I Meet Your Match försöker spelarna matcha olika alternativ med etiketter. Den spelare som har flest korrekta matchningar vinner!",
-    "fastest": "I Fastest försöker spelarna vara den första att svara på en fråga. Den första spelaren som svarar korrekt vinner!"
+    "fastest": "I Fastest försöker spelarna vara den första att svara på en fråga. Den första spelaren som svarar korrekt vinner!",
+    "rank": "Kan du rangorda alternativ rätt enligt frågan?",
+    "jeopardy": "Som det klassiska programmet, fast i Zap!"
   }
 }

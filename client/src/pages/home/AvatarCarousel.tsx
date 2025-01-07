@@ -14,7 +14,7 @@ interface AvatarCarouselProps {
 const AvatarCarousel: React.FC<AvatarCarouselProps> = ({ avatars }) => {
   const { t } = useTranslation();
   return (
-    <div className="w-full flex flex-col items-center text-center text-black bg-[#F4F4F4] py-10">
+    <div className="w-full flex flex-col items-center text-center text-gray-800 bg-[#F4F4F4] py-10">
       <h1 className="font-display lg:text-4xl text-2xl mb-6">
         {t('homepage:avatarText')}
       </h1>
