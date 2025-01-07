@@ -15,7 +15,7 @@ const AvatarCarousel: React.FC<AvatarCarouselProps> = ({ avatars }) => {
   const { t } = useTranslation();
   return (
     <div className="w-full flex flex-col items-center text-center text-black bg-[#F4F4F4] py-10">
-      <h1 className="font-display lg:text-4xl text-3xl mb-6">
+      <h1 className="font-display lg:text-4xl text-2xl mb-6">
         {t('homepage:avatarText')}
       </h1>
       <div className="relative overflow-hidden w-full">

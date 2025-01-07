@@ -88,7 +88,7 @@ function QuizList({
     : quizzes;
 
   return (
-    <div className="flex overflow-x-auto overflow-y-visible gap-2 pb-2">
+    <div className="flex overflow-x-auto overflow-y-visible gap-2 bg- pt-2">
       {filteredQuizzes
         .sort((a, b) => {
           const aDate = a.updatedAt || a.createdAt;

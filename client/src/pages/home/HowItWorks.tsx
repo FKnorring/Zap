@@ -1,4 +1,4 @@
-import slideView from '@/utils/images/slideView.png';
+import slideView from '@/assets/editorImages/slideView.png';
 import { useTranslation } from 'react-i18next';
 
 const HowItWorks = () => {

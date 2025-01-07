@@ -17,21 +17,27 @@
   "playNow": "Play Now!",
   "signIn": "Sign In",
   "signUp": "Sign Up",
-  "avatarText": "More than 100 avatars",
-  "slogan": "Creative, Simple, Unique",
-  "inspotext": "Create unforgettable quizzes and events with Zap! Whether it'sonline team building, live interactive games, icebreakers, orengaging lessons, Zap makes it easy to connect and excite youraudience—anytime, anywhere.",
+  "avatarText": "Choose from thousands avatars!",
+  "slogan": "Creative, Simple and Unique",
+  "inspotext": "Create unforgettable quizzes and events with Zap!",
   "getStarted": "Get Started!",
 
   "stepTitles": {
     "0": "Build it, quiz it, win it!",
     "1": "Invite your friends!",
     "2": "Watch the action unfold & enjoy the fun!"
- 
   },
 
   "stepText": {
-    "0": "Get started with Zap by creating quiz and game night slides. Add a variety of interactive challenges to keep your friendsengaged, all within one easy-to-use app.",
+    "0": "Get started with Zap by creating quiz and game night slides. Add a variety of interactive challenges to keep your friend sengaged, all within one easy-to-use app.",
     "1": "Your friends can join the fun on any device, just by scanning a QR code or using a link—no apps required!",
-    "2": "Follow the answers, points, and results as they unfold, intensifying the excitement until a winner is crowned."
+    "2": "Follow the action, track the scores, and watch as the tension builds, leading to a dramatic finish and the crowning of a winner."
+  },
+  "questionCarouselText": "Our question types",
+  "questionDescriptions": {
+    "bomb": "In Ticking Timebomb, players take turns answering questions within a set time. If time runs out, you lose a life. The last player standing wins!",
+    "locateit": "Think you know geography? Pin the right location on the world map! Choose from various difficulty levels, ranging from landmarks to precise locations, and test your knowledge with different settings!",
+    "matching": "In Meet Your Match, players try to match different options to labels. The player with the most correct matches wins!",
+    "fastest": "In Fastest, players try to be the first to answer a question. The first player to answer correctly wins!"
   }
 }

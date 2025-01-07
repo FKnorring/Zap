@@ -3,9 +3,6 @@ import { WiggleText } from '@/components/WiggleText';
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import QuestionCarousel from '@/pages/home/QuestionCarousel';
 import AvatarCarousel from './AvatarCarousel';
-import dallebomb from '@//utils/images/dalle/dallebomb.webp';
-import dallebutton from '@/utils/images/dalle/dallebutton.webp';
-import dalleflag1 from '@/utils/images/dalle/dalleflag1.webp';
 import { useTranslation } from 'react-i18next';
 import HowItWorks from './HowItWorks';
 import HowItWorksPhone from './HowItWorksPhone';
@@ -57,24 +54,6 @@ const generateRandomAvatarData = (): AvatarData[] => {
 
 const avatarData = generateRandomAvatarData();
 
-const imageData = [
-  {
-    img: dallebomb,
-    text: 'In Ticking Timebomb, players take turns answering questions within a set time. If time runs out, you lose a life. The last player standing wins!',
-  },
-  {
-    img: dalleflag1,
-    text: 'Think you know geography? Pin the right location on the world map! Choose from various difficulty levels, ranging from landmarks to precise locations, and test your knowledge with different settings!',
-  },
-  { img: dallebutton, text: 'Know the answer? Press the button!' },
-  { img: 'anotherImageURL', text: 'Explanation for image 4' },
-];
-const titles: string[] = [
-  'Ticking Time Bomb',
-  'Locate It',
-  'Fastest Finger First',
-];
-
 function Home() {
   const { register } = useKindeAuth();
 
@@ -88,33 +67,34 @@ function Home() {
           <div className="flex items-center justify-center gap-4">
             <WiggleText
               text="Zap!"
-              className="text-center text-8xl font-bold font-display fancy-wrap"
+              className="text-center text-6xl font-bold font-display fancy-wrap"
             />
           </div>
           <div className="mt-5 flex flex-col justify-center items-center gap-y-3  ">
-            <h1 className="text-5xl font-display text-center text-black ">
+            <h1 className="text-5xl font-display text-center text-gray-800 mx-4 ">
               {t('homepage:slogan')}
             </h1>
 
-            <h3 className="text-gray-500 lg:w-1/2 sm:w-4/5 text-center text-2xl font-display m-2">
+            <h3 className="text-gray-500 lg:w-1/2 sm:w-4/5 text-center text-2xl font-display mx-4">
               {t('homepage:inspotext')}
             </h3>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center">
             <Button
-              className="font-display lg:text-7xl text-4xl outline outline-3 m-4  p-16  bg-green-500 text-white hover:bg-white hover:text-black"
+              className="font-display lg:text-4xl text-2xl m-4  p-8  bg-green-500 text-white hover:bg-white hover:text-black hover:border-black hover:border-2"
               size="lg"
+              isInteractive
               onClick={() => register()}
             >
-              {t('homepage:signUp')}
+              {t('general:register')}
             </Button>
           </div>
         </div>
 
         {/* Container for Title and Carousel */}
-        <div>
+        <div className="flex-1 w-full">
           {' '}
-          <QuestionCarousel images={imageData} titles={titles} />;
+          <QuestionCarousel />;
         </div>
 
         <div className="w-full bg-[#F8F8F8]">

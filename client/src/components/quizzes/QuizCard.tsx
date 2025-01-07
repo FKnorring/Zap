@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { InfoSlide, UserQuizzes } from '@/models/Quiz';
@@ -43,17 +42,21 @@ export function QuizCard({ quiz, onClick, children }: QuizCardProps) {
     id: '1',
   };
   return (
-    <Card className={`${onClick ? 'cursor-pointer' : ''} bg-gray-100`} onClick={onClick} >
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-lg mr-auto">{quiz.quizName}</CardTitle>
-          {quiz.isShared && (
-            <div className="bg-primary text-white p-1 rounded flex flex-row">
-              <Share className="w-4 h-4" />
-            </div>
-          )}
-        </div>
-      </CardHeader>
+    <Card
+      className={`${onClick ? 'cursor-pointer' : ''} bg-[#FFFFFF]` }
+      onClick={onClick}
+    >
+      <div className="flex items-center gap-2 ml-6">
+        <CardTitle className="text-lg mr-auto pb-1 pt-4 font-display">
+          {quiz.quizName}
+        </CardTitle>
+        {quiz.isShared && (
+          <div className="bg-primary text-white p-1 rounded flex flex-row">
+            <Share className="w-4 h-4" />
+          </div>
+        )}
+      </div>
+
       <CardContent>
         <div className="aspect-video w-full rounded overflow text-white relative">
           <SlidePreview slide={mockInfo as InfoSlide} />

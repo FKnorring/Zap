@@ -71,8 +71,12 @@ export default {
   				}
   			},
   			flash: {
-  				'0%': { opacity: '0.25' },
-  				'100%': { opacity: '0' },
+  				'0%': {
+  					opacity: '0.25'
+  				},
+  				'100%': {
+  					opacity: '0'
+  				}
   			}
   		},
   		animation: {
@@ -112,7 +116,17 @@ export default {
   			component: 'hsl(var(--component))',
   			'component-background': 'hsl(var(--component-background))',
   			textonwbg: 'hsl(var(--textonwbg))',
-  			'textonwbg-grayonw': 'hsl(var(--textonwbg-grayonw))'
+  			'textonwbg-grayonw': 'hsl(var(--textonwbg-grayonw))',
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
+  			}
   		}
   	}
   },

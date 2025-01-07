@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { quizService } from '@/services/quizzes';
 import { useTranslation } from 'react-i18next';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/ui/AppSidebar';
 
 function useQuizzesPage() {
   const {
@@ -150,80 +152,87 @@ function Quizzes() {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-around gap-4 overflow-y-auto p-4">
-      <Card className=" w-full max-w-7xl" id="quiz-manager-container">
-        <CardHeader>
-          <CardTitle className="flex justify-between text-2xl items-center">
-            <span>{t('homepage:myQuizzes')}</span>
-            {ongoingQuiz && (
-              <Button
-                variant="outline"
-                onClick={() => navigate(`/quizzes/${ongoingQuiz.id}/lobby`)}
-              >
-                {t('homepage:gotoOngoing')}
-              </Button>
-            )}
-            <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="min-h-[300px]">
-          {quizzesLoading ? (
-            <div className="flex justify-center items-center h-[300px] w-full">
-              <Loader2 className="animate-spin" />
-            </div>
-          ) : (
-            <QuizList
-              quizzes={quizzes.map((quiz) => ({
-                quizId: quiz.id,
-                quizName: quiz.quiz_name,
-                userId: quiz.user_id,
-                isHosted: quiz.isHosted,
-                isShared: quiz.isShared,
-                createdAt: quiz.created_at,
-                updatedAt: quiz.updated_at,
-              }))}
-              onDeleteQuiz={handleDeleteQuiz}
-              onShareQuiz={handleShareQuiz}
-            />
-          )}
-        </CardContent>
-      </Card>
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="flex-1 flex flex-row items-center justify-around overflow-y-auto   bg-[#FFFFFF]">
+        <div className="flex-1 flex flex-col items-center justify-around gap-4 mt-20 bg-[#FFFFFF]">
+          <div className=" ml-20 mb-5 flex flex-col self-start  font-display text-5xl  text-black mt-4">
+            <span className="m-4">{t('homepage:myQuizzes')}</span>
 
-      <Card className="w-full max-w-7xl">
-        <CardHeader>
-          <CardTitle>
-            <div className="flex items-center gap-4">
-              <span className="m-0">
-                {t('homepage:sharedQuizzes')}
-              </span>
-              <div className="flex items-center gap-2">
-                <Search className="w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder={t('homepage:searchShared')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="max-w-lg"
+            <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
+          </div>
+
+          <Card
+            className=" w-full max-w-7xl  bg-[#F9F8FE] p-8"
+            id="quiz-manager-container shadow-lg"
+          >
+            <CardHeader>
+              <CardTitle className="flex justify-center font-display text-3xl items-center">
+                {ongoingQuiz && (
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate(`/quizzes/${ongoingQuiz.id}/lobby`)}
+                  >
+                    {t('homepage:gotoOngoing')}
+                  </Button>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="min-h-[300px]">
+              {quizzesLoading ? (
+                <div className="flex justify-center items-center h-[300px] w-full">
+                  <Loader2 className="animate-spin" />
+                </div>
+              ) : (
+                <QuizList
+                  quizzes={quizzes.map((quiz) => ({
+                    quizId: quiz.id,
+                    quizName: quiz.quiz_name,
+                    userId: quiz.user_id,
+                    isHosted: quiz.isHosted,
+                    isShared: quiz.isShared,
+                    createdAt: quiz.created_at,
+                    updatedAt: quiz.updated_at,
+                  }))}
+                  onDeleteQuiz={handleDeleteQuiz}
+                  onShareQuiz={handleShareQuiz}
                 />
-              </div>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="min-h-[300px]">
-          {sharedQuizzesLoading ? (
-            <div className="flex justify-center items-center h-[300px] w-full">
-              <Loader2 className="animate-spin" />
-            </div>
-          ) : (
-            <SharedQuizList
-              quizzes={sharedQuizzes}
-              onCopyQuiz={handleCopyQuiz}
-              searchTerm={searchTerm}
+              )}
+            </CardContent>
+          </Card>
+
+          <div className="flex justify-center font-display text-5xl items-center text-black">
+            <span className="m-0">{t('homepage:sharedQuizzes')}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Search className="w-4 h-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder={t('homepage:searchShared')}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-lg"
             />
-          )}
-        </CardContent>
-      </Card>
-    </div>
+          </div>
+          <Card className="w-full max-w-7xl bg-[#F9F8FE]">
+            <CardHeader className="flex items-center "></CardHeader>
+            <CardContent className="min-h-[300px]">
+              {sharedQuizzesLoading ? (
+                <div className="flex justify-center items-center h-[300px] w-full">
+                  <Loader2 className="animate-spin" />
+                </div>
+              ) : (
+                <SharedQuizList
+                  quizzes={sharedQuizzes}
+                  onCopyQuiz={handleCopyQuiz}
+                  searchTerm={searchTerm}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
 

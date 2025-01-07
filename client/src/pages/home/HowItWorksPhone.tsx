@@ -1,10 +1,12 @@
-import slideView from '@/utils/images/slideView.png';
+import slideView from '@/assets/editorImages/slideView.png';
+import { useTranslation } from 'react-i18next';
 
 const HowItWorksPhone = () => {
+  const { t } = useTranslation();
   return (
     <div className="py-8 w-full bg-gray-50">
       <h1 className="text-3xl font-display text-center text-gray-700 mb-6">
-        Get started!
+        {t('homepage:getStarted')}
       </h1>
       <div className="space-y-16 max-w-md mx-auto px-4">
         {/* Step 1 */}
@@ -21,12 +23,10 @@ const HowItWorksPhone = () => {
           {/* Content */}
           <div className=" rounded-lg  p-4 ">
             <h2 className="text-xl font-display text-gray-800">
-              Build it, quiz it, win it!
+              {t('homepage:stepTitles.0')}
             </h2>
             <p className=" text-gray-600 text-sm font-display">
-              Get started with Zap by creating quiz and game night slides. Add a
-              variety of interactive challenges to keep your friends engaged,
-              all within one easy-to-use app.
+              {t('homepage:stepText.0')}
             </p>
           </div>
 
@@ -47,11 +47,10 @@ const HowItWorksPhone = () => {
           {/* Content */}
           <div className=" rounded-lg  p-4 ">
             <h2 className="text-xl font-display text-gray-800">
-              Invite your friends
+              {t('homepage:stepTitles.1')}
             </h2>
             <p className=" font-display text-gray-600 text-sm">
-              Your friends can join the fun on any device, just by scanning a QR
-              code or using a link—no apps required!
+              {t('homepage:stepText.1')}
             </p>
           </div>
 
@@ -72,11 +71,10 @@ const HowItWorksPhone = () => {
           {/* Content */}
           <div className=" rounded-lg  p-4 mt-4">
             <h2 className="text-xl font-display text-gray-800">
-              Watch the action & enjoy the fun!
+              {t('homepage:stepTitles.2')}
             </h2>
             <p className=" font-display text-gray-600 text-sm">
-              Follow the answers, points, and results as they unfold,
-              intensifying the excitement until a winner is crowned.
+              {t('homepage:stepText.2')}
             </p>
           </div>
 

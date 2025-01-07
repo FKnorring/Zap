@@ -70,7 +70,7 @@ export function Header() {
     return (
       <header
         className={cn(
-          'bg-black/40 md:block transition-opacity duration-200 border-b-2  border-b-primary shadow shadow-black/20 z-50',
+          'bg-black/100 md:block transition-opacity duration-200 border-b-2  border-b-primary shadow shadow-black/20 z-50',
           inLobby && 'absolute top-0 left-0 right-0',
           inGame && 'hidden'
         )}
@@ -136,7 +136,11 @@ export function Header() {
                     </Button>
                   </>
                 )}
-                <Settings />
+                {isAuthenticated ? (
+                  <Settings />
+                ) : (
+                  <LanguageToggle fixed={false} />
+                )}
               </div>
             </nav>
           </div>
@@ -199,7 +203,10 @@ export function Header() {
                 >
                   <Menu />
                 </SheetTrigger>
-                <SheetContent className="w-full border-none font-display text-xl text-white overflow-y-auto">
+                <SheetContent
+                  className="w-full border-none font-display text-xl text-white overflow-y-auto"
+                  onOpenAutoFocus={(event) => event.preventDefault()}
+                >
                   <SheetHeader className="flex flex-row items-center justify-center space-x-1 pt-6">
                     <Zap className="text-yellow-400" size={25} />
                     <span className="fancy-wrap text-2xl">Zap!</span>
@@ -207,7 +214,7 @@ export function Header() {
                   <SheetDescription className="flex flex-col space-y-2 text-left pt-6">
                     <Link to="/">
                       <Button
-                        className="text-2xl"
+                        className="text-2xl "
                         variant="link"
                         onClick={() => setSheetOpen(false)}
                       >
