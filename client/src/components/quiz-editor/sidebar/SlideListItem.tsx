@@ -62,23 +62,22 @@ export function SlideListItem({
         }
       }}
     >
-      {' '}
       <div>
         <div className="flex flex-row space-x-2  text-md  items-center">
-          <slideComponent.Info.icon className="text-black" size={20} />
+          <slideComponent.Info.icon className="text-black" size={16} />
           <h1 className="font-display text-black ">
             {t(slideComponent.Info.label)}
           </h1>
         </div>
         <div
           className={`cursor-pointer rounded overflow-hidden ${
-            activeSlideId === slide.id
-              ? ' bg-primary/60 '
-              : ''
+            activeSlideId === slide.id ? ' bg-primary/60 ' : ''
           }`}
         >
-          <div className='flex flex-row items-center p-2 '>
-            <h1 className='text-black rounded-full font-display text-xl  mr-2'>{index +1}</h1>
+          <div className="flex flex-row items-center p-2 ">
+            <h1 className="text-black rounded-full font-display text-sm  mr-2">
+              {index + 1}
+            </h1>
             <SlidePreview
               slide={slide}
               backgroundColor={backgroundColor}
@@ -87,7 +86,7 @@ export function SlideListItem({
             />
           </div>
         </div>
-          
+
         <SlideActions
           index={index}
           totalSlides={totalSlides}

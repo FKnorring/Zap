@@ -6,8 +6,6 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { ChevronDown, Languages, LogIn } from 'lucide-react';
 import {
   Dialog,
@@ -19,19 +17,16 @@ import {
   DialogFooter,
   DialogClose,
 } from '@/components/ui/dialog';
+import LanguageRadio from '@/components/Settings/LanguageRadio';
 
 interface ParticipantMenuProps {
   onLeave: () => void; // This will call handleRemoveParticipant from parent
 }
 
 export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const [popoverOpen, setPopoverOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-
-  function changeLanguage(lang: string) {
-    i18n.changeLanguage(lang);
-  }
 
   return (
     <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -70,28 +65,7 @@ export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
 
           {langOpen && (
             <div className="rounded bg-gray-100 p-2">
-              <RadioGroup defaultValue={i18n.language}>
-                <div className="flex items-center space-x-2 mb-2">
-                  <RadioGroupItem
-                    value="sv"
-                    id="lang-sv"
-                    onClick={() => changeLanguage('sv')}
-                  />
-                  <Label htmlFor="lang-sv" className="cursor-pointer">
-                    {t('general:swedish')}
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    value="en"
-                    id="lang-en"
-                    onClick={() => changeLanguage('en')}
-                  />
-                  <Label htmlFor="lang-en" className="cursor-pointer">
-                    {t('general:english')}
-                  </Label>
-                </div>
-              </RadioGroup>
+              <LanguageRadio setOpen={setLangOpen} />
             </div>
           )}
 

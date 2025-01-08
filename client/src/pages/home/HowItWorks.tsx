@@ -1,4 +1,4 @@
-import slideView from '@/assets/editorImages/slideView.png';
+import results from '@/assets/questionImages/results.png';
 import editor from '@/assets/editorImages/editor.png';
 import lobby from '@/assets/questionImages/lobby.png';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 const HowItWorks = () => {
   const { t } = useTranslation();
   return (
-    <div className="py-8  w-full ">
+    <div className="py-6  w-full ">
       <h1 className="text-4xl font-display text-center text-gray-700 mb-2">
         {t('homepage:getStarted')}
       </h1>
@@ -102,7 +102,7 @@ const HowItWorks = () => {
             {/* Placeholder Image */}
             <div className="flex-1 w-1/2">
               <img
-                src={slideView}
+                src={results}
                 alt="Placeholder 1"
                 className="w-full h-auto rounded-lg shadow-md"
               />

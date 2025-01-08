@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import useGetAuthenticatedUser from '@/hooks/useGetAuthenticatedUser';
 import { userService } from '@/services/users';
-import LanguageToggle from '@/components/LanguageToggle';
+import LanguageToggle from '@/components/Settings/LanguageToggle';
 import { useTranslation } from 'react-i18next';
 import { avatarCollections, collectionNames } from '@/utils'; // Adjust path to your collection exports
 

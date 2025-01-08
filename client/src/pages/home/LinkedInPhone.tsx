@@ -61,23 +61,23 @@ export default function LinkedInPhone() {
   ];
 
   return (
-    <div className="flex flex-col justify-center items-center w-full bg-[#F4F4F4] py-6 px-4">
+    <div className="flex flex-col justify-center items-center w-full bg-[#F9F8FE] py-6 px-4">
       {/* Section Heading */}
       <h1 className="text-2xl font-display text-gray-800 mb-4">
         {t('about:team')}
       </h1>
 
       {/* Carousel */}
-      <div className="w-full max-w-sm">
+      <div className="w-full">
         <Carousel setApi={setApi} increment={1} rotateTime={3} buttons={false}>
           <CarouselContent>
             {people.map((person, index) => (
               <CarouselItem key={index}>
-                <div className="flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden">
+                <div className="flex flex-col items-center bg-white rounded-lg shadow-sm overflow-hidden w-[250px] mx-auto mb-1">
                   <img
                     src={person.src}
                     alt={person.name}
-                    className="w-full h-[360px] object-cover"
+                    className="h-[250px] object-cover"
                   />
                   <div className="p-4 text-center">
                     <a
@@ -87,7 +87,7 @@ export default function LinkedInPhone() {
                       className="flex items-center justify-center space-x-2 hover:text-blue-600"
                     >
                       <FaLinkedin size={24} color="#0A66C2" />
-                      <p className="text-lg font-medium text-gray-700">
+                      <p className="text-lg font-display text-gray-700">
                         {person.name}
                       </p>
                     </a>
@@ -110,8 +110,8 @@ export default function LinkedInPhone() {
               <span
                 key={slideIndex}
                 className={cn(
-                  'w-3 h-3 rounded-full transition-colors duration-300',
-                  isActive ? 'bg-primary' : 'bg-gray-300'
+                  'w-3 h-3 rounded-full transition-colors duration-300 transform',
+                  isActive ? 'bg-primary scale-110' : 'bg-gray-300'
                 )}
               />
             );

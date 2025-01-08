@@ -6,7 +6,7 @@ import { ParticipantService } from '@/services/participant';
 import { useNavigate } from 'react-router-dom';
 import { GameShackTitle } from '@/components/GameShackTitle';
 import { Card, CardContent } from '@/components/ui/card';
-import LanguageSelect from '@/components/LanguageToggle';
+import LanguageSelect from '@/components/Settings/LanguageToggle';
 import { useTranslation } from 'react-i18next';
 
 export default function JoinQuiz() {

@@ -62,7 +62,7 @@ export function SlideInsertArea({
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <div className="h-2 w-full group-hover:h-8 group-hover:border-2 group-hover:border-dashed group-hover:border-primary/50 group-hover:bg-primary/5 rounded transition-all duration-150" />
+          <div className="h-2 w-full group-hover:h-8 group-hover:border-2 group-hover:border-dashed group-hover:border-primary/50 group-hover:bg-primary/5 rounded transition-all duration-350 delay-100"></div>
         </div>
       </PopoverTrigger>
       <SlideCreationMenu

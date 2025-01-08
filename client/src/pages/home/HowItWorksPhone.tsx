@@ -1,12 +1,12 @@
-import slideView from '@/assets/editorImages/slideView.png';
 import editor from '@/assets/editorImages/editor.png';
 import lobby from '@/assets/questionImages/lobby.png';
+import results from '@/assets/questionImages/results.png';
 import { useTranslation } from 'react-i18next';
 
 const HowItWorksPhone = () => {
   const { t } = useTranslation();
   return (
-    <div className="py-8 w-full bg-gray-50">
+    <div className="py-6 w-full bg-gray-50">
       <h1 className="text-3xl font-display text-center text-gray-700 mb-6">
         {t('homepage:getStarted')}
       </h1>
@@ -66,7 +66,7 @@ const HowItWorksPhone = () => {
             3
           </div>
           <img
-            src={slideView}
+            src={results}
             alt="Placeholder 3"
             className="w-full h-auto rounded-lg shadow-md"
           />

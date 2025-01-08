@@ -98,7 +98,6 @@ function Home() {
 
         {/* Container for Title and Carousel */}
         <div className="flex-1 w-full">
-          {' '}
           <QuestionCarousel />;
         </div>
 
@@ -120,17 +119,15 @@ function Home() {
         {/* Avatar Carousel */}
       </div>
 
-      <div className="w-full">
-        {/* Render HowItWorks for larger devices */}
-        <div className="hidden lg:block">
+      <>
+        <div className="w-full hidden lg:block">
           <LinkedInComponent />
         </div>
 
-        {/* Render HowItWorksPhone for smaller devices */}
-        <div className="block lg:hidden">
+        <div className="w-full block lg:hidden">
           <LinkedInPhone />
         </div>
-      </div>
+      </>
 
       <div className="flex flex-col items-center w-full mt-10 mb-10">
         <h1 className="text-gray-800 font-display text-3xl text-center">
