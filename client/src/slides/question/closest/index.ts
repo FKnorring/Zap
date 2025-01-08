@@ -6,12 +6,12 @@ export * from './HostAnswer';
 export * from './CalculateAnswer';
 
 import { QuestionTypes, SlideTypes, AnswerTypes } from '@/models/Quiz';
-import { Target } from 'lucide-react';
+import { FaCrosshairs } from 'react-icons/fa';
 import { SlideInfo } from '../..';
 
 export const Info: SlideInfo = {
   value: 'question:CLOSEST',
-  icon: Target,
+  icon: FaCrosshairs,
   label: QuestionTypes.CLOSEST,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.CLOSEST,

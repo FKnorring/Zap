@@ -6,11 +6,11 @@ export * from './HostAnswer';
 export * from './CalculateAnswer';
 
 import { QuestionTypes, SlideTypes, AnswerTypes } from "@/models/Quiz";
-import { TypeIcon } from "lucide-react";
+import { FaComment } from "react-icons/fa";
 import { SlideInfo } from "../..";
 export const Info: SlideInfo = {
   value: 'question:FTA',
-  icon: TypeIcon,
+  icon: FaComment,
   label: QuestionTypes.FTA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.FTA,

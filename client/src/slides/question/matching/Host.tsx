@@ -6,9 +6,15 @@ import NextSlide from '@/slides/_components/NextSlide';
 export function Host({
   slide,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: MatchingSlide;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   return (
     <>
@@ -25,7 +31,12 @@ export function Host({
           ))}
         </div>
       </BaseQuestionRender>
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </>
   );
 }

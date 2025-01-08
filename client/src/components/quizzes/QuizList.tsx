@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { useAppContext } from '@/contexts/App/context';
 import { database } from '@/firebase';
 import { ref, get, serverTimestamp } from 'firebase/database';
+import { quizCodes } from '@/data/quizCodes';
 
 interface QuizListProps {
   quizzes: UserQuizzes[];
@@ -26,23 +27,39 @@ function QuizList({
   } = useAppContext();
 
   const generateQuizCode = async (): Promise<string> => {
-    let quizCode = '';
+    const maxAttempts = 4;
+    let attempts = 0;
+
+    while (attempts < maxAttempts) {
+      const randomIndex = Math.floor(Math.random() * quizCodes.length);
+      const quizCode = quizCodes[randomIndex];
+      const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
+      const quiz = await get(quizRef);
+
+      if (!quiz.exists()) {
+        return quizCode;
+      }
+
+      attempts++;
+    }
+
     let isUnique = false;
+    let randomCode = '';
 
     while (!isUnique) {
       // Generate a random 4-letter code
-      quizCode = Array.from({ length: 4 }, () =>
+      randomCode = Array.from({ length: 4 }, () =>
         String.fromCharCode(65 + Math.floor(Math.random() * 26))
       ).join('');
 
-      const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
+      const quizRef = ref(database, `ongoingQuizzes/${randomCode}`);
       const quiz = await get(quizRef);
       if (!quiz.exists()) {
         isUnique = true;
-        return quizCode;
+        return randomCode;
       }
     }
-    return quizCode;
+    return randomCode;
   };
 
   const handleHostGame = async (quiz: UserQuizzes) => {
@@ -88,7 +105,7 @@ function QuizList({
     : quizzes;
 
   return (
-    <div className="flex overflow-x-auto overflow-y-visible gap-2 bg- pt-2">
+    <div className="flex overflow-x-auto overflow-y-visible gap-2  pt-1">
       {filteredQuizzes
         .sort((a, b) => {
           const aDate = a.updatedAt || a.createdAt;

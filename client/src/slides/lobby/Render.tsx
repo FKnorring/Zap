@@ -28,6 +28,7 @@ const ENABLE_TEAMS = flags.ENABLE_TEAMS;
 
 export default function Render({
   onNextSlide,
+
   quizCode,
   participants,
   removeParticipant,
@@ -35,6 +36,7 @@ export default function Render({
   slide: LobbySlide;
   participants: Participant[];
   onNextSlide: () => void;
+
   quizCode: string;
   removeParticipant: (participantId: string) => void;
 }) {

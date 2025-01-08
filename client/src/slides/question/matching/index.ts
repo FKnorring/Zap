@@ -6,12 +6,12 @@ export * from './HostAnswer';
 export * from './CalculateScore';
 
 import { QuestionTypes, SlideTypes, AnswerTypes } from '@/models/Quiz';
-import { ListTree } from 'lucide-react';
+import { FaPuzzlePiece } from 'react-icons/fa';
 import { SlideInfo } from '../..';
 
 export const Info: SlideInfo = {
   value: 'question:MATCHING',
-  icon: ListTree,
+  icon: FaPuzzlePiece,
   label: QuestionTypes.MATCHING,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.MATCHING,

@@ -1,4 +1,6 @@
 import slideView from '@/assets/editorImages/slideView.png';
+import editor from '@/assets/editorImages/editor.png';
+import lobby from '@/assets/questionImages/lobby.png';
 import { useTranslation } from 'react-i18next';
 
 const HowItWorksPhone = () => {
@@ -16,7 +18,7 @@ const HowItWorksPhone = () => {
             1
           </div>
           <img
-            src={slideView}
+            src={editor}
             alt="Placeholder 1"
             className="w-full h-auto rounded-lg shadow-md"
           />
@@ -40,7 +42,7 @@ const HowItWorksPhone = () => {
             2
           </div>
           <img
-            src={slideView}
+            src={lobby}
             alt="Placeholder 2"
             className="w-full h-auto rounded-lg shadow-md"
           />

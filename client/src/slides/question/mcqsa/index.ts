@@ -6,13 +6,13 @@ export * from './HostAnswer';
 export * from './CalculateScore';
 
 import { QuestionTypes, SlideTypes, AnswerTypes,MCQSAPointsAwarding } from '@/models/Quiz';
-import { CircleDotIcon } from "lucide-react";
+import { FaRegDotCircle } from 'react-icons/fa';
 import { SlideInfo } from '../..';
 import { nanoid } from 'nanoid'
 
 export const Info: SlideInfo = {
   value: 'question:MCQSA',
-  icon: CircleDotIcon,
+  icon: FaRegDotCircle,
   label: QuestionTypes.MCQSA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.MCQSA,

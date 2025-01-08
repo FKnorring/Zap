@@ -1,8 +1,8 @@
 {
   "selectSlide": "Välj en bild för att redigera",
   "quizName": "Quiz Namn",
-  "slides": "Bilder",
-  "questionTypes": "Frågetyper",
+  "slides": "Presentera",
+  "questionTypes": "Quizza",
   "colorScheme": "Färgschema",
   "backgroundColor": "Bakgrundsfärg",
   "primary": "Primär",

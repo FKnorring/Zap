@@ -49,7 +49,7 @@ export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
       </PopoverTrigger>
 
       <PopoverContent className="w-48 p-3">
-        <div className="space-y-2">
+        <div className="space-y-2 font-display">
           <Button
             variant="ghost"
             className="flex w-full items-center justify-between px-2 py-2"
@@ -98,7 +98,7 @@ export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
           <Dialog>
             <DialogTrigger className="flex w-full items-center gap-2">
               <Button className="gap-1 w-full text-red-500" variant="outline">
-                <LogIn transform="rotate(180)" />
+                <LogIn className="transform rotate-180" />
                 {t('participants:leave')}
               </Button>
             </DialogTrigger>
@@ -106,7 +106,7 @@ export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
               onClick={(e) => e.stopPropagation()}
               className="w-4/5 rounded-lg"
             >
-              <DialogHeader>
+              <DialogHeader className="text-black">
                 <DialogTitle>{t('participants:leaveTitle')}</DialogTitle>
                 <DialogDescription>
                   {t('participants:leaveDescription')}
@@ -115,7 +115,9 @@ export default function ParticipantMenu({ onLeave }: ParticipantMenuProps) {
               <DialogFooter>
                 <div className="flex justify-end gap-2 mt-4">
                   <DialogClose asChild>
-                    <Button variant="outline">{t('general:cancel')}</Button>
+                    <Button variant="outline" className="text-black">
+                      {t('general:cancel')}
+                    </Button>
                   </DialogClose>
                   <DialogClose asChild>
                     <Button

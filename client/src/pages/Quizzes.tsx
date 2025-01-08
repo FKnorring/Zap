@@ -150,18 +150,18 @@ function Quizzes() {
   const [searchTerm, setSearchTerm] = useState('');
 
   return (
-    <div className="h-screen overflow-y-auto bg-white p-10">
-      <div className="flex flex-col items-center w-full bg-white px-4 py-8 h-full ">
+    <div className="h-screen overflow-y-auto bg-white ">
+      <div className="flex flex-col items-center w-full bg-white p-5 lg:p-10 h-full ">
         {/* My Quizzes Section */}
         <div className="w-full flex-col ">
-          <div className="mb-2 flex flex-row items-center justify-between">
+          <div className="flex-col b-2 mb-4 lg:mb-0 flex lg:flex-row items-center justify-between">
             <h1 className="font-display text-5xl text-black mb-4">
               {t('homepage:myQuizzes')}
             </h1>
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
           </div>
 
-          <Card className="bg-[#F9F8FE] shadow-lg">
+          <Card className="bg-[#F9F8FE] shadow-lg w-full">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 {ongoingQuiz && (
@@ -199,8 +199,8 @@ function Quizzes() {
         </div>
 
         {/* Shared Quizzes Section */}
-        <div className="w-full  mt-8">
-          <div className="mb-2 flex justify-between items-center flex-row">
+        <div className="w-full flex-col mt-10">
+          <div className="mb-2 flex justify-between items-center flex-col lg:flex-row">
             <h1 className="font-display text-5xl text-black mb-2">
               {t('homepage:sharedQuizzes')}
             </h1>
@@ -230,7 +230,7 @@ function Quizzes() {
           </Card>
         </div>
 
-        <div className="w-full  mt-8 mb-8 pb-8">
+        <div className="w-full flex-col mt-10 pb-10 ">
           <div className="mb-2">
             <h1 className="font-display text-5xl text-black mb-2">
               {t('homepage:templates')}

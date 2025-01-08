@@ -55,7 +55,7 @@ function QuizEdit() {
       />
       <ResizablePanelGroup direction="horizontal" style={{ height: 'inherit' }}>
         <ResizablePanel
-          defaultSize={20}
+          defaultSize={12}
           minSize={12}
           maxSize={24}
           id="quiz-sidebar"

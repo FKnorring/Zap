@@ -11,12 +11,18 @@ export function Host({
   slides,
   currentSlide,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
   slide,
 }: {
   participants: Participant[];
   slides: Slide[];
   currentSlide: number;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
   slide: ScoreSlide;
 }) {
   const SlideComponent = getSlideComponents(slide);
@@ -34,7 +40,12 @@ export function Host({
         slides={slides}
         participants={participants}
       />
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }

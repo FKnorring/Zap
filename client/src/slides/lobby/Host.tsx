@@ -5,12 +5,14 @@ export function Host({
   slide,
   participants,
   onNextSlide,
+ 
   removeParticipant,
   quizCode,
 }: {
   slide: LobbySlide;
   participants: Participant[];
   onNextSlide: () => void;
+ 
   removeParticipant: (participantId: string) => void;
   quizCode: string;
 }) {
@@ -19,6 +21,7 @@ export function Host({
       slide={slide}
       participants={participants}
       onNextSlide={onNextSlide}
+
       quizCode = {quizCode}
       removeParticipant={removeParticipant}
     />

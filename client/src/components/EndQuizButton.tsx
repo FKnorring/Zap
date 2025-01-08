@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 export default function EndQuizButton({ onClick }: { onClick: () => void }) {
   const { t } = useTranslation();
   return (
-    <div className="absolute top-5 left-0">
+    <div className="absolute top-10 left-0">
       <CustomTooltip content={t('slides:endQuiz')}>
         <button
           onClick={onClick}

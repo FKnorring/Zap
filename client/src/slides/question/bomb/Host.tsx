@@ -13,7 +13,7 @@ import NextSlide from '@/slides/_components/NextSlide';
 type HostProps = {
   participants: Participant[];
   slide: BombSlide;
-  quizCode: string;
+
   slideNumber: number;
   changeTurn: (participantId: string, quizCode: string) => void;
 
@@ -23,6 +23,9 @@ type HostProps = {
     usedAnswers: string[]
   ) => void;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 };
 
 type ParticipantHearts = {
@@ -36,8 +39,10 @@ export function Host({
   quizCode,
   slideNumber,
   onNextSlide,
+  onPrevSlide,
   changeTurn,
   updateSlideUsedAnswers,
+  endQuiz,
 }: HostProps) {
   const { t } = useTranslation();
   const [time, setTime] = useState(1000000000);
@@ -622,7 +627,12 @@ export function Host({
             </motion.div>
           </div>
         </motion.div>
-        <NextSlide onClick={onNextSlide} />
+        <NextSlide
+          quizCode={quizCode}
+          endQuiz={() => endQuiz(quizCode)} // Corrected here
+          onPrev={onPrevSlide}
+          onNext={onNextSlide}
+        />
       </div>
     );
   }

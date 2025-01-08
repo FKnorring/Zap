@@ -6,12 +6,12 @@ export * from './HostAnswer';
 export * from './CalculateScore';
 
 import { QuestionTypes, SlideTypes, AnswerTypes,AwardPointsLocation,MapDetails } from "@/models/Quiz";
-import { MapPinnedIcon } from "lucide-react";
+import { FaMapMarkedAlt } from "react-icons/fa";
 import { SlideInfo } from "../..";
 
 export const Info: SlideInfo = {
   value: 'question:LOCATEIT',
-  icon: MapPinnedIcon,
+  icon: FaMapMarkedAlt,
   label: QuestionTypes.LOCATEIT,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.LOCATEIT,

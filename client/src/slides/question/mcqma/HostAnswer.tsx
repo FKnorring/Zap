@@ -1,19 +1,25 @@
-import { MCQMASlide, Participant } from "@/models/Quiz";
-import { CheckCircle2, CircleX } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getColor } from "../base/QuizColors";
-import NextSlide from "@/slides/_components/NextSlide";
+import { MCQMASlide, Participant } from '@/models/Quiz';
+import { CheckCircle2, CircleX } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { getColor } from '../base/QuizColors';
+import NextSlide from '@/slides/_components/NextSlide';
 
 export function HostAnswer({
   slide,
   participants = [],
   isPreview = false, // Default to false
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: MCQMASlide;
   participants: Participant[];
   isPreview?: boolean;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   const AnswerCount = () => {
     const calculateAnswerCounts = () => {
@@ -74,8 +80,8 @@ export function HostAnswer({
     return (
       <div
         className={cn(
-          'grid gap-6 w-full',
-          `grid-cols-${Math.ceil(slide.options.length / 2)}` // Dynamic columns for answers
+          ' flex items-center  gap-6 w-4/5 m-4',
+          ` grid grid-cols-${Math.ceil(slide.options.length / 2)}` // Dynamic columns for answers
         )}
         style={{ gridAutoRows: '1fr' }}
       >
@@ -83,7 +89,7 @@ export function HostAnswer({
           <div
             key={option.id}
             className={cn(
-              "flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full",
+              'flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full',
               {
                 'bg-white/10 backdrop-blur outline outline-white/50':
                   !option.isCorrect,
@@ -108,13 +114,22 @@ export function HostAnswer({
   };
 
   return (
-    <div className="flex flex-col items-center h-full p-10 w-full">
-      <div className="bg-white rounded p-6 mb-40">
+    <div className="flex flex-col items-center h-full  w-full">
+      <div className="bg-white rounded p-6 mb-16 mt-10">
         <h1 className="text-4xl text-black font-display">{slide.title}</h1>
       </div>
-      <AnswerCount />
-      <CorrectAnswers />
-      <NextSlide onClick={onNextSlide} />
+      <div className="w-full flex flex-col m-4 items-center">
+        <AnswerCount />
+        <CorrectAnswers />
+      </div>
+      <div>
+        <NextSlide
+          quizCode={quizCode}
+          endQuiz={() => endQuiz(quizCode)} // Corrected here
+          onPrev={onPrevSlide}
+          onNext={onNextSlide}
+        />
+      </div>
     </div>
   );
 }

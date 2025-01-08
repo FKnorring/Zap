@@ -1,32 +1,41 @@
-import { Participant, MatchingSlide } from "@/models/Quiz";
-import NextSlide from "@/slides/_components/NextSlide";
-import { SlideTitle } from "@/slides/_components/SlideTitle";
-import { getColor } from "../base/QuizColors";
-import { cn } from "@/lib/utils";
-import MatchGroup from "./MatchGroup";
-import { CalculateScore } from "./CalculateScore";
+import { Participant, MatchingSlide } from '@/models/Quiz';
+import NextSlide from '@/slides/_components/NextSlide';
+import { SlideTitle } from '@/slides/_components/SlideTitle';
+import { getColor } from '../base/QuizColors';
+import { cn } from '@/lib/utils';
+import MatchGroup from './MatchGroup';
+import { CalculateScore } from './CalculateScore';
 
 export function HostAnswer({
   slide,
   participants,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: MatchingSlide;
   participants: Participant[];
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   const unAssignedOptions = slide.options.filter(
-    (option) => !slide.labels.some((label) => label?.correctOptions?.includes(option))
+    (option) =>
+      !slide.labels.some((label) => label?.correctOptions?.includes(option))
   );
 
   const cols = slide.labels.length + (unAssignedOptions.length > 0 ? 1 : 0);
   const answers = participants
-    .filter((participant) => participant.answers && participant.answers.length > 0)
+    .filter(
+      (participant) => participant.answers && participant.answers.length > 0
+    )
     .map((participant) => participant.answers[participant.answers.length - 1]);
 
   const scores = CalculateScore({ slide, participants });
   const totalParticipants = participants.length;
-  const perfectScores = scores.filter(score => score === slide.points).length;
+  const perfectScores = scores.filter((score) => score === slide.points).length;
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-8">
@@ -34,10 +43,13 @@ export function HostAnswer({
       <h2 className="text-2xl font-bold">
         {perfectScores} out of {totalParticipants} got all matches correct
       </h2>
-      <div className={cn("w-full grid grid-cols-2 gap-8 px-16", 
-        cols == 3 && "grid-cols-3", 
-        cols == 4 && "grid-cols-4"
-      )}>
+      <div
+        className={cn(
+          'w-full grid grid-cols-2 gap-8 px-16',
+          cols == 3 && 'grid-cols-3',
+          cols == 4 && 'grid-cols-4'
+        )}
+      >
         {slide.labels.map((label, idx) => (
           <MatchGroup
             key={label.id}
@@ -60,7 +72,12 @@ export function HostAnswer({
           />
         )}
       </div>
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
-} 
+}

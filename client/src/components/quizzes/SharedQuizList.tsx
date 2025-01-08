@@ -19,7 +19,7 @@ export default function SharedQuizList({
     : quizzes;
 
   return (
-    <div className="flex overflow-x-auto overflow-y-visible gap-2 pt-2">
+    <div className="flex overflow-x-auto overflow-y-visible gap-2 pt-5">
       {filteredQuizzes
         .sort((a, b) => {
           const aDate = a.sharedAt;

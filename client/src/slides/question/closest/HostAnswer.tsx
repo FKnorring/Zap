@@ -8,25 +8,36 @@ interface HostAnswerProps {
   slide: ClosestSlide;
   participants: Participant[];
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }
 
 const mockParticipants = getParticipants(10);
 
-export function HostAnswer({ slide, participants = mockParticipants, onNextSlide }: HostAnswerProps) {
+export function HostAnswer({
+  slide,
+  participants = mockParticipants,
+  onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
+}: HostAnswerProps) {
   const { t } = useTranslation(['questions']);
 
   // Calculate differences and sort participants by closest guess
   const participantsWithDiff = participants
-    .map(participant => {
+    .map((participant) => {
       const latestAnswer = participant.answers.at(-1)?.answer[0];
       const guess = latestAnswer ? parseFloat(latestAnswer) : null;
-      const diff = guess !== null ? Math.abs(guess - slide.correctAnswer) : Infinity;
+      const diff =
+        guess !== null ? Math.abs(guess - slide.correctAnswer) : Infinity;
       return { participant, guess, diff };
     })
     .sort((a, b) => a.diff - b.diff);
 
   const winner = participantsWithDiff[0]?.participant;
-  const hasValidGuesses = participantsWithDiff.some(p => p.guess !== null);
+  const hasValidGuesses = participantsWithDiff.some((p) => p.guess !== null);
 
   return (
     <div className="flex flex-1">
@@ -37,29 +48,32 @@ export function HostAnswer({ slide, participants = mockParticipants, onNextSlide
         {hasValidGuesses && (
           <div className="flex flex-col gap-8 items-center">
             <div className="grid grid-cols-1 gap-4 w-full max-w-2xl">
-              {participantsWithDiff.map(({ participant, guess, diff }, index) => (
-                guess !== null && (
-                  <div 
-                    key={participant.participantId}
-                    className={`flex items-center justify-between p-4 rounded-lg ${
-                      index === 0 ? 'bg-green-500 text-white' : 'bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <Avatar
-                        width="2.5rem"
-                        height="2.5rem"
-                        avatarString={participant.avatar}
-                        collectionName={participant.collectionName}
-                      />
-                      <span className="text-2xl font-display">{participant.name}</span>
+              {participantsWithDiff.map(
+                ({ participant, guess, diff }, index) =>
+                  guess !== null && (
+                    <div
+                      key={participant.participantId}
+                      className={`flex items-center justify-between p-4 rounded-lg ${
+                        index === 0 ? 'bg-green-500 text-white' : 'bg-white'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <Avatar
+                          width="2.5rem"
+                          height="2.5rem"
+                          avatarString={participant.avatar}
+                          collectionName={participant.collectionName}
+                        />
+                        <span className="text-2xl font-display">
+                          {participant.name}
+                        </span>
+                      </div>
+                      <div className="text-2xl font-display">
+                        {guess} ({t('closest.difference')}: {diff.toFixed(2)})
+                      </div>
                     </div>
-                    <div className="text-2xl font-display">
-                      {guess} ({t('closest.difference')}: {diff.toFixed(2)})
-                    </div>
-                  </div>
-                )
-              ))}
+                  )
+              )}
             </div>
 
             {winner && (
@@ -84,7 +98,12 @@ export function HostAnswer({ slide, participants = mockParticipants, onNextSlide
         )}
       </div>
 
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
-} 
+}

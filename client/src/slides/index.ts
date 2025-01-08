@@ -1,5 +1,6 @@
 import { Participant, QuestionSlide, QuestionType, Slide, SlideType } from "@/models/Quiz";
 import { LucideIcon } from "lucide-react";
+import { IconType } from "react-icons/lib";
 import * as Info from "./info";
 import * as Score from "./score";
 import * as Lobby from "./lobby";
@@ -17,7 +18,7 @@ import * as Closest from "./question/closest";
 
 interface SlideInfo {
   value: string;
-  icon: LucideIcon;
+  icon: LucideIcon | IconType;
   label: string;
   slideType: SlideType;
   questionType?: QuestionType;

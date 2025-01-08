@@ -159,6 +159,8 @@ function GuestAdvancedView({
       <Button
         onClick={handlePlay}
         disabled={isSubmitting}
+        isInteractive
+        interactiveStyles="w-full"
         className="bg-green-500 text-3xl text-[#fefefe] hover:bg-green-300 py-8 px-12 font-display w-full [&_svg]:!size-5"
       >
         {t('participants:play')}

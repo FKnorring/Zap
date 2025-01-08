@@ -12,8 +12,7 @@ import {
 } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
 import { database } from '@/firebase';
-import { ref, update,serverTimestamp,get } from 'firebase/database';
-
+import { ref, update, serverTimestamp, get } from 'firebase/database';
 
 export interface LatestScore {
   id: string;
@@ -34,15 +33,18 @@ export const useHostLogic = (id: string | undefined) => {
     (participantId: string) => {
       if (!ongoingQuiz) return;
       optimisticUpdate(ongoingQuiz.id, {
-        participants: Object.entries(ongoingQuiz.participants || {}).reduce((acc, [id, participant]) => {
-          if (id === participantId) {
-            return acc;
-          }
-          return {
-            ...acc,
-            [id]: participant,
-          };
-        }, {} as { [key: string]: Participant }),
+        participants: Object.entries(ongoingQuiz.participants || {}).reduce(
+          (acc, [id, participant]) => {
+            if (id === participantId) {
+              return acc;
+            }
+            return {
+              ...acc,
+              [id]: participant,
+            };
+          },
+          {} as { [key: string]: Participant }
+        ),
       });
     },
     [optimisticUpdate, ongoingQuiz]
@@ -76,7 +78,7 @@ export const useHostLogic = (id: string | undefined) => {
   );
 
   const updateScores = async (slide: Slide, showAnswer: boolean) => {
-    if(!ongoingQuiz) return {};
+    if (!ongoingQuiz) return {};
     if (slide.type !== SlideTypes.question) return {};
     const questionSlide = slide as QuestionSlide;
     if (questionSlide.questionType == QuestionTypes.FTA) return {};
@@ -104,7 +106,7 @@ export const useHostLogic = (id: string | undefined) => {
   const handleAddPoints = async (
     pointsData: { participantId: string; awardPoints: number }[],
     showAnswer: boolean,
-    changeSlide?: boolean 
+    changeSlide?: boolean
   ) => {
     const participants = { ...ongoingQuiz!.participants };
 
@@ -118,7 +120,7 @@ export const useHostLogic = (id: string | undefined) => {
         hasAnswered: false,
       };
     });
-    if(changeSlide) {
+    if (changeSlide) {
       await optimisticUpdate(ongoingQuiz!.id, {
         ...ongoingQuiz,
         participants,
@@ -126,13 +128,13 @@ export const useHostLogic = (id: string | undefined) => {
         isShowingCorrectAnswer: false,
       });
     } else {
-    await optimisticUpdate(ongoingQuiz!.id, {
-      ...ongoingQuiz,
-      participants,
-      isShowingCorrectAnswer: showAnswer,
-    });
-  }
-    
+      await optimisticUpdate(ongoingQuiz!.id, {
+        ...ongoingQuiz,
+        participants,
+        isShowingCorrectAnswer: showAnswer,
+      });
+    }
+
     return participants;
   };
 
@@ -151,19 +153,19 @@ export const useHostLogic = (id: string | undefined) => {
             ongoingQuiz.currentSlide - 1
         ) {
           var updatedParticipants = ongoingQuiz.participants;
-          const currentSlide  = getCurrentSlide() as QuestionSlide;
+          const currentSlide = getCurrentSlide() as QuestionSlide;
 
           let newAnswer = {
             answer: [''],
             slideNumber: ongoingQuiz.currentSlide - 1,
             time: new Date().toISOString(),
-          }
-          if(currentSlide.questionType == QuestionTypes.LOCATEIT) {
+          };
+          if (currentSlide.questionType == QuestionTypes.LOCATEIT) {
             newAnswer = {
-              answer: ['-83','160'],
+              answer: ['-83', '160'],
               slideNumber: ongoingQuiz.currentSlide - 1,
               time: new Date().toISOString(),
-            }
+            };
           }
           if (!participant.answers) {
             updatedParticipants[id].answers = [newAnswer];
@@ -236,6 +238,64 @@ export const useHostLogic = (id: string | undefined) => {
         currentSlideTime: time,
       },
       true);
+    }
+  };
+
+  const prevSlide = async () => {
+    if (!ongoingQuiz) return;
+
+    const currentSlide = getCurrentSlide();
+
+    const showAnswer =
+      ongoingQuiz.isShowingCorrectAnswer &&
+      currentSlide?.type == SlideTypes.question &&
+      currentSlide.showCorrectAnswer != ShowCorrectAnswerTypes.never;
+
+    let updatedParticipants = ongoingQuiz.participants;
+
+    if (!ongoingQuiz.isShowingCorrectAnswer) {
+      updatedParticipants = Object.entries(updatedParticipants).reduce(
+        (acc, [id, participant]) => ({
+          ...acc,
+          [id]: {
+            ...participant,
+            tempAnswer: null,
+            hasAnswered: false,
+          },
+        }),
+        {}
+      );
+    }
+
+    const previousSlideIndex = Math.max(0, ongoingQuiz.currentSlide - 2);
+    const previousSlide = ongoingQuiz.quiz.slides[previousSlideIndex];
+
+    if (!previousSlide) return;
+
+    await optimisticUpdate(ongoingQuiz.id ? ongoingQuiz.id : '', {
+      ...ongoingQuiz,
+      isShowingCorrectAnswer: showAnswer,
+      currentSlide: Math.max(1, ongoingQuiz.currentSlide - 1),
+      participants: updatedParticipants,
+      currentSlideTime: showAnswer
+        ? ongoingQuiz.currentSlideTime
+        : (serverTimestamp() as unknown as string),
+    });
+
+    if (!showAnswer) {
+      const timeRef = ref(
+        database,
+        `ongoingQuizzes/${ongoingQuiz.id}/currentSlideTime`
+      );
+      const timeSnap = await get(timeRef);
+      const time = timeSnap.val();
+      optimisticUpdate(
+        ongoingQuiz.id,
+        {
+          currentSlideTime: time,
+        },
+        true
+      );
     }
   };
 
@@ -357,7 +417,7 @@ export const useHostLogic = (id: string | undefined) => {
     };
     checkAnswers();
   }, [ongoingQuiz, allAnswered]);
-  
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (
@@ -380,6 +440,7 @@ export const useHostLogic = (id: string | undefined) => {
     ongoingQuiz,
     getCurrentSlide,
     nextSlide,
+    prevSlide,
     handleAddPoints,
     changeTurn,
     updateSlideUsedAnswers,

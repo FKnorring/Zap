@@ -146,7 +146,7 @@ export default function ParticipantLogic() {
       );
       if (success) {
         removeCookie('participantId');
-        navigate('/play');
+        navigate('/');
       }
     } catch (error) {
       console.error('Error removing participant:', error);

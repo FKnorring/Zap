@@ -34,7 +34,7 @@ export function useSlideSidebar({ slides, activeSlideId, onSlideSelect }: UseSli
     if (!isOverMenu) {
       const timeoutId = window.setTimeout(() => {
         setIsOpen(false);
-      }, 300);
+      }, 600);
       setCloseTimeout(timeoutId);
     }
   };

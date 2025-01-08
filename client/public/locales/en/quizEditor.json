@@ -1,8 +1,8 @@
 {
   "selectSlide": "Select a slide to edit",
-  "slides": "Slides",
-  "questionTypes": "Question Types",
-  "slideTypes": "Slide Types",
+  "slides": "Present",
+  "questionTypes": "Quiz",
+  "slideTypes": "Present",
   "quizName": "Quiz Name",
   "colorScheme": "Color Scheme",
   "backgroundColor": "Background Color",

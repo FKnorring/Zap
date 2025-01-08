@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { InfoIcon } from 'lucide-react';
+import { ArrowLeft, InfoIcon } from 'lucide-react';
 import { ParticipantService } from '@/services/participant';
 import { useNavigate } from 'react-router-dom';
 import { GameShackTitle } from '@/components/GameShackTitle';
@@ -39,6 +39,14 @@ export default function JoinQuiz() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-8 ">
+      <Button
+        onClick={() => navigate('/')}
+        variant={'link'}
+        className="absolute top-0 left-0 mt-4 ml-4 font-display !gap-0"
+      >
+        <ArrowLeft className="w-5 h-5" strokeWidth={3} />
+        <p> {t('general:home')}</p>
+      </Button>
       <LanguageSelect />
       <GameShackTitle className="mb-10" />
       <div>

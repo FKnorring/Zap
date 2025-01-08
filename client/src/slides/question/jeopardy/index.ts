@@ -5,7 +5,7 @@ export * from './Host';
 export * from './HostAnswer';
 export * from './CalculateScore';
 
-import { Grid3X3 } from "lucide-react";
+import { FaBrain } from 'react-icons/fa';
 import { AnswerTypes, QuestionTypes, ShowCorrectAnswerTypes, SlideTypes } from "@/models/Quiz";
 import { nanoid } from "nanoid";
 import { SlideInfo } from "@/slides";
@@ -101,7 +101,7 @@ defaultCategories[4].questions = [
 
 export const Info: SlideInfo = {
   value: 'question:JEOPARDY',
-  icon: Grid3X3,
+  icon: FaBrain,
   label: "Jeopardy",
   slideType: SlideTypes.question,
   questionType: QuestionTypes.JEOPARDY,

@@ -9,11 +9,17 @@ export function HostAnswer({
   participants = [],
   isPreview = false, // Default to false
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: MCQSASlide;
   participants: Participant[];
   isPreview?: boolean;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   const AnswerCount = () => {
     const calculateAnswerCounts = () => {
@@ -112,9 +118,16 @@ export function HostAnswer({
       <div className="bg-white rounded p-6 mb-40">
         <h1 className="text-4xl text-black font-display">{slide.title}</h1>
       </div>
-      <AnswerCount />
-      <CorrectAnswers />
-      <NextSlide onClick={onNextSlide} />
+      <div className=" justify-center w-full flex flex-col mb-20">
+        <AnswerCount />
+        <CorrectAnswers />
+      </div>
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }
