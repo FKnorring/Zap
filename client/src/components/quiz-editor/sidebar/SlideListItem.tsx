@@ -64,7 +64,12 @@ export function SlideListItem({
     >
       <div>
         <div className="flex flex-row space-x-2  text-md  items-center">
-          <slideComponent.Info.icon className="text-black" size={16} />
+          <slideComponent.Info.icon
+            className="text-black"
+            size={16}
+            strokeWidth={3}
+            color={slideComponent.Info.iconColor}
+          />
           <h1 className="font-display text-black ">
             {t(slideComponent.Info.label)}
           </h1>

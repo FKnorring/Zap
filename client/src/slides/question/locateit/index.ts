@@ -12,6 +12,7 @@ import { SlideInfo } from "../..";
 export const Info: SlideInfo = {
   value: 'question:LOCATEIT',
   icon: FaMapMarkedAlt,
+  iconColor: '#4d7c0f',
   label: QuestionTypes.LOCATEIT,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.LOCATEIT,

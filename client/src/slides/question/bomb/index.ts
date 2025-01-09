@@ -13,6 +13,7 @@ import {FaBomb} from 'react-icons/fa';
 export const Info: SlideInfo = {
   value: 'question:BOMB',
   icon: FaBomb,
+  iconColor:"#111827",
   label: 'Ticking time bomb',
   slideType: SlideTypes.question,
   questionType: QuestionTypes.BOMB,

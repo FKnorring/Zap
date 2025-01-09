@@ -102,6 +102,7 @@ defaultCategories[4].questions = [
 export const Info: SlideInfo = {
   value: 'question:JEOPARDY',
   icon: FaBrain,
+  iconColor:"#fb923c",
   label: "Jeopardy",
   slideType: SlideTypes.question,
   questionType: QuestionTypes.JEOPARDY,

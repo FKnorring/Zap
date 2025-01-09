@@ -12,6 +12,7 @@ import { SlideInfo } from '../..';
 export const Info: SlideInfo = {
   value: 'question:RANK',
   icon: FaListOl,
+  iconColor:"#14b8a6",
   label: QuestionTypes.RANK,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.RANK,

@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid'
 export const Info: SlideInfo = {
   value: 'question:MCQSA',
   icon: FaRegDotCircle,
+  iconColor:"#facc15",
   label: QuestionTypes.MCQSA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.MCQSA,

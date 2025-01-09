@@ -77,6 +77,7 @@ function RenderOptions({
               key={option.value}
               label={t(option.label)}
               icon={option.icon}
+              iconColor={option.iconColor}
               onClick={() => {
                 onAddSlide(option.slideType, option.questionType);
                 onCloseMenu?.();

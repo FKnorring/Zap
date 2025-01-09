@@ -19,6 +19,7 @@ import * as Closest from "./question/closest";
 interface SlideInfo {
   value: string;
   icon: LucideIcon | IconType;
+  iconColor?:string,
   label: string;
   slideType: SlideType;
   questionType?: QuestionType;

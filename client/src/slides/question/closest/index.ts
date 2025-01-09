@@ -12,6 +12,7 @@ import { SlideInfo } from '../..';
 export const Info: SlideInfo = {
   value: 'question:CLOSEST',
   icon: FaCrosshairs,
+  iconColor: "#f87171",
   label: QuestionTypes.CLOSEST,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.CLOSEST,

@@ -11,6 +11,7 @@ import { SlideInfo } from "../..";
 export const Info: SlideInfo = {
   value: 'question:FTA',
   icon: FaComment,
+  iconColor: "#60a5fa",
   label: QuestionTypes.FTA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.FTA,

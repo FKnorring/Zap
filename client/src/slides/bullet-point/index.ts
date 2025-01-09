@@ -12,6 +12,7 @@ export * from './HostAnswer';
 export const Info: SlideInfo = {
     value: "bulletPoint",
     icon: ListChecks,
+    iconColor:"#92400e",
     label: "Bullet Points",
     slideType: SlideTypes.bulletPoint,
     defaults: {

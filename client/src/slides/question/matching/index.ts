@@ -12,6 +12,7 @@ import { SlideInfo } from '../..';
 export const Info: SlideInfo = {
   value: 'question:MATCHING',
   icon: FaPuzzlePiece,
+  iconColor:"#8b5cf6",
   label: QuestionTypes.MATCHING,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.MATCHING,

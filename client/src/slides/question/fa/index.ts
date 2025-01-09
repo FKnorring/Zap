@@ -12,6 +12,7 @@ import { SlideInfo } from '../..';
 export const Info: SlideInfo = {
   value: 'question:FA',
   icon: FaTachometerAlt,
+  iconColor:"#e879f9",
   label: QuestionTypes.FA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.FA,
