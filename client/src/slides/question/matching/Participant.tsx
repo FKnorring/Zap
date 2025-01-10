@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { MatchingSlide } from '@/models/Quiz';
 import { DroppableContainer } from '@/slides/_components/dnd';
 import { getColor } from '../base/QuizColors';
+import { useTranslation } from 'react-i18next';
 
 interface MatchingViewProps {
   slide: MatchingSlide;
@@ -18,6 +19,7 @@ interface MatchingViewProps {
 }
 
 export function Participant({ slide, answerQuestion }: MatchingViewProps) {
+  const { t } = useTranslation();
   const [matches, setMatches] = useState<Record<string, string[]>>({});
   const [availableOptions, setAvailableOptions] = useState<string[]>([]);
 
@@ -110,8 +112,8 @@ export function Participant({ slide, answerQuestion }: MatchingViewProps) {
 
           <div className="mt-8 bg-secondary/50 rounded-lg p-2">
             <DroppableContainer
-              id="available-options"
-              label="Available Options"
+              id="Unassigned"
+              label={t('questions:noCategory')}
               matchedOptions={availableOptions}
             />
           </div>

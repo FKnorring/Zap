@@ -20,7 +20,7 @@
   "signUp": "Sign Up",
   "avatarText": "Choose from thousands avatars!",
   "slogan": "Creative, Simple and Unique",
-  "inspotext": "Create unforgettable quizzes and events with Zap!",
+  "inspotext": "Create unforgettable quizzes and events with Zap! Bring your ideas to life with engaging features, seamless customization, and a touch of creativity that sets your experiences apart.",
   "getStarted": "Get Started!",
 
   "stepTitles": {
@@ -34,7 +34,7 @@
     "1": "Your friends can join the fun on any device, just by scanning a QR code or using a link—no apps required!",
     "2": "Follow the action, track the scores, and watch as the tension builds, leading to a dramatic finish and the crowning of a winner."
   },
-  "questionCarouselText": "Some of our question types",
+  "questionCarouselText": "Explore our question types",
   "readmore": "Read more about us!",
   "questionDescriptions": {
     "bomb": "In Ticking Timebomb, players take turns answering questions within a set time. If time runs out, you lose a life. The last player standing wins!",

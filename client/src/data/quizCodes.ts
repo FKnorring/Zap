@@ -1,11 +1,10 @@
 export const quizCodes = [
     "JUMP", "PLAY", "SPIN", "FLIP", "GLOW", 
-    "WAVE", "WHAT", "SNAP", "CLAP", "PINK",
+    "WAVE", "WHAT", "SNAP", "PINK", "FIRE",
     "BEEP", "BOOM", "SLAM", "SKIP", "QUIZ",
-    "RACE", "SWIM", "HOPP", "DILL", "NILS",
-    "SURF", "DUCK", "BARK", "MEOW", "LION",
-    "SNOW", "TOES", "PEAK", "DASH", "YELL",
-    "RIZZ", "JAZZ", "BUZZ", "BEAR", "VIBE",
-    "ZAAP", "ZOOM", "LAVA", "DOOM", "FIRE",
+    "SURF", "DUCK", "BARK", "MEOW", "AURA",
+    "SNOW", "PEAK", "YELL", "ZAAP", "ZOOM",
+    "RIZZ", "JAZZ", "BUZZ", "BEER", "VIBE",
+    "KNOR", "RAMZ", "LISA", "DILL", "NILS",
   ];
   

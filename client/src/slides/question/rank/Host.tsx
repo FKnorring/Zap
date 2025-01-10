@@ -4,6 +4,7 @@ import { SlideContent } from '@/slides/_components/SlideContent';
 import SlideTitleSpecial from '@/slides/_components/SlideTitleSpecial';
 import { getSlideComponents } from '@/slides/utils';
 import { useTranslation } from 'react-i18next';
+import { Smartphone } from 'lucide-react';
 
 export function Host({
   slide,
@@ -32,9 +33,10 @@ export function Host({
       </div>
       <SlideContent content={slide.content} />
       <div></div>
-      <span className="font-display text-6xl mt-32">
+      <span className="font-display text-6xl mt-10">
         {t('lookAtYourScreen')}
       </span>
+      <Smartphone  size={256} color='white' className='mt-10'></Smartphone>
       {slide.imageUrl && (
         <div className="flex justify-center">
           <div className="relative flex items-center justify-center">

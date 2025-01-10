@@ -58,10 +58,11 @@ export function Header() {
 
   const inLobby = location.pathname.endsWith('/lobby');
   const inGame = location.pathname.startsWith('/play');
+  const inEditor = location.pathname.endsWith('/edit');
 
   const [isLargeScreen] = useState(window.innerWidth >= 1024); // Assuming 1024px is the breakpoint for large screens
 
-  if (inLobby && !showHeader) {
+  if (inEditor || (inLobby && !showHeader) || inGame) {
     return null;
   }
 

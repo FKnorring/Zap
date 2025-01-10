@@ -1,6 +1,6 @@
-import { Preview } from './Preview';
 import { InfoSlide } from '@/models/Quiz';
 import NextSlide from '../_components/NextSlide';
+import { Render } from './Render';
 
 export function HostAnswer({
   slide,
@@ -17,7 +17,7 @@ export function HostAnswer({
 }) {
   return (
     <div className="flex-1 flex flex-col">
-      <Preview slide={slide} />
+      <Render slide={slide} />
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here

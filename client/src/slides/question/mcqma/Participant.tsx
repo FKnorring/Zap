@@ -34,11 +34,9 @@ export function Participant({ slide, answerQuestion }: McqmaViewProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full p-6 select-none">
-      <h1 className=" text-3xl lg:text-5xl font-display font-bold text-center justify-center mb-8">
-        {slide.title}
-      </h1>
-      <div className="grid grid-cols-2 gap-6 w-full">
+    <div className="flex flex-col items-center justify-center h-full m-4 select-none">
+     
+      <div className="grid grid-cols-2 gap-4 w-full h-full lg:p-8">
         {slide.options.map((option: Options, index: number) => {
           const isShortText = option.text.length < 10;
 
@@ -51,7 +49,7 @@ export function Participant({ slide, answerQuestion }: McqmaViewProps) {
               style={{
                 backgroundColor: getColor(index),
               }}
-              className={`flex items-center justify-center text-white font-display h-32 w-full rounded-lg ${
+              className={`flex items-center justify-center text-white font-display h-full w-full rounded-lg ${
                 selectedIndexes.includes(index) ? 'ring-4 ring-white' : ''
               }`}
             >
@@ -75,7 +73,7 @@ export function Participant({ slide, answerQuestion }: McqmaViewProps) {
       <button
         onClick={handleSubmit}
         disabled={selectedIndexes.length === 0}
-        className="mt-8 py-4 px-6 text-2xl font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50"
+        className="mt-4 py-4 px-6 text-2xl font-bold text-white bg-green-500 rounded-lg hover:bg-green-600 disabled:opacity-50"
       >
         {t('participants:submitAnswer')}
       </button>

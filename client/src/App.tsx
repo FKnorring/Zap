@@ -8,7 +8,6 @@ import { TutorialProvider } from './contexts/Tutorial/context';
 import { TutorialOverlay } from './components/tutorial/TutorialOverlay';
 import NoSleepComponent from './NoSleepComponent';
 
-
 const environment = import.meta.env.VITE_ENVIRONMENT;
 
 const uri =
@@ -18,7 +17,7 @@ const uri =
 
 function App() {
   return (
-    <div className="min-h-dvh bg-background bg-[url('/assets/bg-mobile.svg')] md:bg-[url('/assets/bg-desktop.svg')] bg-cover bg-no-repeat bg-center text-white">
+    <div className="min-h-dvh inset-0 fixed bg-background bg-[url('/assets/bg-mobile.svg')] md:bg-[url('/assets/bg-desktop.svg')] bg-cover bg-no-repeat bg-center text-white">
       <main className="min-h-dvh max-h-dvh flex flex-col relative">
         <NoSleepComponent />
         <KindeProvider

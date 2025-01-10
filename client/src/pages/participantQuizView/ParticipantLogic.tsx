@@ -12,6 +12,8 @@ import { Participant, QuestionTypes, Slide } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
 import Spinner from '@/components/Spinner';
 import ParticipantMenu from './components/ParticipantMenu';
+import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
+import { QuizSettings } from '@/models/Quiz';
 
 function QuizView({
   questions,
@@ -86,12 +88,15 @@ function QuizView({
 }
 
 export default function ParticipantLogic() {
-  const { quizCode } = useParams();
+  var { quizCode } = useParams();
+  quizCode = quizCode?.toUpperCase();
+
   const [participantId, setParticipantId] = useState<string | undefined>(
     undefined
   );
   const [cookies, setCookie, removeCookie] = useCookies(['participantId']);
   const [questions, setQuestions] = useState<Slide[]>();
+  const [quizSettings, setQuizSettings] = useState<QuizSettings>();
   const navigate = useNavigate();
 
   const { currentSlide, participantData, showAnswer, turn, currentSlideTime } =
@@ -123,6 +128,8 @@ export default function ParticipantLogic() {
 
             const slides = await ParticipantService.getQuizSlides(quizCode);
             setQuestions(slides);
+            const settings = await ParticipantService.getQuizSettings(quizCode);
+            setQuizSettings(settings);
           } else {
             // Cookie corresponds to participant in different quiz, remove it
             removeCookie('participantId');
@@ -212,7 +219,11 @@ export default function ParticipantLogic() {
   };
 
   if (!participantId || !participantData) {
-    return <CreateParticipant handleAddParticipant={handleAddParticipant} />;
+    return (
+      <>
+        <CreateParticipant handleAddParticipant={handleAddParticipant} />
+      </>
+    );
   }
 
   return (
@@ -245,6 +256,17 @@ export default function ParticipantLogic() {
           turn={turn}
           currentSlideTime={currentSlideTime}
         />
+        {/* Render background*/}
+        {quizSettings && (
+          <QuizBackground
+            backgroundColor={quizSettings.backgroundColor}
+            primaryColor={quizSettings.primaryColor}
+            secondaryColor={quizSettings.secondaryColor}
+            style={questions && questions[currentSlide - 1]?.backgroundStyle}
+            className="fixed inset-0 h-screen w-screen z-[-1] object-cover h-dvh"
+            isDynamic
+          />
+        )}
       </div>
 
       {/* Bottom: Team info */}

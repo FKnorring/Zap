@@ -1,6 +1,12 @@
-import { BulletPointSlide } from "@/models/Quiz";
-import { Render } from "./Render";
+import { BulletPointSlide } from '@/models/Quiz';
+import { Render } from './Render';
 
-export function Preview({ slide }: { slide: BulletPointSlide }) {
-    return <Render slide={slide} />;
-} 
+export function Preview({
+  slide,
+  onSlideUpdate,
+}: {
+  slide: BulletPointSlide;
+  onSlideUpdate: (slide: BulletPointSlide) => void;
+}) {
+  return <Render slide={slide} onSlideUpdate={onSlideUpdate} isEditable />;
+}

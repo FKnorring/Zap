@@ -1,5 +1,4 @@
 import type { Slide, SlideTypes, QuestionTypes } from '@/models/Quiz';
-import { SidebarHeader } from './SidebarHeader';
 import { SlideList } from './SlideList';
 import { SlideSidebarProvider } from './SlideSidebarContext';
 
@@ -29,8 +28,7 @@ interface SlideSidebarProps {
 export function SlideSidebar(props: SlideSidebarProps) {
   return (
     <SlideSidebarProvider {...props}>
-      <aside className="min-w-[200px] bg-white h-full border-r  shadow-md flex flex-col overflow-hidden">
-        <SidebarHeader />
+      <aside className=" bg-white h-full border-r  shadow-md flex flex-col overflow-hidden">
         <SlideList />
       </aside>
     </SlideSidebarProvider>

@@ -10,7 +10,7 @@ import {
   serverTimestamp,
 } from 'firebase/database';
 import { database } from '@/firebase';
-import { Participant, Slide } from '@/models/Quiz';
+import { Participant, QuizSettings, Slide } from '@/models/Quiz';
 import { nanoid } from 'nanoid';
 
 
@@ -212,6 +212,13 @@ export const ParticipantService = {
     const slidesSnap = await get(slidesRef);
     return slidesSnap.exists() ? slidesSnap.val() : [];
   },
+
+  async getQuizSettings(quizCode: string): Promise<QuizSettings> {
+    const settingsRef = ref(database, `ongoingQuizzes/${quizCode}/quiz/settings`);
+    const settingsSnap = await get(settingsRef);
+    return settingsSnap.exists() ? settingsSnap.val() : null;
+  }
+
 };
 
 // Custom Hook: useGameStatus

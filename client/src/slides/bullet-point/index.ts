@@ -14,6 +14,7 @@ export const Info: SlideInfo = {
     icon: ListChecks,
     iconColor:"#92400e",
     label: "Bullet Points",
+    interactivePreview: true,
     slideType: SlideTypes.bulletPoint,
     defaults: {
         points: [],

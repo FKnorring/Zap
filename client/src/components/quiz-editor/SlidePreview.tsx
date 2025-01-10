@@ -1,8 +1,8 @@
-import type { Slide } from "@/models/Quiz";
-import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
-import { QuizBackground } from "./QuizBackground";
-import { getSlideComponents } from "@/slides/utils";
+import type { Slide } from '@/models/Quiz';
+import { cn } from '@/lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import { QuizBackground } from './QuizBackground';
+import { getSlideComponents } from '@/slides/utils';
 
 interface SlidePreviewProps {
   slide: Slide;
@@ -21,19 +21,19 @@ const DESKTOP_HEIGHT = 1080;
 const PHONE_WIDTH = 375;
 const PHONE_HEIGHT = 812;
 
-export function   SlidePreview({
+export function SlidePreview({
   slide,
   className,
-  backgroundColor = "#000B58",
-  primaryColor = "#006a67",
-  secondaryColor = "#fff4b7",
-  whichPreview = "Preview",
+  backgroundColor = '#001220',
+  primaryColor = '#FBAE3C',
+  secondaryColor = '#498e77',
+  whichPreview = 'Host',
   onSlideUpdate,
 }: SlidePreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  const isPhoneView = whichPreview === "Participant";
+  const isPhoneView = whichPreview === 'Participant';
 
   useEffect(() => {
     const updateScale = () => {
@@ -71,9 +71,9 @@ export function   SlidePreview({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full overflow-hidden",
-        isPhoneView ? "aspect-[9/16]" : "aspect-video",
-        !interactivePreview && "pointer-events-none",
+        'relative w-full overflow-hidden',
+        isPhoneView ? 'aspect-[9/16]' : 'aspect-video',
+        !interactivePreview && 'pointer-events-none',
         className
       )}
     >

@@ -117,7 +117,7 @@ export function Participant({ slide, answerQuestion }: RankViewProps) {
       <div className="flex flex-col items-center justify-center h-screen w-full p-4">
         <div className="flex flex-col items-center w-full max-w-md space-y-4">
           <div className="bg-white items-center rounded text-wrap p-3 max-w-4/5 flex flex-row space-x-1">
-            <SlideComponent.Info.icon className="w-8 h-8 text-black" />
+            <SlideComponent.Info.icon className="w-8 h-8 text-black mr-2" />
             <h1 className="text-3xl text-black font-display">{slide.title}</h1>
           </div>
           <div className="flex flex-col w-full space-y-3 pb-5">

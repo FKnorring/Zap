@@ -90,11 +90,10 @@ export function Participant({
 
   // Question UI
   return (
-    <div className="flex flex-col items-center justify-center h-full p-6">
-      <h1 className="lg:text-5xl text-4xl font-display font-bold text-center mb-8">
-        {slide.title}
-      </h1>
-      <div className="grid grid-cols-2 gap-6 w-full max-w-3xl">
+    <div className="flex flex-col items-center justify-center h-full ">
+      
+      
+      <div className="grid grid-cols-2 p-4 gap-4 w-full h-full">
         {slide.options.map((option: Options, index: number) => (
           <Button
             key={option.id}
@@ -105,7 +104,7 @@ export function Participant({
               backgroundColor: getColor(index),
               cursor: 'pointer',
             }}
-            className="flex items-center justify-center text-2xl text-white font-display h-32 rounded-lg hover:ring-4 hover:ring-white"
+            className="  flex items-center justify-center text-md lg:text-2xl text-white font-display h-full  "
           >
             {option.text}
           </Button>

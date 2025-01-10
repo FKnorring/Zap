@@ -11,7 +11,7 @@ export default function SlideTitleSpecial({
   const Icon = icon;
   return (
     <div className="flex flex-row items-center space-x-1">
-      <Icon className="w-16 h-16 text-black" />
+      <Icon className="w-16 h-16 text-black mr-4" />
       <h1 className="text-7xl text-black font-display">{title}</h1>
     </div>
   );

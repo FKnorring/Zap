@@ -27,8 +27,9 @@
   "del": "Del",
   "noAnswer": "No answers available",
   "addAnswer": "Add Answer",
-  "lookAtYourScreen": "Look at your screen and rank the options",
+  "lookAtYourScreen": "Look at your screen and rank the options!",
   "rankAnswers": "Rank Answers",
+  "noCategory": "None of the others",
   "add": "Add",
   "embededYT": "Embed YouTube Video",
   "embeded": "Embed",
@@ -38,6 +39,10 @@
   "closest": {
     "enterGuess": "Enter your guess",
     "submitGuess": "Submit Guess",
-    "difference": "Difference"
+    "difference": "Difference",
+    "closest": "Closest!",
+    "2nd": "2nd",
+    "3rd": "3rd",
+    "last": "Last 💀"
   }
 }

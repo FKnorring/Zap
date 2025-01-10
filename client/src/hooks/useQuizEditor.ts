@@ -17,7 +17,7 @@ import { nanoid } from 'nanoid';
 import { useTranslation } from 'react-i18next';
 
 const DEFAULT_TIME_LIMIT = 0;
-const SAVE_ON_N_ACTIONS = 50;
+const SAVE_ON_N_ACTIONS = 5000;
 const SAVE_ON_LAST_ACTION = 30000; // 30 seconds
 
 export function useQuizEditor(quizId: string | undefined) {

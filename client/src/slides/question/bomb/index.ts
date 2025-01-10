@@ -16,6 +16,7 @@ export const Info: SlideInfo = {
   iconColor:"#111827",
   label: 'Ticking time bomb',
   slideType: SlideTypes.question,
+  slideState: "Waiting",
   questionType: QuestionTypes.BOMB,
   interactivePreview: true,
   defaults: { points: 1000, initialTime: 30, hearts: 3 } as Partial<BombSlide>, // Default to an empty object or provide appropriate defaults

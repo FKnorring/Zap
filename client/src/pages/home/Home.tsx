@@ -84,9 +84,9 @@ function Home() {
               {t('homepage:inspotext')}
             </h3>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 flex flex-col items-center justify-center mb-4">
             <Button
-              className="font-display lg:text-4xl text-2xl m-4  p-8  bg-green-500 text-white hover:bg-white hover:text-black hover:border-black hover:border-2"
+              className="font-display lg:text-4xl text-2xl mb-4 mt-4  p-8  bg-green-500 border-2 boarder-green-500 text-white hover:bg-white hover:text-black hover:border-black hover:border-2"
               size="lg"
               isInteractive
               onClick={() => register()}
@@ -97,7 +97,7 @@ function Home() {
         </div>
 
         {/* Container for Title and Carousel */}
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full ">
           <QuestionCarousel />;
         </div>
 

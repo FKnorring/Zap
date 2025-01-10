@@ -15,5 +15,6 @@ export const Info: SlideInfo = {
     iconColor:"#64748b",
     label: "Information Slide",
     slideType: SlideTypes.info,
-    defaults: {}
+    defaults: {},
+    interactivePreview: true,
 } as const;

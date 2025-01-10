@@ -64,6 +64,7 @@ export interface OngoingQuiz {
   isShowingCorrectAnswer: boolean;
   currentSlide: number;
   currentSlideTime: string;
+  slideState?: string;
   quiz: Quiz;
   quizId: string;
   quizHost: string;

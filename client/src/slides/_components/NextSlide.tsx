@@ -48,7 +48,7 @@ export default function NextSlide({
   };
 
   return (
-    <div className="absolute bottom-4 right-4 flex items-center gap-4 border-2 border-primary bg-primary text-background text-xl rounded-md p-2">
+    <div className="absolute z-2 bottom-4 right-4 flex items-center gap-4 border-2 border-primary bg-primary text-background text-xl rounded-md p-2">
       {/* Navigation Button */}
       <button
         onClick={onPrev}

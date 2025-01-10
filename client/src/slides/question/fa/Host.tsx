@@ -16,6 +16,7 @@ export function Host({
   onNextSlide,
   onPrevSlide,
   endQuiz,
+  answerTempQuestion,
   quizCode,
 }: {
   slide: FASlide;
@@ -23,6 +24,7 @@ export function Host({
   onNextSlide: () => void;
   onPrevSlide: () => void;
   endQuiz: (quizCode: string) => Promise<boolean>;
+  answerTempQuestion: (participantId: string, quizCode: string) => void;
   quizCode: string;
 }) {
   const [participantsQueue, setParticipantsQueue] = useState<Participant[]>([]);
@@ -106,17 +108,14 @@ export function Host({
     });
   }, [participants]);
 
-  function moveFirstParticipantToLast() {
+
+
+  function removeFromQueue(participantId: string) {
+    answerTempQuestion
     setParticipantsQueue((currentQueue) => {
-      if (currentQueue.length > 1) {
-        const updatedQueue = [...currentQueue];
-        const firstParticipant = updatedQueue.shift();
-        if (firstParticipant) {
-          updatedQueue.push(firstParticipant);
-        }
-        return updatedQueue;
-      }
-      return currentQueue;
+      return currentQueue.filter(
+        (participant) => participant.participantId !== participantId
+      );
     });
   }
 
@@ -179,11 +178,13 @@ export function Host({
                   <Button
                     variant="ghost"
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
-                    onClick={() => moveFirstParticipantToLast()}
+                    onClick={() => removeFromQueue(participantsQueue[0].participantId)}
                   >
                     <X />
                   </Button>
-                  <h1 className="text-1xl font-display">{t('wrongAnswer')}</h1>
+                  <h1 className="text-1xl font-display mt-2">
+                    {t('wrongAnswer')}
+                  </h1>
                 </div>
               )}
               <div className="flex flex-col items-center justify-center p-4 rounded-lg animate-[zoom-in_1s_ease-in-out] ">
@@ -221,7 +222,9 @@ export function Host({
                   >
                     <Check />
                   </Button>
-                  <h1 className="text-1xl font-display">{t('rightAnswer')}</h1>
+                  <h1 className="text-1xl font-display mt-2">
+                    {t('rightAnswer')}
+                  </h1>
                 </div>
               )}
             </div>

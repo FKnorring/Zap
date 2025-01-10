@@ -129,6 +129,8 @@ export interface BombSlide extends QuestionSlideBase {
   questionType: QuestionTypes.BOMB,
   answerType: AnswerTypes.bomb,
   initialTime: number,
+  gameStarted: boolean;
+  deadParticipantsIds: string[]
   hearts: number,
   participantHearts: { participantId: string, hearts: number }[]
   id: string;
