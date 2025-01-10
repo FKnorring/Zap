@@ -22,6 +22,7 @@
   "correct": "Correct!",
   "wrong": "Wrong!",
   "almost": "Almost!",
+  "bad": "Not very good...",
   "answerStreak": "Answerstreak: ",
   "lostStreak": "Lost a streak of: ",
   "submitAnswer": "Submit answer",

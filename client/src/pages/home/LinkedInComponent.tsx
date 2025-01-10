@@ -9,11 +9,14 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-function LinkedInComponent() {
-  const { t } = useTranslation();
+interface LinkedInComponentProps {
+  readMore: boolean;
+}
 
+function LinkedInComponent({ readMore }: LinkedInComponentProps) {
+  const { t } = useTranslation();
   return (
-    <div className="hidden lg:flex flex-col mt-4 items-center justify-center">
+    <div className="flex flex-col mt-4 items-center justify-center ">
       <div className="text-center mb-6 ">
         <h1 className="text-3xl font-display mb-4 text-gray-800">
           {t('about:who')}
@@ -27,7 +30,7 @@ function LinkedInComponent() {
       <h2 className="text-center text-3xl  font-display mb-6 text-gray-800">
         {t('about:team')}
       </h2>
-      <div className="flex-1 p-6 rounded-lg bg-[#F8F8F8]">
+      <div className="flex-1 p-6 rounded-lg bg-[#F8F8F8] ">
         <div className="flex flex-row gap-6 justify-center items-center w-full">
           {[
             {
@@ -58,12 +61,29 @@ function LinkedInComponent() {
           ].map((person, index) => (
             <div
               key={index}
-              className="flex flex-col items-center text-center bg-[#F9F8FE] p-8 rounded-lg shadow-md w-[280px] h-[280px]" // Fixed width and height
+              className="
+                hover:scale-y-105 
+                hover:scale-x-105 
+                flex 
+                flex-col 
+                items-center 
+                text-center 
+                bg-[#F9F8FE] 
+                p-6 
+                rounded-lg 
+                shadow-md 
+                w-[220px] 
+                h-[240px] 
+                max-w-[240px] 
+                transition 
+                duration-300 
+                ease-in-out
+              "
             >
               <img
                 src={person.src}
                 alt={person.name}
-                className="w-32 h-32 rounded-full shadow-lg mb-4 object-cover mx-auto"
+                className="w-28 h-28 rounded-full shadow-lg mb-4 object-cover mx-auto"
               />
               <div className="flex flex-col justify-between items-center h-full">
                 {' '}
@@ -83,16 +103,18 @@ function LinkedInComponent() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-8">
-          <Link to="/about">
-            <Button
-              variant={location.pathname === '/about' ? 'default' : 'ghost'}
-              className=" mb-5 bg-primary p-4 text-2xl font-display text-gray-800"
-            >
-              {t('homepage:readmore')}
-            </Button>
-          </Link>
-        </div>
+        {readMore && (
+          <div className="text-center mt-8">
+            <Link to="/about">
+              <Button
+                variant={location.pathname === '/about' ? 'default' : 'ghost'}
+                className="mb-5 bg-primary p-4 text-2xl font-display text-gray-800"
+              >
+                {t('homepage:readmore')}
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

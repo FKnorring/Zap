@@ -4,7 +4,7 @@ import React, { Suspense } from 'react';
 import Spinner from '@/components/Spinner';
 import { useTutorialTrigger } from '@/hooks/useTutorialTrigger';
 
-const About = React.lazy(() => import('../pages/About'));
+const About = React.lazy(() => import('../pages/about/About'));
 const Home = React.lazy(() => import('../pages/home/Home'));
 const Tools = React.lazy(() => import('../pages/Tools'));
 const Quizzes = React.lazy(() => import('../pages/Quizzes'));

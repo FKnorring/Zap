@@ -24,7 +24,7 @@ const AvatarCarousel: React.FC<AvatarCarouselProps> = ({ avatars }) => {
           animate={{ x: ['0%', '-100%'] }}
           transition={{
             repeat: Infinity,
-            duration: 300, // Control scroll speed
+            duration: 450, // Control scroll speed
             ease: 'linear',
           }}
         >

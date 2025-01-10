@@ -29,7 +29,8 @@ export default function ParticipantCorrect({ children, participant }: Props) {
 
   function getAnswerState() {
     if (latestScore === 0) return 'incorrect';
-    if (latestScore < 500) return 'partial';
+    if (latestScore < 500 && latestScore > 250) return 'partial';
+    if (latestScore < 250) return 'bad';
     return 'correct';
   }
 
@@ -64,6 +65,13 @@ export default function ParticipantCorrect({ children, participant }: Props) {
       bgColor: 'bg-yellow-500',
       icon: <AlertCircle width={70} height={70} />,
       title: t('almost'),
+      message: `${t('answerStreak')} ${streak}`,
+      quote: `+ ${latestScore}`,
+    },
+    bad: {
+      bgColor: 'bg-orange-500',
+      icon: <AlertCircle width={70} height={70} />,
+      title: t('bad'),
       message: `${t('answerStreak')} ${streak}`,
       quote: `+ ${latestScore}`,
     },

@@ -13,7 +13,24 @@ const HowItWorks = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="space-y-16">
           {/* Step 1 */}
-          <div className="relative flex items-center justify-between space-x-24  rounded-lg  p-8 bg-blue-200">
+          <div
+            className="
+  relative 
+  flex 
+  items-center 
+  justify-between 
+  space-x-24 
+  rounded-lg  
+  p-8 
+  bg-blue-200 
+  transition 
+  transform 
+  duration-300 
+  ease-in-out 
+  hover:scale-105 
+  hover:shadow-lg
+"
+          >
             {/* Number Above the Card Box */}
 
             {/* Card Box with Title and Text */}
@@ -45,7 +62,24 @@ const HowItWorks = () => {
             </div>
           </div>
 
-          <div className="relative flex items-center justify-between space-x-24  rounded-lg  p-8 bg-violet-200">
+          <div
+            className="
+  relative 
+  flex 
+  items-center 
+  justify-between 
+  space-x-24 
+  rounded-lg  
+  p-8 
+  bg-violet-200 
+  transition 
+  transform 
+  duration-300 
+  ease-in-out 
+  hover:scale-105 
+  hover:shadow-lg
+"
+          >
             {/* Number Above the Card Box */}
 
             {/* Card Box with Title and Text */}
@@ -77,7 +111,24 @@ const HowItWorks = () => {
           </div>
 
           {/* Step 3 */}
-          <div className="relative flex items-center justify-between space-x-24  rounded-lg  p-8 bg-red-100">
+          <div
+            className="
+  relative 
+  flex 
+  items-center 
+  justify-between 
+  space-x-24 
+  rounded-lg  
+  p-8 
+  bg-red-200 
+  transition 
+  transform 
+  duration-300 
+  ease-in-out 
+  hover:scale-105 
+  hover:shadow-lg
+"
+          >
             {/* Number Above the Card Box */}
 
             {/* Card Box with Title and Text */}

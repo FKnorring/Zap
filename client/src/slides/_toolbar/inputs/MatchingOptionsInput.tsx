@@ -34,9 +34,20 @@ export function MatchingOptionsInput({
 
   const addOption = (option: string) => {
     if (option.trim() === '') return;
-    updateSlide({
-      options: [...slide.options, option],
-    });
+    // Automatically add the option to the "None of the Others" label if not already assigned
+    const noneOfTheOthersLabel = slide.labels.find((label) => label.text === 'None of the Others');
+    if (!noneOfTheOthersLabel) {
+      updateSlide({
+        labels: [
+          ...slide.labels,
+          { id: Date.now().toString(), text: 'None of the Others', correctOptions: [option] },
+        ],
+      });
+    } else {
+      updateSlide({
+        options: [...slide.options, option],
+      });
+    }
   };
 
   const removeOption = (optionToRemove: string) => {
@@ -44,9 +55,7 @@ export function MatchingOptionsInput({
       options: slide.options.filter((opt) => opt !== optionToRemove),
       labels: slide.labels.map((label) => ({
         ...label,
-        correctOptions: label.correctOptions.filter(
-          (opt) => opt !== optionToRemove
-        ),
+        correctOptions: label.correctOptions.filter((opt) => opt !== optionToRemove),
       })),
     });
   };
@@ -58,9 +67,7 @@ export function MatchingOptionsInput({
         if (label.id !== labelId && label.correctOptions?.includes(option)) {
           return {
             ...label,
-            correctOptions: label.correctOptions?.filter(
-              (opt) => opt !== option
-            ),
+            correctOptions: label.correctOptions?.filter((opt) => opt !== option),
           };
         }
         // Then toggle it for the current label
@@ -75,6 +82,33 @@ export function MatchingOptionsInput({
     });
   };
 
+  const addLabel = (labelText: string) => {
+    // Ensure "None of the Others" exists
+    const noneOfTheOthersLabel = slide.labels.find((label) => label.text === 'None of the Others');
+    if (!noneOfTheOthersLabel && labelText !== 'None of the Others') {
+      updateSlide({
+        labels: [
+          ...slide.labels,
+          {
+            id: Date.now().toString(),
+            text: 'None of the Others',
+            correctOptions: [],
+          },
+        ],
+      });
+    }
+    updateSlide({
+      labels: [
+        ...slide.labels,
+        {
+          id: Date.now().toString(),
+          text: labelText,
+          correctOptions: [],
+        },
+      ],
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -85,6 +119,7 @@ export function MatchingOptionsInput({
               <Input
                 value={label.text}
                 onChange={(e) => {
+                  if (label.text === 'None of the Others') return; // Prevent editing special label
                   updateSlide({
                     labels: slide.labels.map((l) =>
                       l.id === label.id ? { ...l, text: e.target.value } : l
@@ -92,18 +127,21 @@ export function MatchingOptionsInput({
                   });
                 }}
                 placeholder="Label"
+                disabled={label.text === 'None of the Others'} // Prevent editing special label
               />
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={() => {
-                  updateSlide({
-                    labels: slide.labels.filter((l) => l.id !== label.id),
-                  });
-                }}
-              >
-                Del
-              </Button>
+              {label.text !== 'None of the Others' && (
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => {
+                    updateSlide({
+                      labels: slide.labels.filter((l) => l.id !== label.id),
+                    });
+                  }}
+                >
+                  Del
+                </Button>
+              )}
             </div>
             <div className="space-y-1">
               <Popover>
@@ -124,8 +162,7 @@ export function MatchingOptionsInput({
                         key={option}
                         className={cn(
                           'flex items-center space-x-2 p-2 cursor-pointer hover:bg-accent',
-                          label.correctOptions?.includes(option) &&
-                            'bg-green-100'
+                          label.correctOptions?.includes(option) && 'bg-green-100'
                         )}
                         onClick={() => toggleOptionForLabel(label.id, option)}
                       >
@@ -154,16 +191,7 @@ export function MatchingOptionsInput({
             disabled={!canAddLabel}
             onClick={() => {
               if (newLabel.trim() !== '') {
-                updateSlide({
-                  labels: [
-                    ...slide.labels,
-                    {
-                      id: Date.now().toString(),
-                      text: newLabel,
-                      correctOptions: [],
-                    },
-                  ],
-                });
+                addLabel(newLabel);
                 setNewLabel('');
               }
             }}
@@ -174,7 +202,7 @@ export function MatchingOptionsInput({
       </div>
 
       <div className="space-y-2">
-        <Label>{t("availableOptions")}</Label>
+        <Label>{t('options')}</Label>
         {slide.options.map((option, index) => (
           <div key={index} className="flex items-center space-x-2">
             <Input
@@ -224,3 +252,4 @@ export function MatchingOptionsInput({
     </div>
   );
 }
+  

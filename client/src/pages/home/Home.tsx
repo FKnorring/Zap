@@ -29,7 +29,7 @@ const generateRandomString = (length: number): string => {
 
 // Generate 50 random strings of length 10
 const randomStrings = Array.from({ length: 50 }, () =>
-  generateRandomString(15)
+  generateRandomString(250)
 );
 
 const collectionNames = [
@@ -43,15 +43,13 @@ const collectionNames = [
 const generateRandomAvatarData = (): AvatarData[] => {
   const avatarData: AvatarData[] = [];
 
-  for (let i = 0; i < 50; i++) {
-    const randomString = randomStrings[i];
-    const collectionIndex = i % collectionNames.length; // This will iterate through the 4 collections
-    const randomCollection = collectionNames[collectionIndex];
-
-    avatarData.push({
-      avatarString: randomString,
-      collectionName: randomCollection,
-    });
+  for (const randomString of randomStrings) {
+    for (const collectionName of collectionNames) {
+      avatarData.push({
+        avatarString: randomString,
+        collectionName: collectionName,
+      });
+    }
   }
 
   return avatarData;
@@ -120,8 +118,8 @@ function Home() {
       </div>
 
       <>
-        <div className="w-full hidden lg:block">
-          <LinkedInComponent />
+        <div className="w-full overflow-x-auto hidden lg:block">
+          <LinkedInComponent readMore={true} />
         </div>
 
         <div className="w-full block lg:hidden">

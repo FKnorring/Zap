@@ -21,6 +21,16 @@ export function HostAnswer({
   endQuiz: (quizCode: string) => Promise<boolean>;
   quizCode: string;
 }) {
+  if (!slide || !slide.options || !slide.labels) {
+    console.error('Invalid slide data:', slide);
+    return <div>Error: Slide data is missing or invalid</div>;
+  }
+
+  if (!participants) {
+    console.error('Participants data is missing');
+    return <div>Error: Participants data is missing</div>;
+  }
+
   const unAssignedOptions = slide.options.filter(
     (option) =>
       !slide.labels.some((label) => label?.correctOptions?.includes(option))

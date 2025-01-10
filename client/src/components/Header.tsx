@@ -76,9 +76,9 @@ export function Header() {
           inGame && 'hidden'
         )}
       >
-        <div className="container flex h-16 items-center px-1 overflow-hidden">
-          <div className={cn('mr-0 md:flex w-full', inGame && 'hidden')}>
-            <nav className="flex items-center space-x-6 font-medium w-full justify-between">
+        <div className=" flex h-16 items-center px-1 overflow-hidden">
+          <div className={cn('mr-0 ml-2 md:flex w-full', inGame && 'hidden')}>
+            <nav className=" flex items-center space-x-6 font-medium w-full justify-between">
               <Link
                 to="/"
                 className="flex items-center gap-2 text-2xl font-display"

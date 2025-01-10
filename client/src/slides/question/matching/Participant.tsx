@@ -112,7 +112,7 @@ export function Participant({ slide, answerQuestion }: MatchingViewProps) {
 
           <div className="mt-8 bg-secondary/50 rounded-lg p-2">
             <DroppableContainer
-              id="Unassigned"
+              id="available-options"
               label={t('questions:noCategory')}
               matchedOptions={availableOptions}
             />

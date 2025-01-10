@@ -20,7 +20,7 @@
   "signUp": "Sign Up",
   "avatarText": "Choose from thousands avatars!",
   "slogan": "Creative, Simple and Unique",
-  "inspotext": "Create unforgettable quizzes and events with Zap! Bring your ideas to life with engaging features, seamless customization, and a touch of creativity that sets your experiences apart.",
+  "inspotext": "Challenge your friends' knowledge with exciting formats—Are you a Geography Giant? Locate It. Math Master? Snipe the Number. Memory Monarch? Ticking Time Bomb. Quick Thinker? Fastest on the Buzzer. With Zap, you can show off your expertise, make your knowledge shine, and create the ultimate quiz experience.",
   "getStarted": "Get Started!",
 
   "stepTitles": {
@@ -40,8 +40,8 @@
     "bomb": "In Ticking Timebomb, players take turns answering questions within a set time. If time runs out, you lose a life. The last player standing wins!",
     "locateit": "Think you know geography? Pin the right location on the world map! Choose from various difficulty levels, ranging from landmarks to precise locations, and test your knowledge with different settings!",
     "matching": "In Meet Your Match, players try to match different options to labels. The player with the most correct matches wins!",
-    "fastest": "In Fastest, players try to be the first to answer a question. The first player to answer correctly wins!",
-    "rank": "In Rank, players rank a list of items in the correct order. The player with the most correct rankings wins!",
+    "fastest": "Players race to answer correctly. The first to answer wins!",
+    "rank": "Players rank a list of items in the correct order. The player with the most correct rankings wins!",
     "jeopardy": "In Jeopardy, players answer questions to earn points. The player with the most points at the end wins!"
   }
 }

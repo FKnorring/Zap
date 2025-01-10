@@ -27,16 +27,17 @@ export function Host({
           <div
             key={label.id}
             style={{ backgroundColor: getColor(idx) }}
-            className="p-8 rounded-lg flex items-center justify-center min-w-96 w-fit"
+            className="p-8 rounded-full flex items-center justify-center min-w-96 w-fit"
           >
             <h3 className="text-7xl font-bold font-display">{label.text}</h3>
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-center">
-        <Smartphone size={256} color="white" className="mt-10"></Smartphone>'
+      <div className="flex flex-col items-center justify-center">
+        <h1 className='text-2xl font-display mt-4'>Look at your phone!</h1>
+        <Smartphone size={128} color="white" className="mt-4"></Smartphone>
       </div>
-      '
+      
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here
