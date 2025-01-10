@@ -64,8 +64,8 @@ function Home() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-start overflow-auto overflow-x-hidden h-screen w-full bg-[#F8F8F8]">
-      <div className="flex-1 flex flex-col items-center justify-start mt-10 w-full">
-        {/* "Zap!" text */}
+      <div className="flex-1 flex flex-col items-center justify-start mt-5 w-full">
+        {/* "Zap!" text */} 
         <div className="flex-1 w-full sm:w-4/5">
           <div className="flex items-center justify-center gap-4">
             <WiggleText
@@ -123,7 +123,7 @@ function Home() {
         </div>
 
         <div className="w-full block lg:hidden">
-          <LinkedInPhone />
+          <LinkedInPhone readMore={true} />
         </div>
       </>
 

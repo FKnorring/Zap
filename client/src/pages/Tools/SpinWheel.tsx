@@ -6,13 +6,16 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Trash2 } from 'lucide-react';
-import { DynamicInputList, InputItem } from '@/components/ui/dynamic-input-list';
+import {
+  DynamicInputList,
+  InputItem,
+} from '@/components/ui/dynamic-input-list';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import { useTools } from '@/contexts/Tools/context';
 
 const COLORS = [
@@ -36,17 +39,22 @@ interface WheelItem extends InputItem {
 
 export default function SpinWheel() {
   const { t } = useTranslation();
-  const { showAdvanced, setShowAdvanced, currentItems, setCurrentItems } = useTools();
+  const { showAdvanced, setShowAdvanced, currentItems, setCurrentItems } =
+    useTools();
   const [wheelItems, setWheelItems] = useState<WheelItem[]>(() => {
     if (currentItems.length > 0) {
       return currentItems.map((item, index) => ({
         ...item,
-        percentage: item.text ? 100 / currentItems.filter(i => i.text !== '').length : 0,
+        percentage: item.text
+          ? 100 / currentItems.filter((i) => i.text !== '').length
+          : 0,
         color: COLORS[index % COLORS.length],
-        used: false
+        used: false,
       }));
     }
-    return [{ id: '1', text: '', percentage: 100, color: COLORS[0], used: false }];
+    return [
+      { id: '1', text: '', percentage: 100, color: COLORS[0], used: false },
+    ];
   });
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
@@ -56,9 +64,11 @@ export default function SpinWheel() {
   useEffect(() => {
     const newWheelItems = currentItems.map((item, index) => ({
       ...item,
-      percentage: item.text ? 100 / currentItems.filter(i => i.text !== '').length : 0,
+      percentage: item.text
+        ? 100 / currentItems.filter((i) => i.text !== '').length
+        : 0,
       color: COLORS[index % COLORS.length],
-      used: false
+      used: false,
     }));
     setWheelItems(newWheelItems);
     if (currentItems.length === 1 && currentItems[0].text === '') {
@@ -67,17 +77,17 @@ export default function SpinWheel() {
   }, [currentItems]);
 
   const normalizePercentages = (items: WheelItem[]): WheelItem[] => {
-    const validItems = items.filter(item => item.text !== '' && !item.used);
+    const validItems = items.filter((item) => item.text !== '' && !item.used);
     if (validItems.length === 0) return items;
 
     const total = validItems.reduce((sum, item) => sum + item.percentage, 0);
     if (Math.abs(total - 100) < 0.01) return items;
 
-    return items.map(item => {
+    return items.map((item) => {
       if (item.text !== '' && !item.used) {
         return {
           ...item,
-          percentage: (item.percentage / total) * 100
+          percentage: (item.percentage / total) * 100,
         };
       }
       return item;
@@ -85,7 +95,7 @@ export default function SpinWheel() {
   };
 
   const handleInputChange = (id: string, value: string) => {
-    const newItems = wheelItems.map(item =>
+    const newItems = wheelItems.map((item) =>
       item.id === id ? { ...item, text: value } : item
     );
 
@@ -98,9 +108,9 @@ export default function SpinWheel() {
       });
     }
 
-    const itemsWithContent = newItems.filter(item => item.text !== '');
+    const itemsWithContent = newItems.filter((item) => item.text !== '');
     const defaultPercentage = 100 / itemsWithContent.length;
-    newItems.forEach(item => {
+    newItems.forEach((item) => {
       if (item.text !== '') {
         item.percentage = defaultPercentage;
       }
@@ -109,7 +119,7 @@ export default function SpinWheel() {
     const normalizedItems = normalizePercentages(newItems);
     setWheelItems(normalizedItems);
     setCurrentItems(normalizedItems);
-  };  
+  };
 
   const handleQuickAdd = (values: string[]) => {
     const newItems = values.map((text, index) => ({
@@ -117,7 +127,7 @@ export default function SpinWheel() {
       text,
       percentage: 100 / values.length,
       color: COLORS[index % COLORS.length],
-      used: false
+      used: false,
     }));
 
     newItems.push({
@@ -125,7 +135,7 @@ export default function SpinWheel() {
       text: '',
       percentage: 0,
       color: COLORS[values.length % COLORS.length],
-      used: false
+      used: false,
     });
 
     const normalizedItems = normalizePercentages(newItems);
@@ -137,20 +147,21 @@ export default function SpinWheel() {
     const newPercentage = parseFloat(value) || 0;
     if (newPercentage < 0 || newPercentage > 100) return;
 
-    const validItems = wheelItems.filter(item => item.text !== '');
+    const validItems = wheelItems.filter((item) => item.text !== '');
     if (validItems.length <= 1) return;
 
-    const changedItem = validItems.find(item => item.id === id);
+    const changedItem = validItems.find((item) => item.id === id);
     if (!changedItem) return;
 
     const oldPercentage = changedItem.percentage;
     const percentageDiff = newPercentage - oldPercentage;
-    
+
     // If trying to set a percentage that would make others negative, adjust it
-    const otherItemsTotal = validItems.reduce((sum, item) => 
-      item.id !== id ? sum + item.percentage : sum, 0
+    const otherItemsTotal = validItems.reduce(
+      (sum, item) => (item.id !== id ? sum + item.percentage : sum),
+      0
     );
-    
+
     if (newPercentage > 100 || otherItemsTotal - Math.abs(percentageDiff) < 0) {
       return;
     }
@@ -158,16 +169,18 @@ export default function SpinWheel() {
     // Calculate how much each other item should be adjusted
     const adjustmentRatio = Math.abs(percentageDiff) / otherItemsTotal;
 
-    const newItems = wheelItems.map(item => {
+    const newItems = wheelItems.map((item) => {
       if (item.id === id) {
         return { ...item, percentage: newPercentage };
       } else if (item.text !== '') {
         const adjustment = item.percentage * adjustmentRatio;
         return {
           ...item,
-          percentage: percentageDiff > 0
-            ? item.percentage - adjustment
-            : item.percentage + (adjustment * (otherItemsTotal / (100 - newPercentage)))
+          percentage:
+            percentageDiff > 0
+              ? item.percentage - adjustment
+              : item.percentage +
+                adjustment * (otherItemsTotal / (100 - newPercentage)),
         };
       }
       return item;
@@ -178,9 +191,9 @@ export default function SpinWheel() {
 
   const removeItem = (id: string) => {
     if (wheelItems.length <= 1) return;
-    
-    const newItems = wheelItems.filter(item => item.id !== id);
-    if (newItems.every(item => item.text !== '')) {
+
+    const newItems = wheelItems.filter((item) => item.id !== id);
+    if (newItems.every((item) => item.text !== '')) {
       newItems.push({
         id: Date.now().toString(),
         text: '',
@@ -189,9 +202,9 @@ export default function SpinWheel() {
       });
     }
 
-    const itemsWithContent = newItems.filter(item => item.text !== '');
+    const itemsWithContent = newItems.filter((item) => item.text !== '');
     const defaultPercentage = 100 / itemsWithContent.length;
-    newItems.forEach(item => {
+    newItems.forEach((item) => {
       if (item.text !== '') {
         item.percentage = defaultPercentage;
       }
@@ -203,7 +216,14 @@ export default function SpinWheel() {
   };
 
   const clearItems = () => {
-    const newItems = [{ id: Date.now().toString(), text: '', percentage: 100, color: COLORS[0] }];
+    const newItems = [
+      {
+        id: Date.now().toString(),
+        text: '',
+        percentage: 100,
+        color: COLORS[0],
+      },
+    ];
     setWheelItems(newItems);
     setCurrentItems(newItems);
     setWinner(null);
@@ -235,21 +255,23 @@ export default function SpinWheel() {
   const getWinningItem = (finalAngle: number): WheelItem | null => {
     const normalizedAngle = (360 - (finalAngle % 360) + 90) % 360;
     let currentAngle = 0;
-    
-    const validItems = wheelItems.filter(item => item.text !== '' && !item.used);
-    
+
+    const validItems = wheelItems.filter(
+      (item) => item.text !== '' && !item.used
+    );
+
     for (const item of validItems) {
       currentAngle += item.percentage * 3.6; // Convert percentage to degrees
       if (normalizedAngle <= currentAngle) {
         return item;
       }
     }
-    
+
     return validItems[0] || null;
   };
 
   const calculateRotation = (index: number): number => {
-    const validItems = wheelItems.filter(item => item.text !== '');
+    const validItems = wheelItems.filter((item) => item.text !== '');
     let totalPercentage = 0;
     for (let i = 0; i < index; i++) {
       totalPercentage += validItems[i].percentage;
@@ -259,18 +281,18 @@ export default function SpinWheel() {
 
   const markWinnerAsUsed = () => {
     if (!winner) return;
-    
-    const newItems = wheelItems.map(item => 
-      item.id === winner.id 
-        ? { ...item, used: true, percentage: 0 }
-        : item
+
+    const newItems = wheelItems.map((item) =>
+      item.id === winner.id ? { ...item, used: true, percentage: 0 } : item
     );
 
     // Recalculate percentages for remaining items
-    const remainingItems = newItems.filter(item => item.text !== '' && !item.used);
+    const remainingItems = newItems.filter(
+      (item) => item.text !== '' && !item.used
+    );
     const newPercentage = 100 / remainingItems.length;
-    
-    const normalizedItems = newItems.map(item => 
+
+    const normalizedItems = newItems.map((item) =>
       item.text !== '' && !item.used
         ? { ...item, percentage: newPercentage }
         : item
@@ -282,14 +304,12 @@ export default function SpinWheel() {
   };
 
   const resetUsedItems = () => {
-    const newItems = wheelItems.map(item => ({ ...item, used: false }));
-    const validItems = newItems.filter(item => item.text !== '');
+    const newItems = wheelItems.map((item) => ({ ...item, used: false }));
+    const validItems = newItems.filter((item) => item.text !== '');
     const newPercentage = 100 / validItems.length;
-    
-    const normalizedItems = newItems.map(item => 
-      item.text !== ''
-        ? { ...item, percentage: newPercentage }
-        : item
+
+    const normalizedItems = newItems.map((item) =>
+      item.text !== '' ? { ...item, percentage: newPercentage } : item
     );
 
     setWheelItems(normalizePercentages(normalizedItems));
@@ -300,62 +320,99 @@ export default function SpinWheel() {
   return (
     <div className="container mx-auto p-4">
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="space-y-4">
+        <div className='flex flex-col gap-8'>
+          <div className="space-y-4">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <Label className="text-lg">
+                    {t('general:spinWheel.items')}
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={clearItems}
+                            className="mr-2"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            {t('general:clear')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{t('general:tools.clearTooltip')}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <Switch
+                      id="advanced"
+                      checked={showAdvanced}
+                      onCheckedChange={setShowAdvanced}
+                    />
+                    <Label htmlFor="advanced">
+                      {t('general:spinWheel.advancedSettings')}
+                    </Label>
+                  </div>
+                </div>
+
+                <DynamicInputList
+                  items={wheelItems}
+                  showAdvanced={showAdvanced}
+                  showColors={true}
+                  onItemChange={handleInputChange}
+                  onItemRemove={removeItem}
+                  onPercentageChange={handlePercentageChange}
+                  inputPlaceholder={t('general:spinWheel.title')}
+                  quickAddPlaceholder="Item1, Item2, Item3..."
+                  onQuickAdd={handleQuickAdd}
+                  listLabel={t('general:spinWheel.items')}
+                  quickAddLabel={t('general:spinWheel.quickAdd')}
+                />
+              </CardContent>
+            </Card>
+          </div>
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between mb-4">
-                <Label className="text-lg">{t('general:spinWheel.items')}</Label>
-                <div className="flex items-center space-x-2">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={clearItems}
-                          className="mr-2"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          {t('general:clear')}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>{t('general:tools.clearTooltip')}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                  <Switch
-                    id="advanced"
-                    checked={showAdvanced}
-                    onCheckedChange={setShowAdvanced}
-                  />
-                  <Label htmlFor="advanced">
-                    {t('general:spinWheel.advancedSettings')}
-                  </Label>
-                </div>
+                <Label className="text-lg">
+                  {t('general:spinWheel.usedItems')}
+                </Label>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetUsedItems}
+                  disabled={!wheelItems.some((item) => item.used)}
+                >
+                  {t('general:spinWheel.resetUsed')}
+                </Button>
               </div>
-
-              <DynamicInputList
-                items={wheelItems}
-                showAdvanced={showAdvanced}
-                showColors={true}
-                onItemChange={handleInputChange}
-                onItemRemove={removeItem}
-                onPercentageChange={handlePercentageChange}
-                inputPlaceholder={t('general:spinWheel.title')}
-                quickAddPlaceholder="Item1, Item2, Item3..."
-                onQuickAdd={handleQuickAdd}
-                listLabel={t('general:spinWheel.items')}
-                quickAddLabel={t('general:spinWheel.quickAdd')}
-              />
+              <div className="space-y-2">
+                {wheelItems
+                  .filter((item) => item.used)
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-2 p-2 rounded-md bg-muted"
+                    >
+                      <div
+                        className="w-3 h-3 rounded-full"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           <div className="relative aspect-square">
             <motion.div
-              className="w-full h-full"
+              className="w-full h-full "
               animate={{ rotate: rotation }}
               transition={{
                 duration: 3,
@@ -366,25 +423,36 @@ export default function SpinWheel() {
                 position: 'relative',
               }}
             >
-              <svg viewBox="0 0 100 100" className="w-full h-full">
+              <svg viewBox="0 0 100 100" className="w-full h-full ">
                 {wheelItems
-                  .filter(item => item.text !== '' && !item.used)
+                  .filter((item) => item.text !== '' && !item.used)
                   .map((item, index) => {
                     const startAngle = calculateRotation(index);
                     const endAngle = startAngle + (item.percentage / 100) * 360;
                     const largeArcFlag = item.percentage > 50 ? 1 : 0;
 
                     // Calculate coordinates for the slice
-                    const startX = 50 + 50 * Math.cos((startAngle - 90) * (Math.PI / 180));
-                    const startY = 50 + 50 * Math.sin((startAngle - 90) * (Math.PI / 180));
-                    const endX = 50 + 50 * Math.cos((endAngle - 90) * (Math.PI / 180));
-                    const endY = 50 + 50 * Math.sin((endAngle - 90) * (Math.PI / 180));
+                    const startX =
+                      50 + 50 * Math.cos((startAngle - 90) * (Math.PI / 180));
+                    const startY =
+                      50 + 50 * Math.sin((startAngle - 90) * (Math.PI / 180));
+                    const endX =
+                      50 + 50 * Math.cos((endAngle - 90) * (Math.PI / 180));
+                    const endY =
+                      50 + 50 * Math.sin((endAngle - 90) * (Math.PI / 180));
 
                     // Calculate text position - adjusted for better centering
                     const midAngle = startAngle + (item.percentage / 200) * 360;
-                    const textRadius = Math.min(35, 35 * (item.percentage / 50)); // Adjust radius based on segment size
-                    const textX = 50 + textRadius * Math.cos((midAngle - 90) * (Math.PI / 180));
-                    const textY = 50 + textRadius * Math.sin((midAngle - 90) * (Math.PI / 180));
+                    const textRadius = Math.min(
+                      35,
+                      35 * (item.percentage / 50)
+                    ); // Adjust radius based on segment size
+                    const textX =
+                      50 +
+                      textRadius * Math.cos((midAngle - 90) * (Math.PI / 180));
+                    const textY =
+                      50 +
+                      textRadius * Math.sin((midAngle - 90) * (Math.PI / 180));
 
                     const pathData = `
                       M 50 50
@@ -416,7 +484,8 @@ export default function SpinWheel() {
                       </g>
                     );
                   })}
-                {wheelItems.filter(item => item.text !== '' && !item.used).length === 0 && (
+                {wheelItems.filter((item) => item.text !== '' && !item.used)
+                  .length === 0 && (
                   <circle cx="50" cy="50" r="50" fill="#ccc" />
                 )}
               </svg>
@@ -424,9 +493,10 @@ export default function SpinWheel() {
 
             {/* Pointer */}
             <div className="absolute -right-4 top-1/2 transform -translate-y-1/2">
-              <div className="w-8 h-8 bg-white shadow-lg"
+              <div
+                className="w-8 h-8 bg-white shadow-lg"
                 style={{
-                  clipPath: 'polygon(100% 0, 100% 100%, 0 50%)'
+                  clipPath: 'polygon(100% 0, 100% 100%, 0 50%)',
                 }}
               />
             </div>
@@ -434,7 +504,9 @@ export default function SpinWheel() {
             <Button
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full w-12 h-12 p-0"
               onClick={spinWheel}
-              disabled={wheelItems.filter(item => item.text !== '').length < 2}
+              disabled={
+                wheelItems.filter((item) => item.text !== '').length < 2
+              }
             >
               {t('general:spinWheel.spin')}
             </Button>
@@ -463,39 +535,8 @@ export default function SpinWheel() {
           </div>
 
           {/* Used items section */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <Label className="text-lg">{t('general:spinWheel.usedItems')}</Label>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetUsedItems}
-                  disabled={!wheelItems.some(item => item.used)}
-                >
-                  {t('general:spinWheel.resetUsed')}
-                </Button>
-              </div>
-              <div className="space-y-2">
-                {wheelItems
-                  .filter(item => item.used)
-                  .map(item => (
-                    <div
-                      key={item.id}
-                      className="flex items-center gap-2 p-2 rounded-md bg-muted"
-                    >
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: item.color }}
-                      />
-                      <span>{item.text}</span>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
   );
-} 
+}

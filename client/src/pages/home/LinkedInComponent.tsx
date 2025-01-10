@@ -31,7 +31,7 @@ function LinkedInComponent({ readMore }: LinkedInComponentProps) {
         {t('about:team')}
       </h2>
       <div className="flex-1 p-6 rounded-lg bg-[#F8F8F8] ">
-        <div className="flex flex-row gap-6 justify-center items-center w-full">
+        <div className="flex flex-row gap-6 justify-center items-center w-full lg:flex md:grid md:grid-cols-3 md:gap-4 md:px-4">
           {[
             {
               src: lisa,
@@ -62,23 +62,23 @@ function LinkedInComponent({ readMore }: LinkedInComponentProps) {
             <div
               key={index}
               className="
-                hover:scale-y-105 
-                hover:scale-x-105 
-                flex 
-                flex-col 
-                items-center 
-                text-center 
-                bg-[#F9F8FE] 
-                p-6 
-                rounded-lg 
-                shadow-md 
-                w-[220px] 
-                h-[240px] 
-                max-w-[240px] 
-                transition 
-                duration-300 
-                ease-in-out
-              "
+        hover:scale-y-105 
+        hover:scale-x-105 
+        flex 
+        flex-col 
+        items-center 
+        text-center 
+        bg-[#F9F8FE] 
+        p-6 
+        rounded-lg 
+        shadow-md 
+        w-[220px] 
+        h-[240px] 
+        max-w-[240px] 
+        transition 
+        duration-300 
+        ease-in-out
+      "
             >
               <img
                 src={person.src}
@@ -103,6 +103,7 @@ function LinkedInComponent({ readMore }: LinkedInComponentProps) {
             </div>
           ))}
         </div>
+
         {readMore && (
           <div className="text-center mt-8">
             <Link to="/about">

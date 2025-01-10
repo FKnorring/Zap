@@ -16,7 +16,11 @@ import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-export default function LinkedInPhone() {
+interface LinkedInPhoneProps {
+  readMore: boolean;
+}
+
+export default function LinkedInPhone({ readMore }: LinkedInPhoneProps) {
   const { t } = useTranslation();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -62,6 +66,16 @@ export default function LinkedInPhone() {
 
   return (
     <div className="flex flex-col justify-center items-center w-full bg-[#F9F8FE] py-6 px-4">
+      <div className="text-center">
+        <h1 className="text-3xl font-display mb-4 text-gray-800">
+          {t('about:who')}
+        </h1>
+      </div>
+      <div className="p-4 text-center justify-center items-center  rounded-lg  mb-4 bg-[#F9F8FE]">
+        <p className="text-2xl text-gray-700 font-display">
+          {t('about:introText')}
+        </p>
+      </div>
       {/* Section Heading */}
       <h1 className="text-2xl font-display text-gray-800 mb-4">
         {t('about:team')}
@@ -118,16 +132,20 @@ export default function LinkedInPhone() {
           })}
         </div>
       )}
-      <div className="text-center mt-8">
-        <Link to="/about">
-          <Button
-            variant={location.pathname === '/about' ? 'default' : 'ghost'}
-            className=" mb-5 bg-primary p-4 text-2xl font-display text-gray-800"
-          >
-            {t('homepage:readmore')}
-          </Button>
-        </Link>
-      </div>
+
+      {/* Read More Button */}
+      {readMore && (
+        <div className="text-center mt-8">
+          <Link to="/about">
+            <Button
+              variant={location.pathname === '/about' ? 'default' : 'ghost'}
+              className="mb-5 bg-primary p-4 text-2xl font-display text-gray-800"
+            >
+              {t('homepage:readmore')}
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
