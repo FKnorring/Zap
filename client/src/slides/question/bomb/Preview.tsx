@@ -13,11 +13,11 @@ const mockParticipants: Participant[] = [
     ],
     hasAnswered: true,
     avatar: 'https://example.com/avatar1.png',
-    name: 'Alice Johnson',
+    name: 'Alice',
     participantId: 'P001',
     score: [8, 12],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    collectionName: 'micah',
+    collectionName: 'botttsNeutral',
   },
   {
     answers: [
@@ -26,27 +26,27 @@ const mockParticipants: Participant[] = [
     ],
     hasAnswered: true,
     avatar: 'https://example.com/avatar2.png',
-    name: 'Bob Smith',
+    name: 'Bob',
     participantId: 'P002',
     score: [10, 15],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    collectionName: 'micah',
+    collectionName: 'botttsNeutral',
   },
   {
     answers: [{ slideNumber: 1, answer: ['No'], time: '2024-11-18T10:07:00Z' }],
     hasAnswered: true,
-    avatar: 'https://example.com/avatar3.png',
-    name: 'Charlie Brown',
+    avatar: 'https://example.com/avatar3.',
+    name: 'Charlie',
     participantId: 'P003',
     score: [5],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    collectionName: 'micah',
+    collectionName: 'adventurerNeutral',
   },
   {
     answers: [],
     hasAnswered: false,
     avatar: 'https://example.com/avatar4.png',
-    name: 'Diana Prince',
+    name: 'Diana',
     participantId: 'P004',
     score: [],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
@@ -63,7 +63,7 @@ const mockParticipants: Participant[] = [
     participantId: 'P005',
     score: [9, 11],
     tempAnswer: { tempAnswer: 'hej', time: '10.01' },
-    collectionName: 'micah',
+    collectionName: 'thumbs',
   },
 ];
 
@@ -262,12 +262,12 @@ export function Preview({
                   zIndex: 2,
                 }}
               >
-                <div className=" grid grid-cols-2 gap-4">
+                <div className=" bg-white grid grid-cols-2 gap-4 rounded-lg p-4 mt-8">
                   {/* Timer stays in the first column */}
                   <div className="flex-col justify-center items-center font-display ">
-                    <h2 className="text-5xl">{time}</h2>
+                    <h2 className="text-5xl text-black">{time}</h2>
                     <div className="mt-4 text-4xl">
-                      <h3 className="font-display">
+                      <h3 className="font-display text-black">
                         {currentParticipants[0].name}
                       </h3>
                     </div>
@@ -290,6 +290,7 @@ export function Preview({
                     transition={{ duration: 0.35, ease: 'easeInOut' }}
                   >
                     <Avatar
+                      key={currentParticipants[0].name}
                       width={'8rem'}
                       height={'8rem'}
                       avatarString={currentParticipants[0].avatar}
@@ -301,7 +302,13 @@ export function Preview({
                   <div className="flex flex-col items-center justify-center col-span-1"></div>
                 </div>
                 <div className="flex justify-center items-center">
-                  <div className="bg-white p-2 px-4 rounded-md   text-black font-display text-2xl"></div>
+                  <div
+                    className={
+                      'p-8 mt-16 rounded-md text-black bg-white font-display text-6xl '
+                    }
+                  >
+                    Answering...
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -338,12 +345,13 @@ export function Preview({
             }}
           >
             <Avatar
-              width={'8rem'}
-              height={'8rem'}
+              key={participant.participantId}
+              width={'6rem'}
+              height={'6rem'}
               avatarString={participant.avatar}
               collectionName={participant.collectionName}
             ></Avatar>
-            <h3 className="font-display">{participant.name}</h3>
+            <h3 className="font-display text-2xl">{participant.name}</h3>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {participantHearts[participant.name] > 0 ? (
                 Array.from({ length: participantHearts[participant.name] }).map(

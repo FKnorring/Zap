@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import PlayButton from './PlayButton';
 import EndButton from './EndButton';
 import { flags } from '@/config/features';
+import { serverTimestamp } from 'firebase/database';
 interface Team {
   id: string;
   name: string;
@@ -27,6 +28,7 @@ const ENABLE_TEAMS = flags.ENABLE_TEAMS;
 
 export default function Render({
   onNextSlide,
+
   quizCode,
   participants,
   removeParticipant,
@@ -34,6 +36,7 @@ export default function Render({
   slide: LobbySlide;
   participants: Participant[];
   onNextSlide: () => void;
+
   quizCode: string;
   removeParticipant: (participantId: string) => void;
 }) {
@@ -152,6 +155,7 @@ export default function Render({
         },
         {} as Record<string, { name: string; participants: string[] }>
       ),
+      currentSlideTime: serverTimestamp() as unknown as string,
     });
     onNextSlide();
   };
@@ -174,7 +178,10 @@ export default function Render({
               ref={participantsRef}
               className="flex flex-wrap items-center justify-center rounded-lg min-h-40 overflow-y-auto w-full max-h-[29rem]"
             >
-              <Participants participants={participants} removeParticipant={removeParticipant} />
+              <Participants
+                participants={participants}
+                removeParticipant={removeParticipant}
+              />
             </div>
           </div>
         )}
@@ -182,23 +189,23 @@ export default function Render({
           <div className="flex flex-col items-center space-y-2 bg-black/30 p-4 rounded-lg">
             <Switch
               checked={teamsEnabled}
-            onCheckedChange={setTeamsEnabled}
-            id="team-mode"
-          />
-          <Label htmlFor="team-mode">{t('slides:enableTeams')}</Label>
-          {teamsEnabled && (
-            <div className="flex items-center space-x-2 ">
-              <Label htmlFor="team-count">{t('slides:numTeams')}:</Label>
-              <Input
-                id="team-count"
-                type="number"
-                min={2}
-                max={8}
-                value={numberOfTeams}
-                onChange={(e) => setNumberOfTeams(Number(e.target.value))}
-                className="w-20 text-black"
-              />
-            </div>
+              onCheckedChange={setTeamsEnabled}
+              id="team-mode"
+            />
+            <Label htmlFor="team-mode">{t('slides:enableTeams')}</Label>
+            {teamsEnabled && (
+              <div className="flex items-center space-x-2 ">
+                <Label htmlFor="team-count">{t('slides:numTeams')}:</Label>
+                <Input
+                  id="team-count"
+                  type="number"
+                  min={2}
+                  max={8}
+                  value={numberOfTeams}
+                  onChange={(e) => setNumberOfTeams(Number(e.target.value))}
+                  className="w-20 text-black"
+                />
+              </div>
             )}
           </div>
         )}
@@ -206,7 +213,10 @@ export default function Render({
 
       <div className="flex items-center">
         <EndButton onClick={handleEndQuiz} />
-        <PlayButton disabled={!participants || participants.length === 0} onClick={handleStartGame} />
+        <PlayButton
+          disabled={!participants || participants.length === 0}
+          onClick={handleStartGame}
+        />
       </div>
     </div>
   );

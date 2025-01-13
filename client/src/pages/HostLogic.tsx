@@ -1,12 +1,13 @@
 import { useParams } from 'react-router-dom';
-import { SlideTypes } from '@/models/Quiz';
+import { QuestionTypes, SlideTypes } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
 import Countdown from 'react-countdown';
 import EndScreen from '@/slides/_specials/endscreen/EndScreen';
 import { useHostLogic } from '@/hooks/useHostLogic';
+import answerTempQeustion from '@/pages/participantQuizView/ParticipantLogic';
 import { ParticipantAnswers } from '@/slides/_components/ParticipantAnswers';
 import Spinner from '@/components/Spinner';
-import EndQuizButton from '@/components/EndQuizButton';
+
 import {
   getLocalStorageValue,
   setLocalStorageValue,
@@ -14,6 +15,8 @@ import {
 } from '@/utils/localstorage';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { global_values } from '@/config/values';
+import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
 
 function HostLogic() {
   const { id } = useParams();
@@ -21,8 +24,10 @@ function HostLogic() {
     ongoingQuiz,
     getCurrentSlide,
     nextSlide,
+    prevSlide,
     changeTurn,
     updateSlideUsedAnswers,
+
     endQuiz,
     handleAddPoints,
     removeParticipant,
@@ -57,12 +62,17 @@ function HostLogic() {
       }
     }
     // If no valid stored end date, set a new one
-    const newEndDate = currentTime + slide.timeLimit * 1000;
+    let newEndDate = currentTime + slide.timeLimit * 1000;
+    if (slide.questionType === QuestionTypes.MCQSA) {
+      newEndDate += global_values.waiting_time;
+    }
+
     setCountdownEndDate(newEndDate);
     setLocalStorageValue('quiz_timer', newEndDate);
   }, [ongoingQuiz, getCurrentSlide]);
 
   const handleComplete = () => {
+    if (slide?.id !== currentSlideId) return;
     const complete = removeLocalStorageValue('quiz_timer');
     if (complete) nextSlide();
   };
@@ -73,14 +83,21 @@ function HostLogic() {
 
   if (!ongoingQuiz.quiz.slides || !slide) {
     return (
-      <EndScreen
-        quiz={ongoingQuiz.quiz}
-        endQuiz={() => endQuiz(ongoingQuiz.id)}
-        participants={Object.values(ongoingQuiz.participants || {})}
-      />
+      <>
+        <QuizBackground
+          backgroundColor={ongoingQuiz.quiz.settings.backgroundColor}
+          primaryColor={ongoingQuiz.quiz.settings.primaryColor}
+          secondaryColor={ongoingQuiz.quiz.settings.secondaryColor}
+          className="inset-0 fixed z-[-1]"
+        />
+        <EndScreen
+          quiz={ongoingQuiz.quiz}
+          endQuiz={() => endQuiz(ongoingQuiz.id)}
+          participants={Object.values(ongoingQuiz.participants || {})}
+        />
+      </>
     );
   }
-
   const SlideComponent = getSlideComponents(slide);
 
   const RenderTimer = () => {
@@ -104,6 +121,13 @@ function HostLogic() {
                   const totalSeconds = Math.ceil(total / 1000);
                   const displayMinutes = Math.floor(totalSeconds / 60);
                   const displaySeconds = totalSeconds % 60;
+
+                  if (
+                    slide.questionType === QuestionTypes.MCQSA &&
+                    totalSeconds > slide.timeLimit
+                  ) {
+                    return null; // Hide timer in waiting portion
+                  }
 
                   // Format the display string
                   const formattedTime =
@@ -151,23 +175,34 @@ function HostLogic() {
     );
   };
 
-  const inLobby = ongoingQuiz.currentSlide <= 1;
+  const inLobby = ongoingQuiz.currentSlide == 0;
 
   return (
     <>
+      <QuizBackground
+        backgroundColor={ongoingQuiz.quiz.settings.backgroundColor}
+        primaryColor={ongoingQuiz.quiz.settings.primaryColor}
+        secondaryColor={ongoingQuiz.quiz.settings.secondaryColor}
+        style={slide.backgroundStyle}
+        className="inset-0 fixed z-[-1]"
+      />
       {!ongoingQuiz.isShowingCorrectAnswer ? (
         <>
           <SlideComponent.Host
+            answerTempQuestion={answerTempQeustion}
             slides={ongoingQuiz.quiz.slides}
             currentSlide={ongoingQuiz.currentSlide}
             participants={Object.values(ongoingQuiz.participants || {})}
             removeParticipant={removeParticipant}
             slide={slide as never}
             onNextSlide={nextSlide}
+            onPrevSlide={prevSlide}
+            endQuiz={endQuiz}
             quizCode={ongoingQuiz.id}
             slideNumber={ongoingQuiz.currentSlide}
             changeTurn={changeTurn}
             updateSlideUsedAnswers={updateSlideUsedAnswers}
+            currentSlideTime={ongoingQuiz.currentSlideTime}
           />
           {!inLobby && (
             <ParticipantAnswers
@@ -181,11 +216,13 @@ function HostLogic() {
           participants={Object.values(ongoingQuiz.participants)}
           slide={slide as never}
           onNextSlide={nextSlide}
+          endQuiz={endQuiz}
+          onPrevSlide={prevSlide}
           quizCode={ongoingQuiz.id}
           handleAddPoints={handleAddPoints}
         />
       )}
-      {!inLobby && <EndQuizButton onClick={() => endQuiz(ongoingQuiz.id)} />}
+
       <RenderTimer />
     </>
   );

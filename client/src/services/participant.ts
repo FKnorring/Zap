@@ -7,9 +7,10 @@ import {
   set,
   update,
   DataSnapshot,
+  serverTimestamp,
 } from 'firebase/database';
 import { database } from '@/firebase';
-import { Participant, Slide } from '@/models/Quiz';
+import { Participant, QuizSettings, Slide } from '@/models/Quiz';
 import { nanoid } from 'nanoid';
 
 
@@ -58,7 +59,7 @@ export const ParticipantService = {
       avatar,
       participantId,
       collectionName,
-      isTurn: false,
+      turn: false,
     };
 
     try {
@@ -99,7 +100,7 @@ export const ParticipantService = {
     const participantData = participantSnap.val();
     const updatedAnswers = [
       ...(participantData.answers || []),
-      { slideNumber, answer, time: new Date().toISOString() },
+      { slideNumber, answer, time: serverTimestamp() },
     ];
 
     try {
@@ -211,6 +212,13 @@ export const ParticipantService = {
     const slidesSnap = await get(slidesRef);
     return slidesSnap.exists() ? slidesSnap.val() : [];
   },
+
+  async getQuizSettings(quizCode: string): Promise<QuizSettings> {
+    const settingsRef = ref(database, `ongoingQuizzes/${quizCode}/quiz/settings`);
+    const settingsSnap = await get(settingsRef);
+    return settingsSnap.exists() ? settingsSnap.val() : null;
+  }
+
 };
 
 // Custom Hook: useGameStatus
@@ -220,7 +228,8 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
   const [participantData, setParticipantData] = useState<Participant | null>(
     null
   );
-  const [isTurn,setListenIsTurn] = useState("")
+  const [turn,setListenTurn] = useState("")
+  const [currentSlideTime,setCurrentSlideTime] = useState<string>("")
 
   useEffect(() => {
     const slideRef = ref(database, `ongoingQuizzes/${quizCode}/currentSlide`);
@@ -232,8 +241,8 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       database,
       `ongoingQuizzes/${quizCode}/isShowingCorrectAnswer`
     );
-
-    const isTurnRef = ref(database,`ongoingQuizzes/${quizCode}/isTurn`)
+    const turnRef = ref(database,`ongoingQuizzes/${quizCode}/turn`)
+    const slideTimeRef = ref(database,`ongoingQuizzes/${quizCode}/currentSlideTime`)
     
 
     const handleSlideChange = (snapshot: DataSnapshot) => {
@@ -248,8 +257,12 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
       setShowAnswer(snapshot.exists() ? snapshot.val() : false);
     };
 
-    const handleIsTurnChange = (snapshot: DataSnapshot) => {
-      setListenIsTurn(snapshot.exists() ? snapshot.val() : false);
+    const handleTurnChange = (snapshot: DataSnapshot) => {
+      setListenTurn(snapshot.exists() ? snapshot.val() : false);
+    };
+
+    const handleSlideTimeChange = (snapshot: DataSnapshot) => {
+      setCurrentSlideTime(snapshot.exists() ? snapshot.val() : false);
     };
 
 
@@ -257,15 +270,17 @@ export const useGameStatus = (quizCode: string, participantId: string) => {
     onValue(slideRef, handleSlideChange);
     onValue(participantRef, handleParticipantChange);
     onValue(showAnswerRef, handleShowAnswerChange);
-    onValue(isTurnRef, handleIsTurnChange)
+    onValue(turnRef, handleTurnChange);
+    onValue(slideTimeRef,handleSlideTimeChange);
 
     return () => {
       off(slideRef, 'value', handleSlideChange);
       off(participantRef, 'value', handleParticipantChange);
       off(showAnswerRef, 'value', handleShowAnswerChange);
-      off(isTurnRef,'value', handleIsTurnChange)
+      off(turnRef,'value', handleTurnChange);
+      off(slideTimeRef,'value',handleSlideTimeChange);
     };
   }, [quizCode, participantId]);
 
-  return { currentSlide, participantData, showAnswer, isTurn };
+  return { currentSlide, participantData, showAnswer, turn,currentSlideTime };
 };

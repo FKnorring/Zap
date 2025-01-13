@@ -4,8 +4,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { max_options } from '@/config/max';
+
 import { useTranslation } from 'react-i18next';
+import { HeartIcon, Timer } from 'lucide-react';
 
 export function BombOptionsInput({
   slide,
@@ -19,6 +20,7 @@ export function BombOptionsInput({
       ...updates,
     });
   };
+
   const { t } = useTranslation(['questions']);
 
   const addAnswers = (input: string) => {
@@ -41,26 +43,55 @@ export function BombOptionsInput({
     });
   };
 
+  const maxHearts = 3; // Max number of hearts
+
+  // Handle heart click (update the number of hearts)
+  const handleHeartClick = (index: number) => {
+    updateSlide({ hearts: index + 1 }); // Set hearts count based on the clicked index (0-based)
+  };
+
   return (
     <div className="space-y-6">
       {/* Hearts and Initial Time */}
       <div className="space-y-2">
-        <Label>{t('initialTime')}</Label>
+        <div className="flex items-center space-x-1">
+          <Timer size={17} />
+          <Label>{t('initialTime')}</Label>
+        </div>
+
         <Input
           type="number"
+          max={99}
           value={slide.initialTime}
-          onChange={(e) => updateSlide({ initialTime: Number(e.target.value) })}
+          onChange={(e) => {
+            const value = Math.min(Number(e.target.value), 99); // Clamp the value to 99
+            updateSlide({ initialTime: value });
+          }}
         />
       </div>
 
       <div className="space-y-2">
-        <Label>{t('hearts')}</Label>
-        <Input
-          type="number"
-          value={slide.hearts}
-          max={max_options.bomb.lives}
-          onChange={(e) => updateSlide({ hearts: Number(e.target.value) })}
-        />
+        <div className="flex items-center space-x-1">
+          {/* Heart Icon and Label */}
+
+          <Label>{t('lives')}</Label>
+        </div>
+
+        <div className="flex space-x-2">
+          {/* Render hearts */}
+          {[...Array(maxHearts)].map((_, index) => (
+            <div
+              key={index}
+              onClick={() => handleHeartClick(index)}
+              className="cursor-pointer"
+            >
+              <HeartIcon
+                fill={index < slide.hearts ? '#FF4545' : '#D1D1D1'} // Filled or unfilled color
+                color={index < slide.hearts ? '#FF4545' : '#D1D1D1'} // Same color for both
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Answers Section */}
@@ -100,12 +131,14 @@ export function BombOptionsInput({
           <p>{t('noAnswer')}</p> // Optional message if there are no answers
         )}
 
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 m-4">
           <Input
             value={newAnswer}
             onChange={(e) => setNewAnswer(e.target.value)}
-            placeholder="New Answers (comma-separated)"
+            placeholder={t('ans1ans2')}
           />
+        </div>
+        <div className="justify-center flex">
           <Button
             onClick={() => {
               if (newAnswer.trim() !== '') {

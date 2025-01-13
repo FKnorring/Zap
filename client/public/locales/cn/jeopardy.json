@@ -1,0 +1,56 @@
+{
+  "aiGenerator": "AI分类生成器",
+  "strictAnswerFormat": "严格的答案格式",
+  "examplePrompt": "示例提示",
+  "viewExample": "查看提示",
+  "copy": "复制",
+  "format": "格式",
+  "pasteAiCategory": "在此粘贴您的AI生成的分类...",
+  "addCategory": "添加分类",
+  "replaceLastCategory": "替换最后的分类",
+  "categories": "分类",
+  "questions": "问题",
+  "category": "分类",
+  "categoryName": "分类名称",
+  "question": "问题",
+  "answer": "答案",
+  "minScore": "最低分数",
+  "maxScore": "最高分数",
+  "mainTimeLimit": "抢答时间限制（秒）",
+  "answerTimeLimit": "答案时间限制（秒）",
+  "newCategory": "新分类",
+  "clickToContinue": "点击继续",
+  "aiGeneratorDescription": "此工具允许您粘贴由AI生成的分类和问题。它将解析输入并将其添加到幻灯片中。",
+  "participant": {
+    "yourTurn": "轮到您选择分类了！",
+    "waitingForSelection": "等待选择分类...",
+    "waitForHost": "等待主持人读取问题",
+    "answer": "回答！",
+    "yourAnswer": "轮到您回答！（{{timeLeft}}秒）",
+    "otherPlayerAnswering": "其他玩家正在回答...",
+    "waitForHostToProgress": "问题结束。请等待主持人继续..."
+  },
+  "host": {
+    "start": "开始",
+    "correct": "正确",
+    "incorrect": "错误"
+  },
+  "errors": {
+    "sixLines": "输入必须包含恰好6行：1行分类和5行问题",
+    "categoryFormat": "分类行必须以“Category:”开头",
+    "questionFormat": "问题{{number}}的格式必须为“Q{{number}}: 问题 | A: 答案”",
+    "answerFormat": "答案{{number}}必须以“What is”、“Who is”或“Where is”开头",
+    "parseFailed": "解析输入失败。请检查格式。"
+  },
+  "aiInput": {
+    "validAnswerStarts": "what is,who is,where is",
+    "prompt": {
+      "base": "创建一个关于[主题]的Jeopardy分类，包含5个难度递增的问题。格式如下：\n\nCategory: [分类名称]\nQ1: [最简单的问题] | A: {{answerFormat}}\nQ2: [简单的问题] | A: {{answerFormat}}\nQ3: [中等的问题] | A: {{answerFormat}}\nQ4: [困难的问题] | A: {{answerFormat}}\nQ5: [最困难的问题] | A: {{answerFormat}}\n\n{{formatNote}}",
+      "strictAnswerFormat": "[答案需以'What/Who/Where is'格式]",
+      "anyAnswerFormat": "[答案]",
+      "strictFormatNote": "确保每个答案以'What is'、'Who is'或'Where is'开头，并以问题形式表达。",
+      "anyFormatNote": "答案可以是任何格式。",
+      "formatExample": "Category: [分类名称]\nQ1: [问题] | A: [答案]\nQ2: [问题] | A: [答案]\nQ3: [问题] | A: [答案]\nQ4: [问题] | A: [答案]\nQ5: [问题] | A: [答案]"
+    }
+  }
+}

@@ -236,31 +236,13 @@ class QuizService extends BaseService<Quiz> {
         return { data: null, error: new Error('Quiz not found') };
       }
 
-      const newQuizId = nanoid();
-      const newQuizRef = ref(database, `${this.path}/${newQuizId}`);
-      const quizUpdate = {
+      return { data: {
         ...quizData.val(),
-        id: newQuizId,
-        quiz_name: `${quizData.val().quiz_name} (Copy)`,
         user_id: userId,
         isShared: false,
         updated_at: new Date().toLocaleString(),
-      };
-      await set(newQuizRef, quizUpdate);
-
-      const userQuizRef = ref(database, `${this.userQuizzesRef}/${newQuizId}`);
-      const userQuiz = {
-        userId: userId,
-        quizId: newQuizId,
-        quizName: `${quizData.val().quiz_name} (Copy)`,
-        isHosted: false,
-        isShared: false,
-        createdAt: new Date().toLocaleString(),
-        updatedAt: new Date().toLocaleString(),
-      };
-      await set(userQuizRef, userQuiz);
-
-      return { data: quizUpdate, error: null };
+        id: nanoid(),
+      }, error: null };
     } catch (error) {
       return { data: null, error: error as Error };
     }

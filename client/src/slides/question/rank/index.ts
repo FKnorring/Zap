@@ -6,12 +6,13 @@ export * from './HostAnswer';
 export * from './CalculateScore';
 
 import { QuestionTypes, SlideTypes, AnswerTypes } from '@/models/Quiz';
-import { ListOrdered } from 'lucide-react';
+import {FaListOl} from 'react-icons/fa';
 import { SlideInfo } from '../..';
 
 export const Info: SlideInfo = {
   value: 'question:RANK',
-  icon: ListOrdered,
+  icon: FaListOl,
+  iconColor:"#14b8a6",
   label: QuestionTypes.RANK,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.RANK,

@@ -12,7 +12,9 @@ import { SlideInfo } from "..";
 export const Info: SlideInfo = {
     value: "info",
     icon: InfoIcon,
+    iconColor:"#64748b",
     label: "Information Slide",
     slideType: SlideTypes.info,
-    defaults: {}
+    defaults: {},
+    interactivePreview: true,
 } as const;

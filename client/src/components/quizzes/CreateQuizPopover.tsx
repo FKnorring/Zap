@@ -1,58 +1,68 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CreateQuizPopoverProps {
   onCreateQuiz: (name: string) => Promise<void>;
 }
 
 function CreateQuizPopover({ onCreateQuiz }: CreateQuizPopoverProps) {
-  const [quizName, setQuizName] = useState("");
+  const [quizName, setQuizName] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
   const handleCreate = async () => {
     if (!quizName.trim()) return;
-    setQuizName("");
+    setQuizName('');
     setIsOpen(false);
     await onCreateQuiz(quizName);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleCreate();
+    if (e.key === 'Enter') {
+      const button = document.getElementById('create-quiz-finish');
+      if (button) {
+        const clickEvent = new MouseEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        });
+        button.dispatchEvent(clickEvent);
+      }
     }
   };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button>
-          <span className="flex items-center gap-2">
-            {t("homepage:createQuiz")}
-            <Plus />
+        <Button id="create-quiz-button" className='rounded-3xl shadow-lg outline'>
+          <span className="flex just items-center gap-2 py-4 text-lg">
+            {t('homepage:createQuiz')}
+           
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="flex flex-col gap-4">
+      <PopoverContent className="w-80 mt-1">
+        <div className="flex flex-col gap-4" id="create-quiz-input">
           <Input
-            placeholder={t("homepage:quizName")}
+            placeholder={t('homepage:quizName')}
             value={quizName}
             onChange={(e) => setQuizName(e.target.value)}
             onKeyUp={handleKeyPress}
           />
-          <Button onClick={handleCreate}>
-            <span className="flex items-center gap-2">
-              {t("homepage:create")} <Plus />
-            </span>
+          <Button
+            onClick={handleCreate}
+            id="create-quiz-finish"
+            className="flex items-center gap-2"
+          >
+            {t('homepage:create')} <Plus />
           </Button>
         </div>
       </PopoverContent>

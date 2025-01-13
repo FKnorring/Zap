@@ -5,7 +5,8 @@ export enum SlideTypes {
   info = "info",
   score = "score",
   question = "question",
-  lobby = "lobby"
+  lobby = "lobby",
+  bulletPoint = "bulletPoint"
 }
 
 export type SlideType = SlideTypes;
@@ -34,4 +35,13 @@ export interface ScoreSlide extends BaseSlide {
   type: SlideTypes.score;
 }
 
-export type Slide = InfoSlide | ScoreSlide | QuestionSlide | LobbySlide; 
+export interface BulletPointSlide extends BaseSlide {
+  type: SlideTypes.bulletPoint;
+  points: string[];
+  imageUrl?: string;
+  imagePosition: 'left' | 'right';
+  fontSize: number;
+  pointSpacing: number;
+}
+
+export type Slide = InfoSlide | ScoreSlide | QuestionSlide | LobbySlide | BulletPointSlide; 

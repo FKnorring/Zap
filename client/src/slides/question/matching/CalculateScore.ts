@@ -5,34 +5,55 @@ export function CalculateScore({
   slide,
   participants,
 }: CalculateScoreProps<MatchingSlide>): number[] {
-  const { labels } = slide;
+  const { labels, options } = slide;
+  
   return participants.map((participant) => {
     const latestAnswer = participant.answers?.at(-1)?.answer;
     if (!latestAnswer) return 0;
 
     const answer = latestAnswer as unknown as Record<string, string[]>;
-    
-    // Count total correct options across all labels
-    const totalCorrectOptions = labels.reduce((sum, label) => 
-      sum + label.correctOptions.length, 0);
 
-    // Count how many correct options the participant matched
-    const correctMatches = labels.reduce((sum, label) => {
+    // Total options (labels only)
+    const totalOptions = options.length;
+
+    // Correct matches in assigned categories
+    const correctAssignedMatches = labels.reduce((sum, label) => {
       const participantAnswers = answer[label.id] || [];
-      const correctlyMatched = label.correctOptions.filter(option => 
+      const correctlyMatched = label.correctOptions.filter((option) =>
         participantAnswers.includes(option)
       ).length;
       return sum + correctlyMatched;
     }, 0);
 
-    // Check unassigned options - they should not be in any correct answers
-    const unassignedAnswers = answer.unassigned || [];
-    const incorrectlyUnassigned = unassignedAnswers.filter(option => 
-      labels.some(label => label.correctOptions.includes(option))
-    ).length;
+    // Track unassigned options
+    const assignedOptions = labels.flatMap((label) => label.correctOptions);
+    const unassignedOptions = options.filter((option) => !assignedOptions.includes(option));
 
-    // Subtract points for incorrectly unassigned options
-    const finalScore = Math.max(0, (correctMatches - incorrectlyUnassigned) / totalCorrectOptions) * slide.points;
-    return finalScore;
+    // Check if unassigned options are marked as correct under "None of the Others"
+    const correctUnassignedMatches = unassignedOptions.reduce((sum, option) => {
+      const participantAnswers = Object.values(answer).flat();
+      if (participantAnswers.includes(option)) {
+        sum += 1; // This is a correct answer under "None of the Others"
+      }
+      return sum;
+    }, 0);
+
+    // Debugging logs
+    console.log({
+      participant: participant.participantId,
+      totalOptions,
+      correctAssignedMatches,
+      correctUnassignedMatches,
+      slidelabels: slide.labels,
+      slideoptions: slide.options,
+      calculatedFraction: (correctAssignedMatches + correctUnassignedMatches) / totalOptions,
+    });
+
+    // Final score, taking into account both assigned and unassigned matches
+    const finalScore = Math.floor(
+      ((correctAssignedMatches + correctUnassignedMatches) / totalOptions) * slide.points
+    );
+
+    return Math.max(0, finalScore); // Ensure score is non-negative
   });
 }

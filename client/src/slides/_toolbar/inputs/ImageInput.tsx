@@ -37,6 +37,7 @@ export default function ImageInput<T extends Slide>({
 
         <div className="flex items-center gap-2">
           <Button
+            id="image-upload-button"
             variant="outline"
             className="w-full"
             onClick={() => document.getElementById('image-upload')?.click()}

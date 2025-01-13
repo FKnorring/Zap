@@ -14,15 +14,18 @@
   "FA": "Snabbast på knappen",
   "FTA": "Fri text",
   "LOCATEIT": "Närmast vinner",
-  "MATCHING": "Hitta rätt matchning",
+  "MATCHING": "Matcha rätt",
   "MCQMA": "Flervalsfråga",
   "MCQSA": "Ett svar gäller",
   "RANK": "Ranka rätt",
+  "ScoreSlide": "Poängställning",
   "addSlide": "Lägg till slide",
-  "hearts": "Hjärtan",
-  "initialTime": "Tid (sekunder)",
-  "availableAnswers": "Tillgängliga svar",
+  "lives": "Liv",
+  "initialTime": "Tid (sekunder) att svara",
+  "availableAnswers": "Korrekta svar",
+  "ans1ans2": "svar1,svar2,svar3",
   "del": "Del",
+  "noCategory": "Inga av alternativen",
   "noAnswer": "Inga svar har lagts till",
   "addAnswer": "Lägg till svar",
   "lookAtYourScreen": "Kolla på din skräm och ranka alternativen",
@@ -32,5 +35,11 @@
   "embeded": "Inbyggd",
   "remove": "Ta bort",
   "used": "Använda",
-  "total": "Totala"
+  "total": "Totala",
+  "CLOSEST": "Pricka talet",
+  "closest": {
+    "enterGuess": "Ange din gissning",
+    "submitGuess": "Skicka gissning",
+    "difference": "Skillnad"
+  }
 }

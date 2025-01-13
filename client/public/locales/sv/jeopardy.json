@@ -1,0 +1,56 @@
+{
+  "aiGenerator": "AI-kategorigenerator",
+  "strictAnswerFormat": "Strikt svarsformat",
+  "examplePrompt": "Exempel på prompt",
+  "viewExample": "Visa prompt",
+  "copy": "Kopiera",
+  "format": "Format",
+  "pasteAiCategory": "Klistra in din AI-genererade kategori här...",
+  "addCategory": "Lägg till kategori",
+  "replaceLastCategory": "Ersätt sista kategorin",
+  "categories": "Kategorier",
+  "questions": "Frågor",
+  "category": "Kategori",
+  "categoryName": "Kategorinamn",
+  "question": "Fråga",
+  "answer": "Svar",
+  "minScore": "Lägsta poäng",
+  "maxScore": "Högsta poäng",
+  "mainTimeLimit": "Buzzertid (sekunder)",
+  "answerTimeLimit": "Svartid (sekunder)",
+  "newCategory": "Ny kategori",
+  "clickToContinue": "Klicka för att fortsätta",
+  "aiGeneratorDescription": "Detta verktyg gör att du kan klistra in en kategori och frågor genererade av en AI. Den kommer sedan att parsa inmatningen och lägga till den i presentationen.",
+  "participant": {
+    "yourTurn": "Din tur att välja kategori!",
+    "waitingForSelection": "Väntar på kategori val...",
+    "waitForHost": "Vänta på att värden läser frågan",
+    "answer": "Svara!",
+    "yourAnswer": "Din tid att svara! ({{timeLeft}}s)",
+    "otherPlayerAnswering": "En annan spelare svarar...",
+    "waitForHostToProgress": "Frågan är över. Vänta på att värden fortsätter..."
+  },
+  "host": {
+    "start": "Starta",
+    "correct": "Rätt",
+    "incorrect": "Fel"
+  },
+  "errors": {
+    "sixLines": "Inmatningen måste innehålla exakt 6 rader: 1 kategorilinje och 5 frågerader",
+    "categoryFormat": "Kategorilinjen måste börja med 'Category:'",
+    "questionFormat": "Fråga {{number}} måste vara i formatet 'Q{{number}}: Fråga | A: Svar'",
+    "answerFormat": "Svar {{number}} måste börja med 'Vad är', 'Vem är' eller 'Var är'",
+    "parseFailed": "Kunde inte tolka inmatningen. Kontrollera formatet."
+  },
+  "aiInput": {
+    "validAnswerStarts": "vad är,vem är,var är",
+    "prompt": {
+      "base": "Skapa en Jeopardy-kategori om [ÄMNE] med 5 frågor av ökande svårighetsgrad. Formatera det exakt så här:\n\nCategory: [Kategorinamn]\nQ1: [Lättaste frågan] | A: {{answerFormat}}\nQ2: [Lätt fråga] | A: {{answerFormat}}\nQ3: [Medel fråga] | A: {{answerFormat}}\nQ4: [Svår fråga] | A: {{answerFormat}}\nQ5: [Svåraste frågan] | A: {{answerFormat}}\n\n{{formatNote}}",
+      "strictAnswerFormat": "[Svar i 'Vad/Vem/Var är' format]",
+      "anyAnswerFormat": "[Svar]",
+      "strictFormatNote": "Se till att varje svar är formulerat som en fråga som börjar med 'Vad är', 'Vem är' eller 'Var är'.",
+      "anyFormatNote": "Svaren kan vara i valfritt format.",
+      "formatExample": "Category: [Namn]\nQ1: [Fråga] | A: [Svar]\nQ2: [Fråga] | A: [Svar]\nQ3: [Fråga] | A: [Svar]\nQ4: [Fråga] | A: [Svar]\nQ5: [Fråga] | A: [Svar]"
+    }
+  }
+} 

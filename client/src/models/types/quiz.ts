@@ -60,9 +60,11 @@ export enum ShowCorrectAnswerTypes {
 export interface OngoingQuiz {
   id: string;
   startedAt: string;
-  isTurn: string;
+  turn: string;
   isShowingCorrectAnswer: boolean;
   currentSlide: number;
+  currentSlideTime: string;
+  slideState?: string;
   quiz: Quiz;
   quizId: string;
   quizHost: string;

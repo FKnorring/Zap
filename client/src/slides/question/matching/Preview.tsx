@@ -12,7 +12,7 @@ export function Preview({ slide }: { slide: MatchingSlide }) {
   return (
     <div>
       <BaseQuestionRender slide={slide}>
-      <div className={cn("w-full grid grid-cols-2 gap-8 px-16", cols == 3 && "grid-cols-3", cols == 4 && "grid-cols-4")}>
+      <div className={cn("w-full grid grid-cols-2 gap-8 p-16 ", cols == 3 && "grid-cols-3", cols == 4 && "grid-cols-4")}>
         {slide.labels.map((label, idx) => (
           <MatchGroup
             key={label.id}

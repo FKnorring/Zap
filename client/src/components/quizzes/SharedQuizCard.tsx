@@ -37,9 +37,12 @@ export function SharedQuizCard({
   };
 
   return (
-    <Card className={`${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
+    <Card
+      className={`${onClick ? 'cursor-pointer' : ''} bg-[#FFFFFF]`}
+      onClick={onClick}
+    >
       <CardContent>
-        <CardTitle className="text-lg mr-auto pb-1 pt-5">
+        <CardTitle className="text-lg mr-auto pb-1 pt-4 font-display">
           {quiz.quizName}
         </CardTitle>
         <div className="aspect-video w-full rounded overflow text-white relative">
@@ -47,8 +50,8 @@ export function SharedQuizCard({
           <div className="font-display absolute bottom-[-10px] left-[-10px] z-50 bg-primary p-1 px-2 rounded text-black flex flex-row items-center gap-1 border">
             <span className="text-lg ">By:</span>
             <Avatar
-              width='1.5625rem'
-              height='1.5625rem'
+              width="1.5625rem"
+              height="1.5625rem"
               avatarString={quiz.userAvatar}
               collectionName={quiz.collectionName}
             ></Avatar>

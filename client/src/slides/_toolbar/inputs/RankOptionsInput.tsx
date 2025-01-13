@@ -66,6 +66,8 @@ export function RankOptionsInput({
               value={newRank}
               onChange={(e) => setNewRank(e.target.value)}
               placeholder={t('answer')}
+              maxLength={25}
+              
             />
             <Button
               onClick={() => {

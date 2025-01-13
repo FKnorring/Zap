@@ -12,52 +12,35 @@ import { Circle } from './_circle';
 import Avatar from '@/Avatar';
 import { Polyline } from './_polyline';
 import NextSlide from '@/slides/_components/NextSlide';
-
-const mockData: Participant[] = [
-  {
-    participantId: 'DsMCalNtbSK8vCnEpnT59',
-    name: 'Nisse',
-    avatar: 'EROHNv5Xbi',
-    answers: [
-      {
-        answer: ['0', '0'],
-        slideNumber: 0,
-        time: '2024-12-02T17:28:30.902Z',
-      },
-    ],
-    tempAnswer: { tempAnswer: 'hej', time: '0' },
-    score: [0],
-    hasAnswered: true,
-    collectionName: 'micah',
-  },
-  {
-    participantId: 'LKFJJSD',
-    name: 'LångtNamnYaoo',
-    avatar: 'LKFJJSDEROHNv5Xbi',
-    answers: [
-      {
-        answer: ['1', '1'],
-        slideNumber: 2,
-        time: '2024-12-02T17:30:00.000Z',
-      },
-    ],
-    score: [2000],
-    tempAnswer: { tempAnswer: 'hej', time: '0' },
-    hasAnswered: false,
-    collectionName: 'micah',
-  },
-];
+import { generateMockParticipants } from './mockData';
 
 export function HostAnswer({
   slide,
   onNextSlide,
-  participants = mockData,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
+  participants: providedParticipants,
 }: {
   slide: LocateItSlide;
   onNextSlide: () => void;
-  participants: Participant[];
+  onPrevSlide: () => void;
+  participants?: Participant[];
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   const APIKEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+
+  const [participants, setParticipants] = useState<Participant[]>(
+    providedParticipants || generateMockParticipants(slide, 5)
+  );
+
+  useEffect(() => {
+    if (!providedParticipants) {
+      setParticipants(generateMockParticipants(slide, 5));
+    }
+  }, [slide.location, providedParticipants, slide.awardPointsLocation]);
+
   const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(
     slide.location
   );
@@ -90,14 +73,14 @@ export function HostAnswer({
   }, [slide.location, slide.radius]);
 
   return (
-    <div className="h-dvh w-full relative p-10 ">
+    <div className="h-dvh w-full relative p-10">
       <APIProvider apiKey={APIKEY}>
         <Map
           mapId={slide.id}
           onCenterChanged={(e) => setMapCenter(e.detail.center)}
           onZoomChanged={(e) => setZoom(e.detail.zoom)}
           gestureHandling="greedy"
-          disableDefaultUI={true}
+          disableDefaultUI
           zoomControl={false}
           streetViewControl={false}
           zoom={zoom}
@@ -137,14 +120,13 @@ export function HostAnswer({
                     anchor={marker}
                     disableAutoPan
                     headerDisabled
-                    shouldFocus={true}
+                    shouldFocus
                     className="touch-action-none will-change-transform select-none"
                   >
                     <div className="text-lg flex flex-col items-center font-display text-black">
                       <p>
                         {participant.name}
-                        {slide.awardPointsLocation === 'DISTANCE' &&
-                          ' :' + participant.score}
+                        {': ' + participant.score}
                       </p>
                     </div>
                   </InfoWindow>
@@ -167,7 +149,12 @@ export function HostAnswer({
           })}
         </Map>
       </APIProvider>
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)}
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }

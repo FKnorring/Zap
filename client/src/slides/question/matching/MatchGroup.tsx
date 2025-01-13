@@ -24,7 +24,7 @@ export default function MatchGroup({
     >
       <h3 className="text-2xl font-bold font-display">{title}</h3>
       <ul className="flex flex-col gap-2 w-full">
-        {options.map((option) => {
+        {options && options.map((option) => {
           // Count how many participants got this option correct in this label
           const correctCount = answers.filter((answer) => {
             const answerObj = answer.answer as Record<string, string[]>;

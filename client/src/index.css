@@ -8,9 +8,7 @@ body {
   overflow: hidden;
 }
 
-
 @layer base {
-
   .font-display {
     font-family: 'Londrina Solid', sans-serif;
   }
@@ -19,16 +17,18 @@ body {
     paint-order: stroke fill;
     display: inline-block;
     letter-spacing: 1px;
-    -webkit-text-stroke: 10px black;
-    text-shadow: 5px 5px 0 black, -5px -5px 0 hsl(var(--primary));
+    -webkit-text-stroke: 0.1em black;
+    text-shadow:
+      0.05em 0.05em 0 black,
+      -0.05em -0.05em 0 hsl(var(--primary));
   }
 
   :root {
     --background: 206 100% 6%;
     --foreground: 222.2 84% 100%;
-    --card: 36 66% 97%;
+    --card: 36 25% 99%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 36 66% 97%;
+    --popover: 36 25% 99%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 36 96% 61%;
     --primary-foreground: 206 100% 6%;
@@ -51,6 +51,14 @@ body {
     --chart-5: 27 87% 67%;
     --component-background: 0, 0%, 95%;
     --textonwbg-grayonw: 0, 0%, 20%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -78,18 +86,35 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 /* Add these color utilities */
 .bg-gold {
-  background-color: #FFD700;
+  background-color: #ffd700;
 }
 
 .bg-silver {
-  background-color: #C0C0C0;
+  background-color: #c0c0c0;
 }
 
 .bg-bronze {
-  background-color: #CD7F32;
+  background-color: #cd7f32;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

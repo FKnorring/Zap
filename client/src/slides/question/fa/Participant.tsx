@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { BuzzerButton } from '@/components/ui/buzzer-button';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -29,15 +29,14 @@ export function Participant({
   } else {
     return (
       <div className="flex flex-1 flex-col items-center justify-center font-display">
-        <Button
+        <BuzzerButton
           className="w-80 h-80 rounded-full text-4xl bg-red-600 text-white"
           onClick={() => {
             answerTempQuestion('');
-            console.log('click');
           }}
         >
           {t('answer')}
-        </Button>
+        </BuzzerButton>
       </div>
     );
   }

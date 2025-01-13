@@ -6,14 +6,19 @@ import { SlideTitle } from '@/slides/_components/SlideTitle';
 export function Host({
   slide,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: FTASlide;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   return (
-    <div className="flex flex-col items-center">
-      {/* Slide Title */}
-      <div className=" p-4 mb-10 mt-20  text-wrap text-center">
+    <div className="flex flex-col items-center justify-center h-screen p-10 space-y-8 w-full">
+      <div className="flex flex-col w-full">
         <SlideTitle title={slide.title} />
       </div>
       <div>
@@ -36,7 +41,12 @@ export function Host({
         </div>
       )}
 
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }

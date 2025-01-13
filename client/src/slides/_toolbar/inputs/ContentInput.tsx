@@ -11,11 +11,12 @@ export default function ContentInput<T extends Slide>({
 
   return (
     <TextInput
+      id="content-input"
       slide={slide}
       onSlideUpdate={onSlideUpdate}
       label={t('content')}
       field="content"
-      placeholder={t('enterContent')+"..."}
+      placeholder={t('enterContent') + '...'}
       textArea
     />
   );

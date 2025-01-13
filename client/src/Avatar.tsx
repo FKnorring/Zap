@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 import { createAvatar } from '@dicebear/core';
-import { avatarCollections, collectionNames } from '@/utils'; // Assuming these are already defined
+import { avatarCollections, collectionNames } from '@/utils'; // Assuming these are already defined¨
 
 interface AvatarProps {
   avatarString: string;
@@ -39,7 +39,12 @@ const Avatar = ({
   }
 
   // Generate the avatar SVG
-  const avatar = createAvatar(selectedCollectionStyle, { seed: avatarString });
+  const avatar = createAvatar(selectedCollectionStyle, {
+    seed: avatarString,
+    translateY: 0,
+    translateX: 0,
+    clip: false,
+  });
   const svg = avatar.toString();
   const sanitizedSvg = DOMPurify.sanitize(svg);
 
@@ -50,7 +55,7 @@ const Avatar = ({
     <div className="flex flex-col items-center">
       <div
         className="rounded-full overflow-hidden" // Ensures the avatar is clipped to a circle
-        style={{ width: width || "8rem", height: height || "8rem"}}
+        style={{ width: width || '8rem', height: height || '8rem' }}
       >
         <div
           className="avatar-svg"

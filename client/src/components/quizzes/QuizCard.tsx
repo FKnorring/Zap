@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { InfoSlide, UserQuizzes } from '@/models/Quiz';
@@ -43,17 +42,21 @@ export function QuizCard({ quiz, onClick, children }: QuizCardProps) {
     id: '1',
   };
   return (
-    <Card className={`${onClick ? 'cursor-pointer' : ''}`} onClick={onClick}>
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <CardTitle className="text-lg mr-auto">{quiz.quizName}</CardTitle>
-          {quiz.isShared && (
-            <div className="bg-primary text-white p-1 rounded flex flex-row">
-              <Share className="w-4 h-4" />
-            </div>
-          )}
-        </div>
-      </CardHeader>
+    <Card
+      className={`${onClick ? 'cursor-pointer' : ''} bg-[#FFFFFF]` }
+      onClick={onClick}
+    >
+      <div className="flex items-center gap-2 ml-6">
+        <CardTitle className="text-lg mr-auto pb-1 pt-4 font-display">
+          {quiz.quizName}
+        </CardTitle>
+        {quiz.isShared && (
+          <div className="bg-primary text-white p-1 rounded flex flex-row">
+            <Share className="w-4 h-4" />
+          </div>
+        )}
+      </div>
+
       <CardContent>
         <div className="aspect-video w-full rounded overflow text-white relative">
           <SlidePreview slide={mockInfo as InfoSlide} />
@@ -87,85 +90,84 @@ export function MyQuizButtons({
 
   const isDisabled = noSlides || isLoading || existingOngoingQuiz;
 
+  const setBodyPointerEvents = (value: boolean) => {
+    document.body.style.pointerEvents = value ? 'auto' : 'none';
+  };
+
   return (
     <>
-      <Button
-        size="sm"
-        disabled={isDisabled}
-        variant={isDisabled ? 'outline' : 'default'}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (noSlides) return;
-          onHost(quiz);
-        }}
-        className="gap-1 mr-auto flex items-center"
-      >
-        <span className="leading-none">{t('homepage:startQuiz')}</span>
-        <Zap className="w-4 h-4" />
-      </Button>
+      <Dialog onOpenChange={(open) => setBodyPointerEvents(open)}>
+        <Button
+          size="sm"
+          disabled={isDisabled}
+          variant={isDisabled ? 'outline' : 'default'}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (noSlides) return;
+            onHost(quiz);
+          }}
+          className="gap-1 mr-auto flex items-center"
+        >
+          <span className="leading-none">{t('homepage:startQuiz')}</span>
+          <Zap className="w-4 h-4" />
+        </Button>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-          <Button variant="outline" size="sm" className="aspect-square">
-            <MoreHorizontal className="w-4 h-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem
-            onClick={(e) => {
-              e.stopPropagation();
-              onShare(quiz.quizId, quiz.quizName);
-            }}
-          >
-            <Share className="w-4 h-4 cursor-pointer" />
-            <span className="cursor-pointer">{t('general:share')}</span>
-          </DropdownMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <Button variant="outline" size="sm" className="aspect-square">
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                onShare(quiz.quizId, quiz.quizName);
+              }}
+            >
+              <Share className="w-4 h-4 cursor-pointer" />
+              <span className="cursor-pointer">{t('general:share')}</span>
+            </DropdownMenuItem>
 
-          <DropdownMenuItem
-            className="text-destructive"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            onSelect={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            <Dialog>
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <DialogTrigger className="flex w-full items-center gap-2">
                 <Trash className="w-4 h-4" />
                 {t('general:delete')}
               </DialogTrigger>
-              <DialogContent onClick={(e) => e.stopPropagation()}>
-                <DialogHeader>
-                  <DialogTitle>{t('homepage:deleteQuiz')}</DialogTitle>
-                  <DialogDescription>
-                    {t('homepage:deleteQuizDescription')} "{quiz.quizName}"?
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <div className="flex justify-end gap-2 mt-4">
-                    <DialogClose asChild>
-                      <Button variant="outline">{t('general:cancel')}</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button
-                        variant="destructive"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDelete(quiz.quizId);
-                        }}
-                      >
-                        {t('general:delete')}
-                      </Button>
-                    </DialogClose>
-                  </div>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DialogContent onClick={(e) => e.stopPropagation()}>
+          <DialogHeader>
+            <DialogTitle>{t('homepage:deleteQuiz')}</DialogTitle>
+            <DialogDescription>
+              {t('homepage:deleteQuizDescription')} "{quiz.quizName}"?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <div className="flex justify-end gap-2 mt-4">
+              <DialogClose asChild>
+                <Button className='text-black' variant="outline">{t('general:cancel')}</Button>
+              </DialogClose>
+              <DialogClose asChild>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    onDelete(quiz.quizId);
+                  }}
+                >
+                  {t('general:delete')}
+                </Button>
+              </DialogClose>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

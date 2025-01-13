@@ -7,9 +7,15 @@ import { InfoIcon } from 'lucide-react';
 export function Host({
   slide,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: LocateItSlide;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   const { t } = useTranslation(['quizEditor']);
 
@@ -50,7 +56,12 @@ export function Host({
           </div>
         </div>
       )}
-      <NextSlide onClick={onNextSlide} />
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }

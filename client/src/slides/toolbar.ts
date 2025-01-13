@@ -21,8 +21,16 @@ import { AnswerText } from './_toolbar/inputs/AnswerInput';
 import { SelectPoints } from './_toolbar/inputs/SelectPoints';
 import { LocateItInputs } from './_toolbar/inputs/LocateItInputs';
 import { MatchingOptionsInput } from './_toolbar/inputs/MatchingOptionsInput';
-
+import { MCQSAPoints } from './_toolbar/inputs/MCQSAPoints';
 import { BombOptionsInput } from './_toolbar/inputs/BombOptionsInput';
+import { ImagePositionInput } from './_toolbar/inputs/ImagePositionInput';
+import { BulletPointSlideInput } from './_toolbar/inputs/BulletPointSlideInput';
+import { BulletPointStyleInput } from './_toolbar/inputs/BulletPointStyleInput';
+import { JeopardyInput } from './_toolbar/inputs/JeopardyInput';
+import { JeopardyScoreInput } from './_toolbar/inputs/JeopardyScoreInput';
+import { JeopardyTimeLimits } from './_toolbar/inputs/JeopardyTimeLimits';
+import { JeopardyAIInput } from './_toolbar/inputs/JeopardyAIInput';
+import { ClosestInput } from "./_toolbar/inputs/ClosestInput";
 
 export interface ToolbarProps<T extends Slide> {
   slide: T;
@@ -113,6 +121,11 @@ export const toolbarConfigs = {
     ...baseToolbarConfig,
     ...baseQuestionToolbarConfig,
     {
+      field: 'pointsAwarding' as keyof MCQSASlide,
+      label: 'Points Awarding',
+      component: MCQSAPoints,
+    },
+    {
       field: 'options' as keyof MCQSASlide,
       label: 'Options',
       component: MCQOptionsInput,
@@ -199,6 +212,77 @@ export const toolbarConfigs = {
       field: 'labels' as keyof BombSlide,
       label: 'Bomb Question',
       component: BombOptionsInput,
+    },
+    ...baseQuestionToolbarConfig,
+  ],
+
+  bulletPoint: [
+    {
+      field: 'title',
+      label: 'Title',
+      component: TitleInput,
+    },
+    {
+      field: 'points',
+      label: 'Bullet Points',
+      component: BulletPointSlideInput,
+    },
+    {
+      field: 'fontSize',
+      label: 'Bullet Point Style',
+      component: BulletPointStyleInput,
+    },
+    {
+      field: 'imageUrl',
+      label: 'Image',
+      component: ImageInput,
+    },
+    {
+      field: 'imagePosition',
+      label: 'Image Position',
+      component: ImagePositionInput,
+    },
+    {
+      field: 'backgroundStyle',
+      label: 'Background',
+      component: BackgroundInput,
+    },
+  ],
+
+  JEOPARDY: [
+    {
+      field: 'categories',
+      label: 'Categories',
+      component: JeopardyInput,
+    },
+    {
+      field: 'AIcategories',
+      label: 'AI Category Generator',
+      component: JeopardyAIInput,
+    },
+    {
+      field: 'minScore',
+      label: 'Scores',
+      component: JeopardyScoreInput,
+    },
+    {
+      field: 'mainTimeLimit',
+      label: 'Time Limits',
+      component: JeopardyTimeLimits,
+    },
+    {
+      field: 'backgroundStyle',
+      label: 'Background',
+      component: BackgroundInput,
+    },
+  ],
+
+  CLOSEST: [
+    ...baseToolbarConfig,
+    {
+      field: 'correctAnswer',
+      label: 'Correct Answer',
+      component: ClosestInput,
     },
     ...baseQuestionToolbarConfig,
   ],

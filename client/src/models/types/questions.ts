@@ -9,7 +9,9 @@ export enum QuestionTypes {
   RANK = "RANK",
   MATCHING = "MATCHING",
   LOCATEIT = "LOCATEIT",
-  BOMB = "BOMB"
+  BOMB = "BOMB",
+  JEOPARDY = "JEOPARDY",
+  CLOSEST = "CLOSEST"
 }
 
 export type QuestionType = QuestionTypes;
@@ -22,7 +24,9 @@ export enum AnswerTypes {
   time = "time",
   matching = "matching",
   location = "location",
-  bomb = "bomb"
+  bomb = "bomb",
+  jeopardy = "jeopardy",
+  number = "number"
 }
 
 export type answerType = AnswerTypes;
@@ -58,6 +62,13 @@ export enum AwardPointsLocation {
 
 export type awardPointsLocation = AwardPointsLocation;
 
+export enum MCQSAPointsAwarding {
+  TIME = "TIME", // 0-100% points based on time
+  CORRECT = "CORRECT", // Full points if correct
+}
+
+export type mcqsaPointsAwarding = MCQSAPointsAwarding;
+
 export interface LocateItSlide extends QuestionSlideBase {
   location: {
     lat: number;
@@ -78,6 +89,7 @@ export interface MCQSASlide extends QuestionSlideBase {
     isCorrect: boolean;
   }>;
   answerType: AnswerTypes.singleString;
+  pointsAwarding: mcqsaPointsAwarding;
 }
 
 export interface MCQMASlide extends QuestionSlideBase {
@@ -117,11 +129,39 @@ export interface BombSlide extends QuestionSlideBase {
   questionType: QuestionTypes.BOMB,
   answerType: AnswerTypes.bomb,
   initialTime: number,
+  gameStarted: boolean;
+  deadParticipantsIds: string[]
   hearts: number,
   participantHearts: { participantId: string, hearts: number }[]
   id: string;
   answers: string[];
   usedAnswers: string[];
+}
+
+export interface JeopardyCategory {
+  id: string;
+  name: string;
+  questions: Array<{
+    id: string;
+    answer: string;
+    question: string;
+  }>;
+}
+
+export interface JeopardySlide extends QuestionSlideBase {
+  questionType: QuestionTypes.JEOPARDY;
+  answerType: AnswerTypes.jeopardy;
+  categories: JeopardyCategory[];
+  minScore: number;
+  maxScore: number;
+  mainTimeLimit: number;
+  answerTimeLimit: number;
+}
+
+export interface ClosestSlide extends QuestionSlideBase {
+  questionType: QuestionTypes.CLOSEST;
+  answerType: AnswerTypes.number;
+  correctAnswer: number;
 }
 
 export type QuestionSlide =
@@ -133,3 +173,5 @@ export type QuestionSlide =
   | LocateItSlide
   | MatchingSlide
   | BombSlide
+  | JeopardySlide
+  | ClosestSlide

@@ -11,7 +11,9 @@ export default function TitleInput<T extends Slide>({
 
   return (
     <TextInput
+      id="title-input"
       slide={slide}
+      
       onSlideUpdate={onSlideUpdate}
       label={t('title')}
       field="title"

@@ -3,6 +3,7 @@
   "gotoOngoing": "Gå till pågående Quiz",
   "createQuiz": "Skapa Quiz",
   "startQuiz": "Starta Quiz",
+  "templates": "Mallar",
   "sharedQuizzes": "Delade Quiz",
   "searchShared": "Sök delade quiz...",
   "quizName": "Quiz namn",
@@ -12,5 +13,34 @@
   "noSlides": "Inga slides än",
   "deleteQuizDescription": "Är du säker att du vill radera: ",
   "copyDescription": "När du kopierar quizet kommer du kunna redigera det och göra det till ditt eget.",
-  "collection": "Kollektion"
+  "collection": "Kollektion",
+  "questionTypes": "Nya och spännande frågetyper!",
+  "playNow": "Spela nu!",
+  "signIn": "Logga in",
+  "signUp": "Registrera",
+  "avatarText": "Välj bland tusentals avatarer!",
+  "slogan": "Kreativt, Enkelt och Unikt",
+  "inspotext": "Skapa oförglömliga quiz och evenemang med Zap!",
+  "getStarted": "Börja bygg!",
+  "stepTitles": {
+    "0": "Bygg, quizza och vinn!",
+    "1": "Bjud in dina vänner!",
+    "2": "Titta på när spänningen byggs upp & njut av roligheten!"
+  },
+
+  "stepText": {
+    "0": "Kom igång med Zap genom att skapa quiz och spelkvälls-slides. Lägg till olika interaktiva utmaningar för att hålla dina vänner engagerade, allt inom en enkel app.",
+    "1": "Dina vänner kan delta i roligheterna på vilken enhet som helst, genom att bara skanna en QR-kod eller använda en länk—inga appar behövs!",
+    "2": "Följ svaren, poängen och resultaten när de utvecklas, och bygg upp spänningen tills en vinnare koras."
+  },
+  "questionCarouselText": "Några av våra frågetyper",
+  "readmore": "Läs mer om oss!",
+  "questionDescriptions": {
+    "bomb": "I Ticking Timebomb turas spelarna om att svara på frågor inom en bestämd tid. Om tiden tar slut förlorar du ett liv. Den sista spelaren som står kvar vinner!",
+    "locateit": "Tror du att du kan geografi? Peka ut rätt plats på världskartan! Välj mellan olika svårighetsgrader, från landmärken till exakta platser, och testa din kunskap med olika inställningar!",
+    "matching": "I Meet Your Match försöker spelarna matcha olika alternativ med etiketter. Den spelare som har flest korrekta matchningar vinner!",
+    "fastest": "I Fastest försöker spelarna vara den första att svara på en fråga. Den första spelaren som svarar korrekt vinner!",
+    "rank": "Kan du rangorda alternativ rätt enligt frågan?",
+    "jeopardy": "Som det klassiska programmet, fast i Zap!"
+  }
 }

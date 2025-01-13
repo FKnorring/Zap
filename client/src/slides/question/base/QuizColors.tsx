@@ -1,7 +1,7 @@
 export function getColor(index: number): string {
   const colors = [
-    'rgb(255,0,195)', // Pink
-    'rgb(0,220,255)', // Light Blue
+    'rgb(255, 105, 180)', // Pink
+    'rgb(0, 191, 255)', // Light Blue
     'rgb(255,200,0)', // Yellow
     'rgb(138,0,255)', // Purple
     'rgb(255,120,0)', // Orange

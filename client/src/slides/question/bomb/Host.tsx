@@ -7,13 +7,14 @@ import { BombSlide } from '@/models/Quiz';
 import { ParticipantService } from '@/services/participant';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
-import { BombIcon } from 'lucide-react';
+
+import { FaBomb } from 'react-icons/fa';
 import NextSlide from '@/slides/_components/NextSlide';
 
 type HostProps = {
   participants: Participant[];
   slide: BombSlide;
-  quizCode: string;
+
   slideNumber: number;
   changeTurn: (participantId: string, quizCode: string) => void;
 
@@ -23,6 +24,9 @@ type HostProps = {
     usedAnswers: string[]
   ) => void;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 };
 
 type ParticipantHearts = {
@@ -36,8 +40,11 @@ export function Host({
   quizCode,
   slideNumber,
   onNextSlide,
+  onPrevSlide,
   changeTurn,
+
   updateSlideUsedAnswers,
+  endQuiz,
 }: HostProps) {
   const { t } = useTranslation();
   const [time, setTime] = useState(1000000000);
@@ -57,10 +64,32 @@ export function Host({
   const [deadParticipants, setDeadParticipants] = useState<string[]>([]);
   const [aliveParticipants, setAliveParticipants] = useState<Participant[]>([]);
 
-  const [isTurn, setIsturn] = useState('');
+  const [turn, setTurn] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [gameStarted, setGameStarted] = useState(false);
+
+  const [showRatio, setShowRatio] = useState(true); // State to toggle view
+
+  const handleGameStarted = async () => {
+    try {
+      // Create a setgameSrtared in hostlogic
+      //await startBombGame(quizCode, slideNumber);
+
+      setGameStarted(true);
+    } catch (error) {
+      console.error('Error while changing turn:', error);
+    }
+  };
+
+  const shuffleArray = (participants: Participant[]) => {
+    let shuffled = [...participants]; // Make a copy of the array to avoid mutating the original array
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // Select a random index to swap with
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // Swap elements
+    }
+    return shuffled;
+  };
 
   const initializeHeartsAndTime = () => {
     const newParticipantHearts = participants.map((participant) => {
@@ -75,20 +104,24 @@ export function Host({
         hearts: Math.min(existingHeart?.hearts ?? slide.hearts, 5),
       };
     });
-    setGameStarted(true);
+    handleGameStarted();
+
     setIsTimerRunning(true);
     setTime(slide.initialTime);
-    handleChangeTurn(currentParticipants[0].participantId);
+    // add a shuffle cuntion on currentparticiapnts before starting the game
+    const shuffledParticipants = shuffleArray(currentParticipants);
 
+    handleChangeTurn(shuffledParticipants[0].participantId);
+    setCurrentParticipants(shuffledParticipants);
     setParticipantHearts(newParticipantHearts);
-    setAliveParticipants(currentParticipants);
+    setAliveParticipants(shuffledParticipants);
   };
 
   const handleChangeTurn = async (participantId: string) => {
     try {
       await changeTurn(participantId, quizCode);
 
-      setIsturn(participantId);
+      setTurn(participantId);
     } catch (error) {
       console.error('Error while changing turn:', error);
     }
@@ -155,9 +188,9 @@ export function Host({
 
         if (
           lastTempAnswer &&
-          answers.includes(lastTempAnswer.toUpperCase()) &&
-          !usedAnswers.includes(lastTempAnswer.toUpperCase()) &&
-          currentParticipant.participantId == isTurn
+          answers.includes(lastTempAnswer.toUpperCase().trim()) &&
+          !usedAnswers.includes(lastTempAnswer.toUpperCase().trim()) &&
+          currentParticipant.participantId == turn
         ) {
           setIsCorrect('true');
 
@@ -165,7 +198,6 @@ export function Host({
             const updatedAnswers = [...prev, lastTempAnswer.toUpperCase()];
 
             if (answers.length === updatedAnswers.length) {
-              console.log('inne I FKNIN LOOPEN');
               sendAnswersToDatabase(
                 aliveParticipants,
                 deadParticipants,
@@ -214,14 +246,14 @@ export function Host({
           }, 1200);
         } else if (
           lastTempAnswer &&
-          !answers.includes(lastTempAnswer.toUpperCase())
+          !answers.includes(lastTempAnswer.toUpperCase().trim())
         ) {
           setIsCorrect('false');
           setUserAnswer(lastTempAnswer);
         } else if (
           lastTempAnswer &&
-          answers.includes(lastTempAnswer.toUpperCase()) &&
-          usedAnswers.includes(lastTempAnswer.toUpperCase())
+          answers.includes(lastTempAnswer.toUpperCase().trim()) &&
+          usedAnswers.includes(lastTempAnswer.toUpperCase().trim())
         ) {
           setIsCorrect('used');
           setUserAnswer(lastTempAnswer);
@@ -422,15 +454,14 @@ export function Host({
 
   if (!gameStarted) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center gap-8">
-        <div className="mt-8 rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center break-words text-center">
-          <BombIcon size={32} className="ml-4"></BombIcon>
-          <h1 className="p-8 text-5xl max-w-screen-lg">{slide.title} </h1>
+      <div className="h-screen flex flex-col items-center justify-between mb-10">
+        <div className="mt-10 rounded-md bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center text-center">
+          <FaBomb size={32} className="ml-4" />
+          <h1 className="p-6 text-5xl max-w-screen-lg">{slide.title}</h1>
         </div>
 
         <div className="space-y-10 mx-10">
           <Button
-            size={'lg'}
             className="text-5xl p-16 mx-10 rounded-full font-display"
             onClick={initializeHeartsAndTime}
           >
@@ -441,13 +472,26 @@ export function Host({
     );
   }
 
-  if (currentParticipants && currentParticipants.length > 0 && gameStarted) {
+  if (
+    currentParticipants &&
+    currentParticipants.length > 0 &&
+    gameStarted &&
+    slide.answers
+  ) {
     return (
       <div className="h-screen flex flex-col items-center justify-start gap-16">
         {/* Title moved outside of the motion.div */}
-        <div className="mt-16  rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
-          <BombIcon size={32} className="ml-4"></BombIcon>
+        <div className="mt-10  rounded-lg bg-[#F4F3F2] text-black mb-4 flex justify-center font-display text-4xl items-center max-w-[60%] break-words text-center">
+          <FaBomb className="ml-4"></FaBomb>
           <h1 className="p-4">{slide.title}</h1>
+          <button
+            onClick={() => {
+              setShowRatio(!showRatio); // Toggle the state
+            }}
+            className="bg-blue-500 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Show
+          </button>
         </div>
 
         <motion.div
@@ -482,36 +526,57 @@ export function Host({
                     width: '100%', // Ensure full width for content
                   }}
                 >
-                  <div className="m-8 p-12 items-center bg-component-background rounded-lg grid grid-cols-2 gap-4">
+                  <div className="m-4 p-4 items-center bg-component-background rounded-lg grid grid-cols-2 gap-4">
                     {/* Timer stays in the first column */}
-                    <div className="flex-col justify-center items-center font-display">
-                      <h2 className=" text-black text-5xl">{time}</h2>
-                      <div className="mt-4 text-4xl">
-                        <h3 className="text-black font-display">
-                          {currentParticipants[0].name}
-                        </h3>
-                      </div>
-                      <div className="justify-center items center flex gap-0.5rem">
-                        {Array.from({
-                          length:
-                            participantHearts.find(
-                              (ph) =>
-                                ph.participantId ===
-                                currentParticipants[0].participantId
-                            )?.hearts || 0,
-                        }).map((_, index) => (
-                          <HeartIcon
-                            key={index}
-                            fill="#FF4545"
-                            color="#FF4545"
-                          />
-                        ))}
-                      </div>
+                    <div className="flex flex-col items-center font-display">
+                      <motion.div
+                        animate={{
+                          scale: time <= 5 ? [1, 1.1, 1] : 1,
+                        }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                        }}
+                        className="relative translate-x-7"
+                      >
+                        <FaBomb
+                          size={128}
+                          style={{
+                            color: time <= 5 ? '#8B0000' : 'black',
+                            filter: time <= 5 ? 'brightness(0.8)' : 'none',
+                          }}
+                          className="text-black translate-x-3"
+                        />
+                        <h2
+                          className="absolute inset-0 flex items-center justify-center text-white text-5xl font-bold pointer-events-none"
+                          style={{
+                            transform: '',
+                          }}
+                        >
+                          {time}
+                        </h2>
+                        <div className="mt-4 flex justify-center items-center gap-2">
+                          {Array.from({
+                            length:
+                              participantHearts.find(
+                                (ph) =>
+                                  ph.participantId ===
+                                  currentParticipants[0].participantId
+                              )?.hearts || 0,
+                          }).map((_, index) => (
+                            <HeartIcon
+                              key={index}
+                              fill="#FF4545"
+                              color="#FF4545"
+                            />
+                          ))}
+                        </div>
+                      </motion.div>
                     </div>
 
                     {/* Avatar stays in the second column, center aligned */}
                     <motion.div
-                      className=" flex-col items-center justify-center"
+                      className="flex flex-col items-center justify-center m-4"
                       initial={{ opacity: 1 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
@@ -523,6 +588,9 @@ export function Host({
                         width="8em"
                         height="8rem"
                       />
+                      <h1 className="text-black font-display mt-2 text-4xl">
+                        {currentParticipants[0].name}
+                      </h1>
                     </motion.div>
                   </div>
 
@@ -544,21 +612,74 @@ export function Host({
                 </motion.div>
               )}
           </AnimatePresence>
+
           <div
-            className="absolute flex flex-col justify-center items-center"
+            className="absolute flex flex-col justify-center  overflow-y-hidden text-center items-center"
             style={{
-              left: '25%',
-              top: '45%',
-              transform: 'translate(-90%, -50%)',
+              left: '16%',
+              top: '0%',
             }}
           >
-            <h1 className="text-3xl font-display">
-              {t('questions:used')} / {t('questions:total')}
-            </h1>
-            <h1 className="text-6xl font-display">
-              {usedAnswers.length}/{answers.length}
+            <h1 className="text-6xl font-display mb-4">
+              {usedAnswers.length} / {answers.length}
             </h1>
           </div>
+
+          {/* Ratio Display */}
+
+          <div
+            className="absolute flex flex-col justify-center items-center overflow-y-hidden"
+            style={{
+              left: '5%',
+              top: '15%',
+            }}
+          >
+            {/* Conditional Rendering */}
+            {showRatio === false && (
+              <div
+                className="grid grid-cols-3 gap-4 justify-center text-center items-center"
+                style={{ maxHeight: '24em', overflowY: 'hidden' }} // Adding max height and enabling scroll
+              >
+                {usedAnswers.length > 0 ? (
+                  usedAnswers.slice(0, 15).map((answer, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-400 text-2xl font-display text-black py-4 px-4 rounded"
+                    >
+                      {answer}
+                    </span>
+                  ))
+                ) : (
+                  <h1 className="text-4xl font-display col-span-2">
+                    No answers
+                  </h1>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Display Remaining Answers if usedAnswers > 15 */}
+          {showRatio === false && usedAnswers.length > 15 && (
+            <div
+              className="absolute grid grid-cols-3 justify-center items-center overflow-y-auto gap-4 text-center"
+              style={{
+                left: '65%',
+                top: '15%',
+                maxHeight: '24em',
+                overflowY: 'auto', // Enable scroll for this section if needed
+              }}
+            >
+              {usedAnswers.slice(15).map((answer, index) => (
+                <span
+                  key={index}
+                  className="bg-green-400 text-2xl font-display text-black py-4 px-4 rounded"
+                >
+                  {answer}
+                </span>
+              ))}
+            </div>
+          )}
+
           <div className="relative flex items-center justify-center w-full">
             <motion.div
               style={{
@@ -595,7 +716,7 @@ export function Host({
                     width="6rem"
                     height="6rem"
                   />
-                  <h3 className="font-display">{participant.name}</h3>
+                  <h3 className="font-display text-2xl">{participant.name}</h3>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     {(participantHearts.find(
                       (ph) => ph.participantId === participant.participantId
@@ -618,7 +739,12 @@ export function Host({
             </motion.div>
           </div>
         </motion.div>
-        <NextSlide onClick={onNextSlide} />
+        <NextSlide
+          quizCode={quizCode}
+          endQuiz={() => endQuiz(quizCode)} // Corrected here
+          onPrev={onPrevSlide}
+          onNext={onNextSlide}
+        />
       </div>
     );
   }

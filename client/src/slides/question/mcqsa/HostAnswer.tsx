@@ -1,22 +1,26 @@
-import { MCQSASlide, Participant } from "@/models/Quiz";
-import { CheckCircle2, CircleX } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { getColor } from "../base/QuizColors";
-import NextSlide from "@/slides/_components/NextSlide";
+import { MCQSASlide, Participant } from '@/models/Quiz';
+import { CheckCircle2, CircleX } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { getColor } from '../base/QuizColors';
+import NextSlide from '@/slides/_components/NextSlide';
 
 export function HostAnswer({
   slide,
   participants = [],
   isPreview = false, // Default to false
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
 }: {
   slide: MCQSASlide;
   participants: Participant[];
   isPreview?: boolean;
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
-  console.log(participants);
-
   const AnswerCount = () => {
     const calculateAnswerCounts = () => {
       return slide.options.map((option) => {
@@ -76,20 +80,20 @@ export function HostAnswer({
     return (
       <div
         className={cn(
-          "grid gap-6 w-full",
+          'grid gap-6 w-full',
           `grid-cols-${Math.ceil(slide.options.length / 2)}`
         )}
-        style={{ gridAutoRows: "1fr" }}
+        style={{ gridAutoRows: '1fr' }}
       >
         {slide.options.map((option, index) => (
           <div
             key={option.id}
             className={cn(
-              "flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full",
+              'flex items-center justify-between text-3xl text-white font-display h-40 p-6 gap-4 rounded-lg box-border w-full',
               {
-                "bg-white/10 backdrop-blur outline outline-white/50":
+                'bg-white/10 backdrop-blur outline outline-white/50':
                   !option.isCorrect,
-                "ring-4 ring-white": option.isCorrect,
+                'ring-4 ring-white': option.isCorrect,
               }
             )}
             style={{
@@ -114,9 +118,16 @@ export function HostAnswer({
       <div className="bg-white rounded p-6 mb-40">
         <h1 className="text-4xl text-black font-display">{slide.title}</h1>
       </div>
-      <AnswerCount />
-      <CorrectAnswers />
-      <NextSlide onClick={onNextSlide} />
+      <div className=" justify-center w-full flex flex-col mb-20">
+        <AnswerCount />
+        <CorrectAnswers />
+      </div>
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }

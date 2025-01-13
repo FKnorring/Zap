@@ -15,10 +15,9 @@ import { getSlideComponentsFromType } from '@/slides/utils';
 import { useAppContext } from '@/contexts/App/context';
 import { nanoid } from 'nanoid';
 import { useTranslation } from 'react-i18next';
-import type { Active, Over } from '@dnd-kit/core';
 
 const DEFAULT_TIME_LIMIT = 0;
-const SAVE_ON_N_ACTIONS = 50;
+const SAVE_ON_N_ACTIONS = 5000;
 const SAVE_ON_LAST_ACTION = 30000; // 30 seconds
 
 export function useQuizEditor(quizId: string | undefined) {
@@ -27,7 +26,12 @@ export function useQuizEditor(quizId: string | undefined) {
   const [showSettings, setShowSettings] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const {
-    quizzes: { optimisticUpdate, resources: quizzes, isLoading, enrichResource },
+    quizzes: {
+      optimisticUpdate,
+      resources: quizzes,
+      isLoading,
+      enrichResource,
+    },
   } = useAppContext();
 
   const { t } = useTranslation(['questions']);
@@ -46,7 +50,7 @@ export function useQuizEditor(quizId: string | undefined) {
 
   useEffect(() => {
     if (quizId && enriched) {
-      const globalQuiz = quizzes.find((q) => q.id === quizId)
+      const globalQuiz = quizzes.find((q) => q.id === quizId);
       if (globalQuiz) {
         setLocalQuiz(globalQuiz);
       }
@@ -118,7 +122,11 @@ export function useQuizEditor(quizId: string | undefined) {
     }
   };
 
-  const handleAddSlide = (type: SlideType, questionType?: QuestionType, index?: number) => {
+  const handleAddSlide = (
+    type: SlideType,
+    questionType?: QuestionType,
+    index?: number
+  ) => {
     if (!quizId || !localQuiz) return;
 
     let backgroundStyle =
@@ -128,7 +136,7 @@ export function useQuizEditor(quizId: string | undefined) {
     if (backgroundStyle === 'random') {
       const randomBackgroundStyle =
         quizDefaultsBackgroundStyles[
-        Math.floor(Math.random() * quizDefaultsBackgroundStyles.length)
+          Math.floor(Math.random() * quizDefaultsBackgroundStyles.length)
         ];
       backgroundStyle = randomBackgroundStyle;
     }
@@ -148,12 +156,12 @@ export function useQuizEditor(quizId: string | undefined) {
       ...SlideInfo.defaults,
       ...(questionType
         ? {
-          questionType,
-          timeLimit: DEFAULT_TIME_LIMIT,
-          showCorrectAnswer:
-            localQuiz?.settings?.showCorrectAnswerDefault ??
-            quizDefaults.showCorrectAnswerDefault,
-        }
+            questionType,
+            timeLimit: DEFAULT_TIME_LIMIT,
+            showCorrectAnswer:
+              localQuiz?.settings?.showCorrectAnswerDefault ??
+              quizDefaults.showCorrectAnswerDefault,
+          }
         : {}),
       title: t(SlideInfo.label),
     } as Slide;
@@ -161,9 +169,15 @@ export function useQuizEditor(quizId: string | undefined) {
     setLocalQuiz((prev) =>
       prev
         ? {
-          ...prev,
-          slides: index ? [...prev.slides?.slice(0, index), newSlide, ...prev.slides?.slice(index)] : [...(prev?.slides || []), newSlide],
-        }
+            ...prev,
+            slides: index
+              ? [
+                  ...prev.slides?.slice(0, index),
+                  newSlide,
+                  ...prev.slides?.slice(index),
+                ]
+              : [...(prev?.slides || []), newSlide],
+          }
         : null
     );
     setActiveSlideId(newSlide.id);
@@ -175,11 +189,11 @@ export function useQuizEditor(quizId: string | undefined) {
     setLocalQuiz((prev) =>
       prev
         ? {
-          ...prev,
-          slides: prev.slides.map((slide) =>
-            slide.id === updatedSlide.id ? updatedSlide : slide
-          ),
-        }
+            ...prev,
+            slides: prev.slides.map((slide) =>
+              slide.id === updatedSlide.id ? updatedSlide : slide
+            ),
+          }
         : null
     );
     trackAction();
@@ -190,9 +204,9 @@ export function useQuizEditor(quizId: string | undefined) {
     setLocalQuiz((prev) =>
       prev
         ? {
-          ...prev,
-          slides: prev.slides.filter((slide) => slide.id !== slideId),
-        }
+            ...prev,
+            slides: prev.slides.filter((slide) => slide.id !== slideId),
+          }
         : null
     );
     if (activeSlideId === slideId) {
@@ -263,14 +277,14 @@ export function useQuizEditor(quizId: string | undefined) {
     setLocalQuiz((prev) =>
       prev
         ? {
-          ...prev,
-          quiz_name: updates.quizName ?? prev.quiz_name,
-          settings: {
-            ...quizDefaults,
-            ...prev.settings,
-            ...updates.settings,
-          },
-        }
+            ...prev,
+            quiz_name: updates.quizName ?? prev.quiz_name,
+            settings: {
+              ...quizDefaults,
+              ...prev.settings,
+              ...updates.settings,
+            },
+          }
         : null
     );
     trackAction();
@@ -284,7 +298,7 @@ export function useQuizEditor(quizId: string | undefined) {
 
       const oldIndex = prev.slides.findIndex((slide) => slide.id === activeId);
       const newIndex = prev.slides.findIndex((slide) => slide.id === overId);
-      
+
       if (oldIndex === -1 || newIndex === -1) return prev;
 
       const newSlides = [...prev.slides];

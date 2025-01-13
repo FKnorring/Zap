@@ -40,3 +40,20 @@
 .read-the-docs {
   color: #888;
 }
+
+
+@keyframes pulse-scale {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-red {
+  animation: pulse-scale 1s infinite;
+  color: #8B0000; /* Dark red for the bomb */
+  filter: brightness(0.8); /* Dim the bomb for a more intense effect */
+}
+

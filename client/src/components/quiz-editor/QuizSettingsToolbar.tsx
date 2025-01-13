@@ -19,15 +19,18 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { useTranslation } from 'react-i18next';
+import { WrenchIcon, X } from 'lucide-react';
 
 interface QuizSettingsToolbarProps {
   quiz: Quiz;
   onUpdate: (updates: { quizName?: string; settings?: QuizSettings }) => void;
+  closeSettings: () => void;
 }
 
 export function QuizSettingsToolbar({
   quiz,
   onUpdate,
+  closeSettings,
 }: QuizSettingsToolbarProps) {
   const { quiz_name } = quiz;
   const originalSettings = useMemo(
@@ -48,7 +51,16 @@ export function QuizSettingsToolbar({
   const { t } = useTranslation();
 
   return (
-    <div className="h-full bg-secondary/90 p-4 flex flex-col gap-4 overflow-y-auto text-black">
+    <div className="h-full p-4 flex flex-col gap-4 overflow-y-auto text-black">
+      <div className="flex items-center justify-between">
+        <div className="text-2xl font-display flex flex-row items-center gap-1">
+          <WrenchIcon className="w-6 h-6" />
+          {t('quizEditor:quizSettings')}
+        </div>
+        <Button variant="ghost" onClick={closeSettings}>
+          <X className="w-8 h-8" />
+        </Button>
+      </div>
       <div className="space-y-2">
         <Label>{t('quizEditor:quizName')}</Label>
         <Input

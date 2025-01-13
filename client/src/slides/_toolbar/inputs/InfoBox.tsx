@@ -16,7 +16,7 @@ export default function InfoBox<T extends Slide>({ slide }: ToolbarProps<T>) {
   return (
     <Popover>
       <PopoverTrigger>
-        <Info />
+        <Info color="orange" strokeWidth={4} size={20 } />
       </PopoverTrigger>
       <PopoverContent className="font-display">{t(infoText)}</PopoverContent>
     </Popover>

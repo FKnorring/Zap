@@ -8,29 +8,37 @@ import { useTranslation } from 'react-i18next';
 export function HostAnswer({
   participants,
   onNextSlide,
+  onPrevSlide,
+  endQuiz,
+  quizCode,
   slide,
 }: {
   slide: BombSlide;
   participants: Participant[];
   onNextSlide: () => void;
+  onPrevSlide: () => void;
+  endQuiz: (quizCode: string) => Promise<boolean>;
+  quizCode: string;
 }) {
   // Find the highest answer and collect participants with that answer
   const { t } = useTranslation();
   let highestAnswer = -Infinity;
   let winningParticipants: Participant[] = [];
 
-  participants.forEach((participant) => {
-    const lastAnswer = participant.answers[participant.answers.length - 1];
+  if (participants) {
+    participants.forEach((participant) => {
+      const lastAnswer = participant.answers[participant.answers.length - 1];
 
-    if (parseInt(lastAnswer.answer[0]) > highestAnswer) {
-      // If the current answer is higher, reset the winners list
-      highestAnswer = parseInt(lastAnswer.answer[0]);
-      winningParticipants = [participant]; // New winner
-    } else if (parseInt(lastAnswer.answer[0]) === highestAnswer) {
-      // If the current answer matches the highest, add to winners list
-      winningParticipants.push(participant);
-    }
-  });
+      if (parseInt(lastAnswer.answer[0]) > highestAnswer) {
+        // If the current answer is higher, reset the winners list
+        highestAnswer = parseInt(lastAnswer.answer[0]);
+        winningParticipants = [participant]; // New winner
+      } else if (parseInt(lastAnswer.answer[0]) === highestAnswer) {
+        // If the current answer matches the highest, add to winners list
+        winningParticipants.push(participant);
+      }
+    });
+  }
 
   return (
     <div className="flex flex-col items-center h-full p-10 w-full">
@@ -39,51 +47,60 @@ export function HostAnswer({
         <h1 className="p-4">{slide.title}</h1>
       </div>
 
-      <div className="mt-10 text-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full overflow-y-auto max-h-96">
-        {slide.answers.map((answer, index) => (
-          <div
-            key={index}
-            className={`m-1 flex flex-col items-center justify-center p-4 rounded-lg shadow-md ${
-              slide.usedAnswers
-                ? slide.usedAnswers.includes(answer)
-                  ? 'bg-green-600 '
-                  : 'bg-component-background'
-                : 'bg-component-background'
-            }`}
-          >
-            <span className="text-3xl font-display">{answer}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Render the avatars of the winning participants */}
-      <div className="flex flex-col items-center h-full p-10 w-full">
-        <div className="flex gap-4">
-          {participants.slice(0, 5).map((participant) => (
+      {slide.answers && (
+        <div className="mt-10 text-black grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full overflow-y-auto max-h-96">
+          {slide.answers.map((answer, index) => (
             <div
-              className="mx-4 flex flex-col items-center h-full"
-              key={participant.participantId}
+              key={index}
+              className={`m-1 flex flex-col items-center justify-center p-4 rounded-lg shadow-md ${
+                slide.usedAnswers
+                  ? slide.usedAnswers.includes(answer)
+                    ? 'bg-green-600 '
+                    : 'bg-component-background'
+                  : 'bg-component-background'
+              }`}
             >
-              <h1 className="m-4 text-3xl font-display">
-                {winningParticipants.includes(participant)
-                  ? t('question:winner')
-                  : '💀'}
-              </h1>
-              <Avatar
-                width={'8rem'}
-                height={'8rem'}
-                avatarString={participant.avatar}
-                collectionName={participant.collectionName}
-              ></Avatar>
-              <h1 className="font-display text-2xl mt-2">
-                + {participant.score.at(-1)}
-              </h1>
+              <span className="text-3xl font-display">{answer}</span>
             </div>
           ))}
         </div>
-      </div>
+      )}
 
-      <NextSlide onClick={onNextSlide} />
+      {/* Render the avatars of the winning participants */}
+      {participants && (
+        <div className="flex flex-col items-center h-full p-10 w-full">
+          <div className="flex gap-4">
+            {participants.slice(0, 5).map((participant) => (
+              <div
+                className="mx-4 flex flex-col items-center h-full"
+                key={participant.participantId}
+              >
+                <h1 className="m-4 text-3xl font-display">
+                  {winningParticipants.includes(participant)
+                    ? t('question:winner')
+                    : '💀'}
+                </h1>
+                <Avatar
+                  width={'8rem'}
+                  height={'8rem'}
+                  avatarString={participant.avatar}
+                  collectionName={participant.collectionName}
+                ></Avatar>
+                <h1 className="font-display text-2xl mt-2">
+                  + {participant.score.at(-1)}
+                </h1>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <NextSlide
+        quizCode={quizCode}
+        endQuiz={() => endQuiz(quizCode)} // Corrected here
+        onPrev={onPrevSlide}
+        onNext={onNextSlide}
+      />
     </div>
   );
 }
