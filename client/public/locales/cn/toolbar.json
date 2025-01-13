@@ -1,0 +1,5 @@
+{
+  "correctAnswer": "正确答案",
+  "closestAnswerInfo": "输入玩家需要猜测的目标数字。分数将奖励给最接近猜测的玩家。",
+  "invalidNumberError": "请输入一个有效的数字"
+}

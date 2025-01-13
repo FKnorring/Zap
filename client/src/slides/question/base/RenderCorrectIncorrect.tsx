@@ -28,7 +28,7 @@ export default function ParticipantCorrect({ children, participant }: Props) {
   const latestScore = score[0] ?? 0;
 
   function getAnswerState() {
-    if (latestScore === 0) return 'incorrect';
+    if (latestScore <= 0) return 'incorrect';
     if (latestScore < 500 && latestScore > 250) return 'partial';
     if (latestScore < 250) return 'bad';
     return 'correct';

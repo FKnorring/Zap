@@ -36,7 +36,7 @@ export function Host({
       <span className="font-display text-6xl mt-10">
         {t('lookAtYourScreen')}
       </span>
-      <Smartphone  size={256} color='white' className='mt-10'></Smartphone>
+
       {slide.imageUrl && (
         <div className="flex justify-center">
           <div className="relative flex items-center justify-center">
@@ -52,6 +52,8 @@ export function Host({
           </div>
         </div>
       )}
+       <h1 className='text-2xl font-display mt-4'>Look at your phone!</h1>
+      <Smartphone size={128} color="white"></Smartphone>
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here

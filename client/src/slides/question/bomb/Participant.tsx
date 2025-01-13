@@ -9,7 +9,7 @@ interface BombParticipantProps {
   slide: BombSlide;
   answerQuestion: (answer: string[]) => void;
   answerTempQuestion: (answer: string) => boolean;
-  participantData: Participant;
+  participantData?: Participant; // Ensure optional
   turn: string;
 }
 
@@ -31,45 +31,46 @@ export function Participant({
   };
 
   const handleCheckAnswer = () => {
-    console.log('Checking answer...');
-    const isValid = answerTempQuestion(userAnswer);
+    if (participantData) {
+      const isValid = answerTempQuestion(userAnswer);
 
-    if (isValid) {
-      setUserAnswer('');
-      // Keep the timer running, and rely on `turn` change to reset or stop input
-    } else {
-      console.log('Wrong answer');
+      if (isValid) {
+        setUserAnswer('');
+        // Keep the timer running, and rely on `turn` change to reset or stop input
+      } else {
+        console.log('Wrong answer');
+      }
     }
   };
 
-  // Manage the countdown timer and shaking animation
   useEffect(() => {
+    if (!participantData) return;
+
     let interval: NodeJS.Timeout | undefined;
 
     // Reset the counter and shake when the turn changes
-    if (participantData.participantId !== undefined) {
-      if (turn !== participantData.participantId) {
-        setCounter(slide.initialTime || 0); // Reset counter
-        setShake(false); // Remove shake effect
-        setDisableInput(true); // Disable input
-      } else {
-        setDisableInput(false); // Enable input for the current participant
-        interval = setInterval(() => {
-          setCounter((prevCounter) => {
-            if (prevCounter <= 1) {
-              clearInterval(interval); // Stop the countdown at zero
-              setShake(true); // Trigger the shake animation
-              return 0;
-            }
-            return prevCounter - 1;
-          });
-        }, 1000);
-      }
+    if (turn !== participantData.participantId) {
+      setCounter(slide.initialTime || 0); // Reset counter
+      setShake(false); // Remove shake effect
+      setDisableInput(true); // Disable input
+    } else {
+      setDisableInput(false); // Enable input for the current participant
+      interval = setInterval(() => {
+        setCounter((prevCounter) => {
+          if (prevCounter <= 1) {
+            clearInterval(interval); // Stop the countdown at zero
+            setShake(true); // Trigger the shake animation
+            return 0;
+          }
+          return prevCounter - 1;
+        });
+      }, 1000);
     }
+
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [turn, participantData.participantId, slide.initialTime]);
+  }, [turn, participantData?.participantId, slide.initialTime]);
 
   return (
     <div
@@ -80,7 +81,7 @@ export function Participant({
       </h1>
       <div className="flex flex-col items-center justify-center w-full">
         <div
-          className={`p-8 rounded-md shadow-lg text-black font-display text-3xl mb-8 w-3/4 max-w-lg ${turn === participantData.participantId ? 'bg-white' : 'bg-gray-300'}`}
+          className={`p-8 rounded-md shadow-lg text-black font-display text-3xl mb-8 w-3/4 max-w-lg ${turn === participantData?.participantId ? 'bg-white' : 'bg-gray-300'}`}
         >
           <Input
             value={userAnswer}
@@ -103,7 +104,7 @@ export function Participant({
             </p>
           )}
         </div>
-        {turn === participantData.participantId && counter > 0 && (
+        {turn === participantData?.participantId && counter > 0 && (
           <div className="mt-4 text-center">
             <p
               className={`text-6xl font-bold ${counter <= 5 ? 'text-red-600' : 'text-white'}`}

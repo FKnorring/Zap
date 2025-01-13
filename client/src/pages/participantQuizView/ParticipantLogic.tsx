@@ -14,6 +14,7 @@ import Spinner from '@/components/Spinner';
 import ParticipantMenu from './components/ParticipantMenu';
 import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
 import { QuizSettings } from '@/models/Quiz';
+import NoSleepComponent from '@/NoSleepComponent';
 
 function QuizView({
   questions,
@@ -54,10 +55,14 @@ function QuizView({
   // If we are on a question slide render the corresponding answerView
   if (showAnswer && 'ParticipantAnswer' in SlideComponent) {
     return (
-      <SlideComponent.ParticipantAnswer
-        slide={currentQuestion as never}
-        participant={participantData}
-      />
+      <>
+        {' '}
+        <NoSleepComponent />
+        <SlideComponent.ParticipantAnswer
+          slide={currentQuestion as never}
+          participant={participantData}
+        />
+      </>
     );
   }
 
@@ -72,6 +77,7 @@ function QuizView({
 
   return (
     <>
+      <NoSleepComponent />
       {flash && (
         <div className="fixed inset-0 bg-white/60 animate-flash pointer-events-none z-50" />
       )}
@@ -87,7 +93,16 @@ function QuizView({
   );
 }
 
-export default function ParticipantLogic() {
+export default function ParticipantLogicWrapped() {
+  return (
+    <>
+      <NoSleepComponent />
+      <ParticipantLogic />
+    </>
+  );
+}
+
+function ParticipantLogic() {
   var { quizCode } = useParams();
   quizCode = quizCode?.toUpperCase();
 
@@ -227,51 +242,54 @@ export default function ParticipantLogic() {
   }
 
   return (
-    <div className="h-dvh flex flex-col w-full font-display">
-      {/* Top */}
-      <div className="grid grid-cols-3 items-center p-2 w-full bg-[#F4F3F2] text-[#333333]">
-        <div className="flex items-center">
-          <ParticipantMenu onLeave={handleRemoveParticipant} />
+    <>
+      <NoSleepComponent />
+      <div className="h-dvh flex flex-col w-full font-display">
+        {/* Top */}
+        <div className="grid grid-cols-3 items-center p-2 w-full bg-[#F4F3F2] text-[#333333]">
+          <div className="flex items-center">
+            <ParticipantMenu onLeave={handleRemoveParticipant} />
+          </div>
+
+          <div className="flex items-center justify-center text-xl">
+            <Zap className="w-6 h-6 mr-1 text-primary" />
+            Zap!
+          </div>
+
+          <div className="flex items-center justify-end text-xl">
+            {currentSlide}/{questions?.length}
+          </div>
         </div>
 
-        <div className="flex items-center justify-center text-xl">
-          <Zap className="w-6 h-6 mr-1 text-primary" />
-          Zap!
-        </div>
-
-        <div className="flex items-center justify-end text-xl">
-          {currentSlide}/{questions?.length}
-        </div>
-      </div>
-
-      {/* Middle: Quiz Question */}
-      <div className="flex-grow flex flex-col w-full overflow-auto">
-        <QuizView
-          questions={questions}
-          currentSlide={currentSlide}
-          participantData={participantData}
-          answerQuestion={answerQuestion}
-          showAnswer={showAnswer}
-          answerTempQuestion={answerTempQuestion}
-          turn={turn}
-          currentSlideTime={currentSlideTime}
-        />
-        {/* Render background*/}
-        {quizSettings && (
-          <QuizBackground
-            backgroundColor={quizSettings.backgroundColor}
-            primaryColor={quizSettings.primaryColor}
-            secondaryColor={quizSettings.secondaryColor}
-            style={questions && questions[currentSlide - 1]?.backgroundStyle}
-            className="fixed inset-0 h-screen w-screen z-[-1] object-cover "
-            isDynamic
+        {/* Middle: Quiz Question */}
+        <div className="flex-grow flex flex-col w-full overflow-auto">
+          <QuizView
+            questions={questions}
+            currentSlide={currentSlide}
+            participantData={participantData}
+            answerQuestion={answerQuestion}
+            showAnswer={showAnswer}
+            answerTempQuestion={answerTempQuestion}
+            turn={turn}
+            currentSlideTime={currentSlideTime}
           />
-        )}
-      </div>
+          {/* Render background*/}
+          {quizSettings && (
+            <QuizBackground
+              backgroundColor={quizSettings.backgroundColor}
+              primaryColor={quizSettings.primaryColor}
+              secondaryColor={quizSettings.secondaryColor}
+              style={questions && questions[currentSlide - 1]?.backgroundStyle}
+              className="fixed inset-0 h-screen w-screen z-[-1] object-cover "
+              isDynamic
+            />
+          )}
+        </div>
 
-      {/* Bottom: Team info */}
-      {showAnswer ||
-        (currentSlide === 0 && <TeamInfo participant={participantData} />)}
-    </div>
+        {/* Bottom: Team info */}
+        {showAnswer ||
+          (currentSlide === 0 && <TeamInfo participant={participantData} />)}
+      </div>
+    </>
   );
 }

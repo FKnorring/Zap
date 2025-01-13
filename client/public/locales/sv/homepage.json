@@ -41,6 +41,10 @@
     "matching": "I Meet Your Match försöker spelarna matcha olika alternativ med etiketter. Den spelare som har flest korrekta matchningar vinner!",
     "fastest": "I Fastest försöker spelarna vara den första att svara på en fråga. Den första spelaren som svarar korrekt vinner!",
     "rank": "Kan du rangorda alternativ rätt enligt frågan?",
-    "jeopardy": "Som det klassiska programmet, fast i Zap!"
+    "jeopardy": "Som det klassiska programmet, fast i Zap!",
+    "more": {
+      "title": "Och mycket mer!",
+      "description": "Skapa ett quiz för att utforska alla frågetyper! Vi lägger till nya frågetyper kontinuerligt i applikationen. Så håll utkik för uppdateringar!"
+    }
   }
 }

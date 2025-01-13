@@ -38,7 +38,7 @@ export default function AboutPhone() {
       {/* GitHub Link */}
       <div className="text-center w-full mt-6">
         <a
-          href="https://github.com/FKnorring/GameShack"
+          href="https://github.com/FKnorring/Zap"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xl pb-6 font-display flex items-center justify-center gap-2 text-blue-400 hover:text-blue-600 transition"

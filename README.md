@@ -22,20 +22,23 @@
 
 Zap! supports the creation of quizzes with the following slide types:
 
-1. **Information Slide**
+1. **Presentation Slides**
+   - Slides that are used to present information to the participants
+      - **Information Slide**: Presents information to players without interaction.
+      - **Bullet Points**: Displays a list of bullet points.
+      - **Score Slide**: Displays the scores and rankings of players.
 
-   - Presents information to players without interaction.
-
-2. **Score Slide**
-
-   - Displays the scores and rankings of players.
-
-3. **Question Slide**
+2. **Question Slides**
    - Interactive slides with the following question types:
-     - **Single Answer MCQ**: Players select one correct option.
-     - **Multiple Answer MCQ**: Players select multiple correct options.
-     - **Text Answer**: Players provide a text response.
-     - **Rank Answers**: Players arrange answers in the correct order.
+     - **Multiple Choice**: Players select one or more options out of a list of options.
+     - **Too Close To Call**: Players input a number and the closest number to the correct answer wins.
+     - **Ticking Time Bomb**: Players take turns answering questions before the timer runs out.
+     - **Fastest On The Buzzer**: The first player to press the buzzer gets to answer the question first.
+     - **Free Text**: Players can input any text as an answer.
+     - **Jeopardy**: Jeopardy style game where players answer questions to gain points.
+     - **LocateIt**: Players have to find a location on a map.
+     - **Meet Your Match**: Players have to match options to a given category.
+     - **Rank It Right**: Players have to rank options in the correct order.
 
 ---
 
@@ -43,10 +46,9 @@ Zap! supports the creation of quizzes with the following slide types:
 
 Zap! is built using modern technologies for optimal performance and maintainability:
 
-- **Figma**: For prototyping and design.
 - **TypeScript**: Primary programming language.
-- **shadcn**: UI component library.
 - **React**: Frontend framework.
+- **shadcn**: UI component library.
 - **Firebase**: Backend and database solution.
 
 ---
@@ -57,8 +59,8 @@ _Note: the repository name is outdated due to a rebranding of the project. It wi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/FKnorring/GameShack.git
-   cd GameShack
+   git clone https://github.com/FKnorring/Zap.git
+   cd Zap
    ```
 2. Install dependencies:
    ```bash
@@ -81,7 +83,7 @@ The project is organized into the following directories:
 
 ```plaintext
 
-GameShack/
+Zap/
 ├── src/
 │   ├── components/
 │   ├── hooks/
@@ -103,6 +105,21 @@ GameShack/
 ---
 
 ## Developer Documentation
+
+### Environment Variables
+
+- In order to run the application, you need to create a `.env` file in the root directory.
+- The `.env` file should contain the following variables:
+  - `VITE_ENVIRONMENT`: `DEV` or `PROD`
+  - `VITE_FIREBASE_APIKEY`: The API key for the Firebase project.
+  - `VITE_FIREBASE_AUTHDOMAIN`: The auth domain for the Firebase project.
+  - `VITE_FIREBASE_PROJECTID`: The project ID for the Firebase project.
+  - `VITE_FIREBASE_STORAGEBUCKET`: The storage bucket for the Firebase project.
+  - `VITE_FIREBASE_MESSAGINGSENDERID`: The messaging sender ID for the Firebase project.
+  - `VITE_FIREBASE_APPID`: The app ID for the Firebase project.
+  - `VITE_FIREBASE_MEASUREMENTID`: The measurement ID for the Firebase project.
+  - `VITE_FIREBASE_DATABASEURL`: The database URL for the Firebase project.
+  - `VITE_QR_BASE_URL`: The base URL for the QR code generation ([ip]/play/).
 
 ### Hosting a Game
 
@@ -172,12 +189,8 @@ Follow these steps to add a new language to the application:
 
 ## Contributors
 
-- Jacob Dillström
-- Elisabet Hansson
-- Filip von Knorring
-- Nils Persson
-- Ramez Shakarna
-
-```
-
-```
+- [Jacob Dillström](https://www.linkedin.com/in/jacob-dillstrom/) ([GitHub](https://github.com/Dillenzz))
+- [Elisabet Hansson](https://www.linkedin.com/in/lisa-hansson/) ([GitHub](https://github.com/eliha458))
+- [Filip von Knorring](https://www.linkedin.com/in/filip-v-4b9976139/) ([GitHub](https://github.com/FKnorring))
+- [Nils Persson](https://www.linkedin.com/in/nils-albin-persson/) ([GitHub](https://github.com/NilssPersson))
+- [Ramez Shakarna](https://www.linkedin.com/in/ramezshakarna/) ([GitHub](https://github.com/ramezio))

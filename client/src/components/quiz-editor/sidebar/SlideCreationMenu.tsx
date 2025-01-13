@@ -111,7 +111,7 @@ export function SlideCreationMenu({
       <div className="grid grid-cols-1 gap-6 p-2">
         {optionGroups.map((group) => (
           <div key={group.label} className="flex flex-col gap-1">
-            <h4 className="font-display text-xl leading-none">
+            <h4 className="font-display text-xl leading-none mb-4">
               {t(group.label)}
             </h4>
             <RenderOptions

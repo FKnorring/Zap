@@ -5,16 +5,13 @@ import { stringSimilarity } from 'string-similarity-js';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
-import NextSlide from '@/slides/_components/NextSlide';
+
 
 export function HostAnswer({
   slide,
   participants = [],
-  handleAddPoints,
-  onPrevSlide,
-  endQuiz,
-
-  quizCode,
+  
+ 
 }: {
   slide: FTASlide;
   participants: Participant[];
@@ -56,14 +53,7 @@ export function HostAnswer({
     );
   };
 
-  async function handleAwardPointsNextSlide() {
-    const pointsData = latestAnswers.map((entry) => ({
-      participantId: entry.id,
-      awardPoints: entry.points,
-    }));
-    handleAddPoints(pointsData, false, true);
-  }
-
+  
   return (
     <div className="flex flex-col items-center">
       {/* Slide Title */}
@@ -128,12 +118,6 @@ export function HostAnswer({
       </div>
 
       {/* Next Slide Button */}
-      <NextSlide
-        quizCode={quizCode}
-        endQuiz={() => endQuiz(quizCode)} // Corrected here
-        onPrev={onPrevSlide}
-        onNext={handleAwardPointsNextSlide}
-      />
     </div>
   );
 }

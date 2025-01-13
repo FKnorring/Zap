@@ -42,6 +42,10 @@
     "matching": "In Meet Your Match, players try to match different options to labels. The player with the most correct matches wins!",
     "fastest": "Players race to answer correctly. The first to answer wins!",
     "rank": "Players rank a list of items in the correct order. The player with the most correct rankings wins!",
-    "jeopardy": "In Jeopardy, players answer questions to earn points. The player with the most points at the end wins!"
+    "jeopardy": "In Jeopardy, players answer questions to earn points. The player with the most points at the end wins!",
+    "more": {
+      "title": "And much more!",
+      "description": "Create a quiz to explore all of the question types! We are constantly adding new question types to the application. So stay tuned for updates!"
+    }
   }
 }

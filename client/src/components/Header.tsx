@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import { Menu, Zap, LogIn, ChevronDown } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import Settings from '@/components/Settings/Settings';
@@ -24,37 +24,12 @@ import LanguageToggle from '@/components/Settings/LanguageToggle';
 export function Header() {
   const location = useLocation();
   const { isAuthenticated, login, register, logout } = useKindeAuth();
-  const [showHeader, setShowHeader] = useState(false);
-  const [timeoutId, setTimeoutId] = useState<number | null>(null);
+
   const { t } = useTranslation();
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (location.pathname.endsWith('/lobby')) {
-        if (e.clientY < 100) {
-          // Clear any existing timeout
-          if (timeoutId) clearTimeout(timeoutId);
-          // Set a new timeout
-          const id = window.setTimeout(() => {
-            setShowHeader(true);
-          }, 300); // 300ms delay
-          setTimeoutId(id);
-        } else {
-          // Clear timeout if mouse moves away
-          if (timeoutId) clearTimeout(timeoutId);
-          setShowHeader(false);
-        }
-      }
-    };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [location.pathname, timeoutId]);
 
   const inLobby = location.pathname.endsWith('/lobby');
   const inGame = location.pathname.startsWith('/play');
@@ -62,7 +37,7 @@ export function Header() {
 
   const [isLargeScreen] = useState(window.innerWidth >= 1024); // Assuming 1024px is the breakpoint for large screens
 
-  if (inEditor || (inLobby && !showHeader) || inGame) {
+  if (inEditor || (inLobby) || inGame) {
     return null;
   }
 
@@ -76,9 +51,9 @@ export function Header() {
           inGame && 'hidden'
         )}
       >
-        <div className=" flex h-16 items-center px-1 overflow-hidden">
-          <div className={cn('mr-0 ml-2 md:flex w-full', inGame && 'hidden')}>
-            <nav className=" flex items-center space-x-6 font-medium w-full justify-between">
+        <div className="flex w-full h-16 items-center px-1 overflow-hidden justify-center">
+          <div className={cn('mr-0 ml-2 md:flex w-full max-w-7xl', inGame && 'hidden')}>
+            <nav className="flex items-center space-x-6 font-medium w-full justify-between">
               <Link
                 to="/"
                 className="flex items-center gap-2 text-2xl font-display"
@@ -187,8 +162,7 @@ export function Header() {
                 <>
                   <Link to="/play">
                     <Button
-                      variant="ghost"
-                      className="text-lg bg-green-600"
+                      className="text-lg text-white"
                       isInteractive
                     >
                       {t('general:play')}
@@ -224,8 +198,8 @@ export function Header() {
                     </Link>
                     <Link to="/play">
                       <Button
-                        className="text-2xl"
                         variant="link"
+                        className="text-2xl"
                         onClick={() => setSheetOpen(false)}
                       >
                         {t('general:play')}

@@ -11,6 +11,7 @@
   "timeLimit": "Time Limit",
   "quizSettings": "Quiz Settings",
   "goHome": "Return to homepage",
+  "rankPlaceholder": "New Rank",
   "preview": {
     "text": "Preview",
     "tooltip": "Preview the Quiz",
@@ -49,6 +50,7 @@
   "availableOptions": "Available Options",
   "maxOptionsReached": "Max options reached",
   "points": "Points",
+  "addRanking": "Add Rank",
   "locateitSettings": "LocateIt Settings",
   "mapDetails": "Map Details",
   "none": "None",

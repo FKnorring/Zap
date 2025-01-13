@@ -35,7 +35,7 @@ export function Host({
       </div>
       <div className="flex flex-col items-center justify-center">
         <h1 className='text-2xl font-display mt-4'>Look at your phone!</h1>
-        <Smartphone size={128} color="white" className="mt-4"></Smartphone>
+        <Smartphone size={128} color="white"></Smartphone>
       </div>
       
       <NextSlide

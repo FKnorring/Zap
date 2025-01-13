@@ -3,6 +3,7 @@ import markerIcon from '@/assets/markerIcon.png';
 import NextSlide from '@/slides/_components/NextSlide';
 import { useTranslation } from 'react-i18next';
 import { InfoIcon } from 'lucide-react';
+import { Smartphone } from 'lucide-react';
 
 export function Host({
   slide,
@@ -56,6 +57,8 @@ export function Host({
           </div>
         </div>
       )}
+      <h1 className="text-2xl font-display mt-4">Look at your phone!</h1>
+      <Smartphone size={128} color="white"></Smartphone>
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here

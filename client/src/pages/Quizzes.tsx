@@ -151,9 +151,9 @@ function Quizzes() {
 
   return (
     <div className="h-screen overflow-y-auto bg-white ">
-      <div className="flex flex-col items-center w-full bg-white p-5 lg:p-10 h-full ">
+      <div className="flex flex-col items-center w-full bg-white p-5 lg:p-10 h-full">
         {/* My Quizzes Section */}
-        <div className="w-full flex-col ">
+        <div className="w-full flex-col">
           <div className="flex-col b-2 mb-4 lg:mb-0 flex lg:flex-row items-center justify-between">
             <h1 className="font-display text-5xl text-black mb-4">
               {t('homepage:myQuizzes')}
@@ -161,7 +161,7 @@ function Quizzes() {
             <CreateQuizPopover onCreateQuiz={handleCreateQuiz} />
           </div>
 
-          <Card className="bg-[#F9F8FE] shadow-lg w-full">
+          <Card className="bg-[#F9F8FE] shadow-lg w-full" id="quiz-manager-container">
             <CardHeader>
               <CardTitle className="flex justify-between items-center">
                 {ongoingQuiz && (

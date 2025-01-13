@@ -4,12 +4,12 @@ import React, { Suspense } from 'react';
 import Spinner from '@/components/Spinner';
 import { useTutorialTrigger } from '@/hooks/useTutorialTrigger';
 
-const AboutPage = React.lazy(() => import('../pages/about/index'));
-const Home = React.lazy(() => import('../pages/home/Home'));
-const Tools = React.lazy(() => import('../pages/Tools/Tools'));
-const Quizzes = React.lazy(() => import('../pages/Quizzes'));
+const AboutPage = React.lazy(() => import('@/pages/about/index'));
+const Home = React.lazy(() => import('@/pages/home/Home'));
+const Tools = React.lazy(() => import('@/pages/Tools/Tools'));
+const Quizzes = React.lazy(() => import('@/pages/Quizzes'));
 const JoinQuiz = React.lazy(() => import('@/pages/JoinQuiz'));
-const QuizEdit = React.lazy(() => import('../pages/QuizEdit'));
+const QuizEdit = React.lazy(() => import('@/pages/QuizEdit'));
 const ParticipantLogic = React.lazy(
   () => import('@/pages/participantQuizView/ParticipantLogic')
 );

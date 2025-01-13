@@ -48,7 +48,7 @@ export function SharedQuizCard({
         <div className="aspect-video w-full rounded overflow text-white relative">
           <SlidePreview slide={mockInfo as InfoSlide} />
           <div className="font-display absolute bottom-[-10px] left-[-10px] z-50 bg-primary p-1 px-2 rounded text-black flex flex-row items-center gap-1 border">
-            <span className="text-lg ">By:</span>
+            <span className="text-lg ">{t("general:by")}: </span>
             <Avatar
               width="1.5625rem"
               height="1.5625rem"

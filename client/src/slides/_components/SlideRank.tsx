@@ -11,7 +11,7 @@ export function SlideRank({
 }) {
   const [currentRanking, setCurrentRanking] = useState<string[]>(ranking || []);
 
-  // Randomize the ranking on the first render
+  // Randomize the ranking on the first renderd
   useEffect(() => {
     const randomizedRanking = [...(ranking || [])];
     setCurrentRanking(randomizedRanking); // Update state with randomized ranking
@@ -29,8 +29,6 @@ export function SlideRank({
       });
     }
   });
-
-  console.log('dew', correctnessCount['First']);
 
   return (
     <div className="flex  w-full items-center justify-center">

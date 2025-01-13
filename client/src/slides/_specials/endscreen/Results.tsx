@@ -80,20 +80,17 @@ export default function Results({
     const result: ParticipantTotal[][] = [[], [], [], []];
     let currentRank = 0;
     let lastValue = null;
+    const particiapntsSorted = participants.sort((a, b) => b.total - a.total);
 
-    for (const participant of participants) {
-      if (currentRank > 3) {
+    for (const participant of particiapntsSorted) {
+      if (currentRank > 2) {
         result[3].push(participant);
-      }
-
-      // If the score changes, move to the next rank
-      if (participant.total !== lastValue) {
-        currentRank++;
-        lastValue = participant.total;
-      }
-
-      // Add the participant to the correct rank list
-      if (currentRank <= 3) {
+      } else {
+        // If the score changes, move to the next rank
+        if (participant.total !== lastValue) {
+          currentRank++;
+          lastValue = participant.total;
+        }
         result[currentRank - 1].push(participant);
       }
     }
@@ -103,7 +100,6 @@ export default function Results({
 
   // Returns a list with a list of the placements
   const placement = getTopThree(participantsWithTotal);
-
   const firstPlace = placement[0];
 
   const secondPlace = placement[1];
@@ -167,7 +163,7 @@ export default function Results({
             >
               <span className="font-semibold w-8">{index + 4}.</span>
               <Avatar
-                width={"4rem"}
+                width={'4rem'}
                 height={'4rem'}
                 avatarString={participant.avatar}
                 collectionName={participant.collectionName}

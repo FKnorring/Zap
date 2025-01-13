@@ -7,6 +7,9 @@
   "MATCHING": "Hitta rätt matchning: Koppla ihop rätt föremål med rätt kategori. Spelaren blir tilldelad poäng baserat på antal rätta svar.",
   "LOCATEIT": "Locate It: Ange rätt plats på kartan. Här kan du välja hur du vill dela ut poängen lite längre ner i instsällningarna.",
   "BOMB": "Tickande bomb: Spelarna måste svara innan deras timer tar slut, och de kan bara ge unika svar.",
+  "CLOSEST": "Pricka talet: Spelaren eller spelarna som svarar närmast talet får poäng.",
+  "JEOPARDY": "Jeopardy: Det här spelet fungerar som det kända tv-programmet Jeopardy. En spelare kan få poäng för rätt svar eller minuspoäng för fel svar.",
   "info": "Information: En möjlighet för dig att lägga in en paus.",
-  "score": "Poängtavla: Visar aktuella poängställning."
+  "score": "Poängtavla: Visar aktuella poängställning.",
+  "bulletPoint": "Punktlista: Använd denna slide om du vill skapa en punktlista."
 }

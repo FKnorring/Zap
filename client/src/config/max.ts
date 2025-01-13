@@ -4,7 +4,7 @@ export const max_options = {
     option_text_length: 50,
   },
   mcqma: 6,
-  rank: 8,
+  rank: 6,
   match: {
     labels: 3,
   },

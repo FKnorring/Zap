@@ -14,6 +14,7 @@ export const Info: SlideInfo = {
   icon: FaListOl,
   iconColor:"#14b8a6",
   label: QuestionTypes.RANK,
+  interactivePreview: true,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.RANK,
   defaults: {

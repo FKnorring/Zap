@@ -4,7 +4,6 @@ import { Zap, WrenchIcon, SaveIcon, House, ZapIcon, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { CustomTooltip } from '../ui/custom-tooltip';
-import { cn } from '@/lib/utils';
 import { Separator } from '../ui/separator';
 import { useHostQuiz } from '@/hooks/useHostQuiz';
 import { useState } from 'react';
@@ -39,7 +38,7 @@ export default function QuizEditorHeader({
   };
 
   return (
-    <div className="min-h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 text-black font-display">
+    <div className="min-h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 text-black">
       <QuizPreview
         quiz={quiz}
         isOpen={previewOpen}
@@ -67,7 +66,7 @@ export default function QuizEditorHeader({
             variant="outline"
             disabled={!quiz.slides || quiz.slides.length === 0}
             onClick={() => setPreviewOpen(true)}
-            className="text-lg bg-blue-300"
+            className="bg-blue-300"
             isInteractive
           >
             {t('quizEditor:preview.text')}
@@ -78,7 +77,7 @@ export default function QuizEditorHeader({
           <Button
             variant="outline"
             onClick={handleHostGame}
-            className="text-lg bg-green-500"
+            className="bg-green-500"
             isInteractive
           >
             {t('homepage:startQuiz')}
@@ -89,7 +88,6 @@ export default function QuizEditorHeader({
           <Button
             variant="outline"
             onClick={onSettingsClick}
-            className="text-lg"
             isInteractive
           >
             {t('general:settings')}
@@ -99,7 +97,7 @@ export default function QuizEditorHeader({
         <Separator orientation="vertical" className="h-8 bg-black/25 mx-2" />
         <Link to="/">
           <CustomTooltip content={t('quizEditor:goHome')}>
-            <Button variant="outline" className="text-lg">
+            <Button variant="outline">
               {t('general:home')}
               <House className="w-7 h-7" />
             </Button>
@@ -107,12 +105,7 @@ export default function QuizEditorHeader({
         </Link>
         <CustomTooltip content={t('quizEditor:saveQuiz')}>
           <Button
-            size="sm"
-            variant="outline"
-            className={cn(
-              'text-lg',
-              hasUnsavedChanges && 'text-primary hover:text-primary'
-            )}
+            variant={hasUnsavedChanges ? 'default' : 'outline'}
             onClick={onSaveClick}
             disabled={isSaving || !hasUnsavedChanges}
           >

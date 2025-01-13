@@ -43,19 +43,18 @@ export function QuizCard({ quiz, onClick, children }: QuizCardProps) {
   };
   return (
     <Card
-      className={`${onClick ? 'cursor-pointer' : ''} bg-[#FFFFFF]` }
+      className={`${onClick ? 'cursor-pointer' : ''} bg-[#FFFFFF]`}
       onClick={onClick}
     >
-      <div className="flex items-center gap-2 ml-6">
-        <CardTitle className="text-lg mr-auto pb-1 pt-4 font-display">
-          {quiz.quizName}
-        </CardTitle>
+      <CardTitle className="text-lg mr-auto px-6 pb-1 pt-4 font-display flex items-center justify-between">
+        {quiz.quizName}
         {quiz.isShared && (
-          <div className="bg-primary text-white p-1 rounded flex flex-row">
+          <span className="bg-primary text-white p-1 rounded flex flex-row">
             <Share className="w-4 h-4" />
-          </div>
+          </span>
         )}
-      </div>
+      </CardTitle>
+
 
       <CardContent>
         <div className="aspect-video w-full rounded overflow text-white relative">
@@ -152,7 +151,7 @@ export function MyQuizButtons({
           <DialogFooter>
             <div className="flex justify-end gap-2 mt-4">
               <DialogClose asChild>
-                <Button variant="outline">{t('general:cancel')}</Button>
+                <Button className='text-black' variant="outline">{t('general:cancel')}</Button>
               </DialogClose>
               <DialogClose asChild>
                 <Button

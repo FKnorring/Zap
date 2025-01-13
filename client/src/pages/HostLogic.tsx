@@ -8,6 +8,7 @@ import answerTempQeustion from '@/pages/participantQuizView/ParticipantLogic';
 import { ParticipantAnswers } from '@/slides/_components/ParticipantAnswers';
 import Spinner from '@/components/Spinner';
 
+
 import {
   getLocalStorageValue,
   setLocalStorageValue,
@@ -17,6 +18,16 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { global_values } from '@/config/values';
 import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
+import NoSleepComponent from '@/NoSleepComponent';
+
+export default function HostLogicWrapped() {
+  return (
+    <>
+      <NoSleepComponent />
+      <HostLogic />
+    </>
+  );
+}
 
 function HostLogic() {
   const { id } = useParams();
@@ -105,6 +116,7 @@ function HostLogic() {
 
     return (
       <div className="flex flex-col absolute bottom-5 left-5 m-5">
+        <NoSleepComponent />
         {!ongoingQuiz.isShowingCorrectAnswer &&
           slide.timeLimit > 0 &&
           countdownEndDate && (
@@ -179,6 +191,7 @@ function HostLogic() {
 
   return (
     <>
+      <NoSleepComponent />
       <QuizBackground
         backgroundColor={ongoingQuiz.quiz.settings.backgroundColor}
         primaryColor={ongoingQuiz.quiz.settings.primaryColor}
@@ -227,5 +240,3 @@ function HostLogic() {
     </>
   );
 }
-
-export default HostLogic;

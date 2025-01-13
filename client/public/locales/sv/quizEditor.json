@@ -9,7 +9,9 @@
   "secondary": "Sekundär",
   "timeLimit": "Tidsbegränsning",
   "quizSettings": "Quiz Inställningar",
+  "addRanking": "Lägg till",
   "goHome": "Gå tillbaka till startsidan",
+  "rankPlaceholder": "Nytt alternativ",
   "preview": {
     "text": "Förhandsgranska",
     "tooltip": "Förhandsgranska Quizzet",

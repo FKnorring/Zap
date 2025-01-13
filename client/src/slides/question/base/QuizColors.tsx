@@ -1,9 +1,10 @@
 export function getColor(index: number): string {
   const colors = [
     'rgb(255, 105, 180)', // Pink
-    'rgb(0, 191, 255)', // Light Blue
-    'rgb(255,200,0)', // Yellow
-    'rgb(138,0,255)', // Purple
+    'rgb(123, 211, 234)', // Soft Light Blue
+    'rgba(255, 220, 80, 1)', // Soft Bright Yellow
+    'rgba(160, 80, 255, 1)', // Soft Purple
+
     'rgb(255,120,0)', // Orange
     'rgb(0,0,255)', // Blue
     'rgb(255,0,0)', // Red

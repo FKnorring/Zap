@@ -3,10 +3,13 @@
   "MCQMA": "Multiple choice: Select all the correct options. To get points, the player has to pick all correct answers.",
   "FTA": "Free Text Answer: The participant will answer thorugh text and you can award points based on the answers.",
   "FA": "Fastest on the buzzer: The player who presses the buzzer first get to answer. The first player to get the answer right gets the points.",
-  "RANK": "Rank it Right: Put the options in the correct order. The players get points based on the amount of correct options",
+  "RANK": "Rank it Right: Put the options in the correct order. The players get points based on the amount of correct options.",
   "MATCHING": "Meet you Match: Pair the correct items together with the right category. The players get points based on the amount of correct labels.",
   "LOCATEIT": "Locate It: Pinpoint the right spot on the map. Here you get to choose scoring a bit further down in the setting.",
   "BOMB": "Ticking Time Bomb: The players have to answer before their timer runs out and they can only give unique answers.",
+  "CLOSEST": "Too close to call: The player(s) who is closest to the answer gets points. The answer can only be a number.",
+  "JEOPARDY": "Jeopardy: This question type works as the famous game show Jeopardy. A player can get points for the correct answer or minus points for the wrong answer.",
   "info": "Information Slide: A chance for you to add a break.",
-  "score": "Scoreboard: Shows the current scores"
+  "score": "Scoreboard: Shows the current scores.",
+  "bulletPoint": "Bullet Point: Use this slide to create bullet points."
 }

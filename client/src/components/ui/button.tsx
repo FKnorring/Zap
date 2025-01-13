@@ -64,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <motion.div
           whileTap={{ scale: 0.85 }}
-          className={cn(interactiveStyles, inGrid ? 'grid' : 'inline-block')}
+          className={cn(inGrid ? 'grid' : 'inline-block', interactiveStyles)}
           whileHover={{ scale: 1.05 }}
         >
           <Comp

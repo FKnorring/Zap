@@ -23,7 +23,7 @@ export function HostAnswer({
     winner = participants.find((participant) => {
       if (participant.score.length > 0) {
         const lastScore = participant.score[participant.score.length - 1]; // Get the last score
-        return lastScore !== 0; // Check if it's not 0
+        return lastScore > 0; // Check if it's not 0
       }
     });
   }

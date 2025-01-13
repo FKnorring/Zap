@@ -7,4 +7,8 @@ export const languages = [
       name: 'general:english',
       value: 'en',
     },
+    {
+      name: 'general:chinese',
+      value: 'cn',
+    },
   ];

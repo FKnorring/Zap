@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FASlide, Participant } from '@/models/Quiz';
+import { FASlide, Participant, ParticipantAnswer } from '@/models/Quiz';
 import { Button } from '@/components/ui/button';
 import Avatar from '@/Avatar';
 import { X, Check } from 'lucide-react';
@@ -108,28 +108,34 @@ export function Host({
     });
   }, [participants]);
 
-
-
   function removeFromQueue(participantId: string) {
-    answerTempQuestion
-    setParticipantsQueue((currentQueue) => {
-      return currentQueue.filter(
-        (participant) => participant.participantId !== participantId
-      );
-    });
+    answerTempQuestion;
+    const updatedQueue = participantsQueue.filter(
+      (participant) => participant.participantId !== participantId
+    );
+    setParticipantsQueue(updatedQueue);
   }
 
-  const setAnswerCorrect = async (participant: Participant) => {
+  const setCorrectAnswer = async (participant: Participant) => {
     const participantsObj = ongoingQuiz.participants;
 
     const updatedParticipants = Object.entries(participantsObj).reduce(
       (acc, [id, p]) => {
         const answers = p.answers ? [...p.answers] : [];
-        answers.push({
-          answer: id === participant.participantId ? ['correct'] : [''],
-          slideNumber: ongoingQuiz.currentSlide - 1,
-          time: p.tempAnswer?.time || new Date().toISOString(),
-        });
+
+        // Check if there's already an answer for the current slide
+        const hasAnswerForSlide = answers.some(
+          (answer) => answer.slideNumber === ongoingQuiz.currentSlide - 1
+        );
+
+        if (!hasAnswerForSlide) {
+          // Only add a new answer if there's no existing answer for the slide
+          answers.push({
+            answer: id === participant.participantId ? ['correct'] : [''],
+            slideNumber: ongoingQuiz.currentSlide - 1,
+            time: p.tempAnswer?.time || new Date().toISOString(),
+          });
+        }
 
         acc[id] = {
           ...p,
@@ -143,13 +149,47 @@ export function Host({
 
     try {
       await optimisticUpdate(quizCode, {
-        ...ongoingQuiz,
         participants: updatedParticipants,
       });
     } catch (error) {
       console.error("Error updating participant's answer", error);
     }
   };
+
+  const setFalseAnswer = async (participant: Participant) => {
+    const participantsObj = ongoingQuiz.participants;
+
+    // Create a new ParticipantAnswer object
+    const newAnswer: ParticipantAnswer = {
+      slideNumber: ongoingQuiz.currentSlide - 1,
+      answer: ['incorrect'],
+      time: participant.tempAnswer?.time || new Date().toISOString(),
+    };
+    const prevAnswers = participantsObj[participant.participantId].answers
+      ? participantsObj[participant.participantId].answers
+      : [];
+
+    // Update the participant's answers array
+    const updatedParticipant = {
+      ...participantsObj[participant.participantId],
+      answers: [...prevAnswers, newAnswer], // Use existingAnswers to avoid issues
+      hasAnswered: true,
+    };
+
+    const updatedParticipants = {
+      ...participantsObj,
+      [participant.participantId]: updatedParticipant,
+    };
+    try {
+      await optimisticUpdate(quizCode, {
+        participants: updatedParticipants,
+      });
+      removeFromQueue(participant.participantId);
+    } catch (error) {
+      console.error("Error updating participant's answer", error);
+    }
+  };
+
   if (time > 0) {
     return (
       <div className="flex flex-1 flex-col text-center justify-center gap-20">
@@ -178,7 +218,9 @@ export function Host({
                   <Button
                     variant="ghost"
                     className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
-                    onClick={() => removeFromQueue(participantsQueue[0].participantId)}
+                    onClick={() => {
+                      setFalseAnswer(participant);
+                    }}
                   >
                     <X />
                   </Button>
@@ -217,7 +259,7 @@ export function Host({
                     variant="ghost"
                     className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center p-0 [&_svg]:size-8"
                     onClick={() => {
-                      setAnswerCorrect(participant);
+                      setCorrectAnswer(participant);
                     }}
                   >
                     <Check />

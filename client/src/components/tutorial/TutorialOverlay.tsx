@@ -113,6 +113,7 @@ export function TutorialOverlay({ disabled }: TutorialOverlayProps) {
         <DialogContent
           overlay={false}
           className={cn(
+            'text-black',
             'absolute z-50',
             activeStep.placement === 'top' &&
               'top-1/3 left-1/2 -translate-x-1/2',

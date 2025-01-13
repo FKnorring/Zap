@@ -15,7 +15,8 @@
   "language": "Language",
   "chooseLanguage": "Choose language",
   "english": "English",
-  "swedish": "Swedish",
+  "swedish": "Svenska",
+  "chinese": "中文 (普通话)",
   "share": "Share",
   "delete": "Delete",
   "randomize": "Randomize",
@@ -63,5 +64,7 @@
   "Go": "Go!",
   "areYouSureDel": "Are you sure you want to delete?",
   "deletePlayerText": "This will remove all player names and team data.",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "by": "Made by",
+  "quizhostedsuccessfully": "Quiz hosted successfully"
 }

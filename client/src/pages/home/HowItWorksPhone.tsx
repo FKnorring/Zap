@@ -24,10 +24,10 @@ const HowItWorksPhone = () => {
           />
           {/* Content */}
           <div className=" rounded-lg  p-4 ">
-            <h2 className="text-xl font-display text-gray-800">
+            <h2 className="text-xl font-display text-gray-900 mb-1">
               {t('homepage:stepTitles.0')}
             </h2>
-            <p className=" text-gray-600 text-sm font-display">
+            <p className=" text-gray-700 text-sm leading-snug">
               {t('homepage:stepText.0')}
             </p>
           </div>
@@ -48,10 +48,10 @@ const HowItWorksPhone = () => {
           />
           {/* Content */}
           <div className=" rounded-lg  p-4 ">
-            <h2 className="text-xl font-display text-gray-800">
+            <h2 className="text-xl font-display text-gray-900 mb-1">
               {t('homepage:stepTitles.1')}
             </h2>
-            <p className=" font-display text-gray-600 text-sm">
+            <p className=" text-gray-700 text-sm leading-snug">
               {t('homepage:stepText.1')}
             </p>
           </div>
@@ -72,10 +72,10 @@ const HowItWorksPhone = () => {
           />
           {/* Content */}
           <div className=" rounded-lg  p-4 mt-4">
-            <h2 className="text-xl font-display text-gray-800">
+            <h2 className="text-xl font-display text-gray-900 mb-1">
               {t('homepage:stepTitles.2')}
             </h2>
-            <p className=" font-display text-gray-600 text-sm">
+            <p className=" text-gray-700 text-sm leading-snug">
               {t('homepage:stepText.2')}
             </p>
           </div>

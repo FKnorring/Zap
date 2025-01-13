@@ -14,8 +14,9 @@
   "tutorial.enabled": "Aktivera guider",
   "tutorial.reset": "Återställ alla guider",
   "chooseLanguage": "Välj språk",
-  "english": "Engelska",
+  "english": "English",
   "swedish": "Svenska",
+  "chinese": "中文 (普通话)",
   "share": "Dela",
   "delete": "Radera",
   "randomize": "Slumpa",
@@ -63,5 +64,7 @@
   "Go": "Slumpa!",
   "areYouSureDel": "Är du säker att du vill radera?",
   "deletePlayerText": "Det kommer ta bort alla spelardata.",
-  "confirm": "Bekräfta"
+  "confirm": "Bekräfta",
+  "by": "Gjord av",
+  "quizhostedsuccessfully": "Quiz har startat"
 }

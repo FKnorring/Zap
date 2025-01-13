@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 const HowItWorks = () => {
   const { t } = useTranslation();
   return (
-    <div className="py-6  w-full ">
-      <h1 className="text-4xl font-display text-center text-gray-700 mb-2">
+    <div className="py-6 w-full ">
+      <h1 className="text-4xl font-display text-center text-gray-700 mt-2 mb-10">
         {t('homepage:getStarted')}
       </h1>
       <div className="max-w-7xl mx-auto px-4">
@@ -46,7 +46,7 @@ const HowItWorks = () => {
                 <h1 className="text-2xl font-display text-black">
                   {t('homepage:stepTitles.0')}
                 </h1>
-                <p className=" font-display mt-2 text-gray-600">
+                <p className="text-sm mt-2 text-gray-600 leading-snug">
                   {t('homepage:stepText.0')}
                 </p>
               </div>
@@ -101,7 +101,7 @@ const HowItWorks = () => {
                 <h1 className="text-2xl font-display text-black">
                   {t('homepage:stepTitles.1')}
                 </h1>
-                <p className="mt-2 font-display text-gray-600">
+                <p className="mt-2 text-sm text-gray-600 leading-snug">
                   {t('homepage:stepText.1')}
                 </p>
               </div>
@@ -144,7 +144,7 @@ const HowItWorks = () => {
                 <h1 className=" font-display text-2xl  text-black">
                   {t('homepage:stepTitles.2')}
                 </h1>
-                <p className="mt-2 font-display text-gray-600">
+                <p className="mt-2 text-sm text-gray-600 leading-snug">
                   {t('homepage:stepText.2')}
                 </p>
               </div>
