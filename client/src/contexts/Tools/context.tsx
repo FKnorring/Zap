@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 
@@ -44,10 +44,14 @@ export function ToolsProvider({ children }: { children: React.ReactNode }) {
     if (previousPath && previousPath !== location.pathname) {
       const currentTool = getToolFromPath(location.pathname);
       const previousTool = getToolFromPath(previousPath);
-      
+
       // Only show dialog if switching between shared tools
-      const isSharedToolSwitch = SHARED_TOOLS.includes(currentTool) && SHARED_TOOLS.includes(previousTool);
-      const hasValidItems = currentItems.length > 0 && currentItems.some(item => item.text !== '');
+      const isSharedToolSwitch =
+        SHARED_TOOLS.includes(currentTool) &&
+        SHARED_TOOLS.includes(previousTool);
+      const hasValidItems =
+        currentItems.length > 0 &&
+        currentItems.some((item) => item.text !== '');
 
       if (isSharedToolSwitch && hasValidItems) {
         setPreviousItems([...currentItems]);
@@ -86,8 +90,8 @@ export function ToolsProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <Dialog 
-        open={showKeepItemsDialog} 
+      <Dialog
+        open={showKeepItemsDialog}
         onOpenChange={(open) => {
           if (!open) {
             handleDiscardItems();
@@ -98,17 +102,16 @@ export function ToolsProvider({ children }: { children: React.ReactNode }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('general:tools.keepItems')}</DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="font-display text-black text-xl">
               {t('general:tools.keepItemsDescription')}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={handleDiscardItems}>
+
+          <DialogFooter className="flex flex-row ">
+            <Button className="text-black" onClick={handleDiscardItems}>
               {t('general:discard')}
             </Button>
-            <Button onClick={handleKeepItems}>
-              {t('general:keep')}
-            </Button>
+            <Button onClick={handleKeepItems}>{t('general:keep')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -122,4 +125,4 @@ export function useTools() {
     throw new Error('useTools must be used within a ToolsProvider');
   }
   return context;
-} 
+}

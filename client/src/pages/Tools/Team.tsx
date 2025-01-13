@@ -4,14 +4,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Trash2, Shuffle } from 'lucide-react';
-import { DynamicInputList, InputItem } from '@/components/ui/dynamic-input-list';
-import { Slider } from "@/components/ui/slider";
+import {
+  DynamicInputList,
+  InputItem,
+} from '@/components/ui/dynamic-input-list';
+import { Slider } from '@/components/ui/slider';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTools } from '@/contexts/Tools/context';
 
@@ -23,7 +26,7 @@ export default function Team() {
   const { t } = useTranslation();
   const { currentItems, setCurrentItems } = useTools();
   const [items, setItems] = useState<TeamItem[]>(
-    currentItems.length > 0 
+    currentItems.length > 0
       ? currentItems.map((item: InputItem) => ({ ...item, team: undefined }))
       : [{ id: '1', text: '', team: undefined }]
   );
@@ -34,9 +37,12 @@ export default function Team() {
 
   // Add effect to watch for changes in currentItems
   useEffect(() => {
-    const newItems = currentItems.map((item: InputItem) => ({ ...item, team: undefined }));
+    const newItems = currentItems.map((item: InputItem) => ({
+      ...item,
+      team: undefined,
+    }));
     setItems(newItems);
-    
+
     // Reset teams if items are cleared
     if (currentItems.length === 1 && currentItems[0].text === '') {
       setTeams([]);
@@ -63,8 +69,8 @@ export default function Team() {
   // Update teams whenever items or numberOfTeams changes
   useEffect(() => {
     const validPlayers = items
-      .filter(item => item.text !== '')
-      .map(item => item.text);
+      .filter((item) => item.text !== '')
+      .map((item) => item.text);
 
     if (validPlayers.length >= 2) {
       const newTeams = generateTeams(validPlayers, numberOfTeams);
@@ -78,14 +84,14 @@ export default function Team() {
 
   // Update max number of teams based on number of players
   useEffect(() => {
-    const validItems = items.filter(item => item.text !== '');
+    const validItems = items.filter((item) => item.text !== '');
     if (validItems.length < numberOfTeams) {
       setNumberOfTeams(Math.max(2, validItems.length));
     }
   }, [items]);
 
   const handleInputChange = (id: string, value: string) => {
-    const newItems = items.map(item =>
+    const newItems = items.map((item) =>
       item.id === id ? { ...item, text: value } : item
     );
 
@@ -93,13 +99,13 @@ export default function Team() {
       newItems.push({
         id: Date.now().toString(),
         text: '',
-        team: undefined
+        team: undefined,
       });
     }
 
-    const finalItems = newItems.map(item => ({
+    const finalItems = newItems.map((item) => ({
       ...item,
-      team: item.text !== '' ? item.team : undefined
+      team: item.text !== '' ? item.team : undefined,
     }));
 
     setItems(finalItems);
@@ -110,13 +116,13 @@ export default function Team() {
     const newItems = values.map((text, index) => ({
       id: Date.now() + index.toString(),
       text,
-      team: undefined
+      team: undefined,
     }));
 
     newItems.push({
       id: Date.now() + values.length.toString(),
       text: '',
-      team: undefined
+      team: undefined,
     });
 
     setItems(newItems);
@@ -125,13 +131,13 @@ export default function Team() {
 
   const removeItem = (id: string) => {
     if (items.length <= 1) return;
-    
-    const newItems = items.filter(item => item.id !== id);
-    if (newItems.every(item => item.text !== '')) {
+
+    const newItems = items.filter((item) => item.id !== id);
+    if (newItems.every((item) => item.text !== '')) {
       newItems.push({
         id: Date.now().toString(),
         text: '',
-        team: undefined
+        team: undefined,
       });
     }
 
@@ -148,9 +154,11 @@ export default function Team() {
   };
 
   const randomizeTeams = async () => {
+    // First, split items that contain commas into individual values
     const validPlayers = items
-      .filter(item => item.text !== '')
-      .map(item => item.text);
+      .filter((item) => item.text !== '')
+      .flatMap((item) => item.text.split(',').map((player) => player.trim()))
+      .filter((player) => player !== ''); // Filter out any empty strings
 
     if (validPlayers.length >= 2) {
       setIsShuffling(true);
@@ -172,7 +180,7 @@ export default function Team() {
     }
   };
 
-  const validItemsCount = items.filter(item => item.text !== '').length;
+  const validItemsCount = items.filter((item) => item.text !== '').length;
   const maxTeams = Math.max(2, validItemsCount);
 
   return (
@@ -208,7 +216,9 @@ export default function Team() {
                       onClick={randomizeTeams}
                       disabled={isShuffling}
                     >
-                      <Shuffle className={`w-4 h-4 mr-2 ${isShuffling ? 'animate-spin' : ''}`} />
+                      <Shuffle
+                        className={`w-4 h-4 mr-2 ${isShuffling ? 'animate-spin' : ''}`}
+                      />
                       {t('general:randomize')}
                     </Button>
                   )}
@@ -261,7 +271,7 @@ export default function Team() {
                     <h3 className="text-lg font-bold mb-4">
                       {t('general:randomizing')}...
                     </h3>
-                    <motion.ul 
+                    <motion.ul
                       className="space-y-1"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -271,10 +281,10 @@ export default function Team() {
                           key={index}
                           className="text-xl"
                           initial={{ x: -20, opacity: 0 }}
-                          animate={{ 
-                            x: 0, 
+                          animate={{
+                            x: 0,
                             opacity: 1,
-                            transition: { delay: index * 0.05 }
+                            transition: { delay: index * 0.05 },
                           }}
                         >
                           {name}
@@ -284,43 +294,45 @@ export default function Team() {
                   </CardContent>
                 </Card>
               </motion.div>
-            ) : teams.length > 0 && (
-              <motion.div
-                key="teams"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                className="grid gap-4"
-              >
-                {teams.map((team, index) => (
-                  <Card key={index}>
-                    <CardContent className="pt-6">
-                      <h3 className="text-lg font-bold mb-2">
-                        {t('general:team')} {index + 1}
-                      </h3>
-                      <ul 
-                        className="grid grid-cols-3 gap-x-4 gap-y-1 auto-rows-min grid-flow-col"
-                        style={{
-                          gridTemplateRows: 'repeat(2, minmax(0, auto))',
-                          gridAutoFlow: team.length > 6 ? 'row' : 'column'
-                        }}
-                      >
-                        {team.map((player, playerIndex) => (
-                          <motion.li
-                            key={playerIndex}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: playerIndex * 0.1 }}
-                            className="text-2xl font-bold truncate"
-                          >
-                            {player}
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                ))}
-              </motion.div>
+            ) : (
+              teams.length > 0 && (
+                <motion.div
+                  key="teams"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  className="grid gap-4"
+                >
+                  {teams.map((team, index) => (
+                    <Card key={index}>
+                      <CardContent className="pt-6">
+                        <h3 className="text-lg font-bold mb-2">
+                          {t('general:team')} {index + 1}
+                        </h3>
+                        <ul
+                          className="grid grid-cols-3 gap-x-4 gap-y-1 auto-rows-min grid-flow-col"
+                          style={{
+                            gridTemplateRows: 'repeat(2, minmax(0, auto))',
+                            gridAutoFlow: team.length > 6 ? 'row' : 'column',
+                          }}
+                        >
+                          {team.map((player, playerIndex) => (
+                            <motion.li
+                              key={playerIndex}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: playerIndex * 0.1 }}
+                              className="text-2xl font-bold truncate"
+                            >
+                              {player}
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </motion.div>
+              )
             )}
           </AnimatePresence>
         </div>

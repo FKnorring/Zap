@@ -47,24 +47,25 @@ export function Participant({
     let interval: NodeJS.Timeout | undefined;
 
     // Reset the counter and shake when the turn changes
-    if (turn !== participantData.participantId) {
-      setCounter(slide.initialTime || 0); // Reset counter
-      setShake(false); // Remove shake effect
-      setDisableInput(true); // Disable input
-    } else {
-      setDisableInput(false); // Enable input for the current participant
-      interval = setInterval(() => {
-        setCounter((prevCounter) => {
-          if (prevCounter <= 1) {
-            clearInterval(interval); // Stop the countdown at zero
-            setShake(true); // Trigger the shake animation
-            return 0;
-          }
-          return prevCounter - 1;
-        });
-      }, 1000);
+    if (participantData.participantId !== undefined) {
+      if (turn !== participantData.participantId) {
+        setCounter(slide.initialTime || 0); // Reset counter
+        setShake(false); // Remove shake effect
+        setDisableInput(true); // Disable input
+      } else {
+        setDisableInput(false); // Enable input for the current participant
+        interval = setInterval(() => {
+          setCounter((prevCounter) => {
+            if (prevCounter <= 1) {
+              clearInterval(interval); // Stop the countdown at zero
+              setShake(true); // Trigger the shake animation
+              return 0;
+            }
+            return prevCounter - 1;
+          });
+        }, 1000);
+      }
     }
-
     return () => {
       if (interval) clearInterval(interval);
     };
