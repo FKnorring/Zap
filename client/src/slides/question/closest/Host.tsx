@@ -1,5 +1,4 @@
 import { ClosestSlide, Participant } from '@/models/Quiz';
-import { ParticipantAnswers } from '@/slides/_components/ParticipantAnswers';
 import SlideTitleSpecial from '@/slides/_components/SlideTitleSpecial';
 import { Target } from 'lucide-react';
 import NextSlide from '@/slides/_components/NextSlide';
@@ -16,8 +15,6 @@ interface HostProps {
 
 export function Host({
   slide,
-  participants,
-  removeParticipant,
   onNextSlide,
   onPrevSlide,
   endQuiz,
@@ -29,10 +26,6 @@ export function Host({
         <SlideTitleSpecial title={slide.title} icon={Target} />
       </div>
 
-      <ParticipantAnswers
-        participants={participants}
-        removeParticipant={removeParticipant}
-      />
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here

@@ -120,10 +120,20 @@ export function Preview({
     onSlideUpdate(updatedSlide);
   };
 
+  const handleTitleChange = (newTitle: string) => {
+    if (onSlideUpdate) {
+      onSlideUpdate({ ...slide, title: newTitle });
+    }
+  };
+
   return (
     <div className="w-full h-full relative pl-10 pr-10 pb-10">
       <div className="flex flex-row justify-center p-10">
-        <SlideTitle title={slide.title} />
+        <SlideTitle
+          title={slide.title}
+          isEditable
+          onTitleChange={handleTitleChange}
+        />
       </div>
 
       <APIProvider apiKey={APIKEY}>

@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import Countdown from 'react-countdown';
 import { motion } from 'framer-motion';
-
 import { MCQSASlide } from '@/models/Quiz';
 import { BaseQuestionRender } from '../base/QuestionRender';
-import { getColor } from '../base/QuizColors';
 import NextSlide from '@/slides/_components/NextSlide';
-import { cn } from '@/lib/utils';
 import { global_values } from '@/config/values'; // Make sure you have waiting_time in here
+import RenderOptions from '../base/RenderOptions';
 
 export function Host({
   slide,
@@ -16,6 +14,7 @@ export function Host({
   currentSlideTime,
   endQuiz,
   quizCode,
+  inPreview = false,
 }: {
   slide: MCQSASlide;
   onNextSlide: () => void;
@@ -23,6 +22,7 @@ export function Host({
   currentSlideTime: string;
   endQuiz: (quizCode: string) => Promise<boolean>;
   quizCode: string;
+  inPreview?: boolean;
 }) {
   const showQuestionTime =
     Number(currentSlideTime) + global_values.waiting_time;
@@ -35,7 +35,7 @@ export function Host({
     return null;
   }
   // Countdown UI
-  if (!isTimeToShow) {
+  if (!isTimeToShow && !inPreview) {
     return (
       <BaseQuestionRender slide={slide}>
         <div className="flex flex-col items-center justify-center h-full p-10">
@@ -93,24 +93,7 @@ export function Host({
   return (
     <BaseQuestionRender slide={slide}>
       <div className="flex flex-col items-center justify-center p-10">
-        <div
-          className={cn(
-            'grid grid-cols-2 gap-14',
-            slide.options.length > 4 && 'grid grid-cols-3 gap-14'
-          )}
-        >
-          {slide.options.map((option, index) => (
-            <div
-              key={option.id}
-              style={{
-                backgroundColor: getColor(index),
-              }}
-              className="flex items-center justify-center text-5xl text-white font-display h-56 w-[500px] rounded-lg box-border p-8"
-            >
-              <span>{option.text}</span>
-            </div>
-          ))}
-        </div>
+        <RenderOptions slide={slide} />
         <NextSlide
           quizCode={quizCode}
           endQuiz={() => endQuiz(quizCode)} // Corrected here

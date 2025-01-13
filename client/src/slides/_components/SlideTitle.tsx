@@ -1,6 +1,6 @@
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface SlideTitleProps {
   title: string;
@@ -16,6 +16,7 @@ export function SlideTitle({
   onTitleChange,
 }: SlideTitleProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [tempTitle, setTempTitle] = useState(title);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -23,6 +24,10 @@ export function SlideTitle({
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
+  }, [tempTitle]);
+
+  useEffect(() => {
+    setTempTitle(title);
   }, [title]);
 
   const className = cn(
@@ -37,8 +42,9 @@ export function SlideTitle({
       <Textarea
         ref={textareaRef}
         className={className}
-        value={title}
-        onChange={(e) => onTitleChange?.(e.target.value)}
+        value={tempTitle}
+        onChange={(e) => setTempTitle(e.target.value)} // Update the temporary state
+        onBlur={() => onTitleChange?.(tempTitle)} // Save only on blur
         rows={1}
       />
     );

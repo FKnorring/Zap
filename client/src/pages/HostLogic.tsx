@@ -175,7 +175,7 @@ function HostLogic() {
     );
   };
 
-  const inLobby = ongoingQuiz.currentSlide <= 1;
+  const inLobby = ongoingQuiz.currentSlide == 0;
 
   return (
     <>

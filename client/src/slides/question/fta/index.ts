@@ -15,6 +15,7 @@ export const Info: SlideInfo = {
   label: QuestionTypes.FTA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.FTA,
+  interactivePreview: true,
   defaults: {
     correctAnswer: '',
     answerType: AnswerTypes.freeText,

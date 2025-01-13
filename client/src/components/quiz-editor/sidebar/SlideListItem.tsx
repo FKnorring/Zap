@@ -2,7 +2,6 @@ import type { Slide } from '@/models/Quiz';
 import { SlidePreview } from '../SlidePreview';
 import { SlideActions } from './SlideActions';
 import { getSlideComponents } from '@/slides/utils';
-import { useTranslation } from 'react-i18next';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useSlideSidebarContext } from './SlideSidebarContext';
@@ -18,7 +17,6 @@ export function SlideListItem({
   index,
   totalSlides,
 }: SlideListItemProps) {
-  const { t } = useTranslation(['questions']);
   const slideComponent = getSlideComponents(slide);
   const {
     activeSlideId,
@@ -63,16 +61,14 @@ export function SlideListItem({
       }}
     >
       <div>
-        <div className="flex flex-row space-x-2  text-md  items-center">
+        <div className="flex flex-row space-x-2 text-md items-center w-4/5">
           <slideComponent.Info.icon
             className="text-black"
             size={16}
             strokeWidth={3}
             color={slideComponent.Info.iconColor}
           />
-          <h1 className="font-display text-black ">
-            {t(slideComponent.Info.label)}
-          </h1>
+          <h1 className="font-display text-black truncate ">{slide.title}</h1>
         </div>
         <div
           className={`cursor-pointer rounded overflow-hidden ${

@@ -1,5 +1,5 @@
 import { Textarea } from '@/components/ui/textarea';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface SlideContentProps {
@@ -15,6 +15,7 @@ export function SlideContent({
 }: SlideContentProps) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { t } = useTranslation();
+  const [tempContent, setTempContent] = useState(content);
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -22,6 +23,10 @@ export function SlideContent({
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
+  }, [tempContent]);
+
+  useEffect(() => {
+    setTempContent(content);
   }, [content]);
 
   const className =
@@ -33,8 +38,9 @@ export function SlideContent({
         ref={textareaRef}
         placeholder={t('quizEditor:slideContentPlaceholder')}
         className={`${className} resize-none bg-transparent border-dashed overflow-hidden p-0`}
-        value={content}
-        onChange={(e) => onContentChange?.(e.target.value)}
+        value={tempContent}
+        onChange={(e) => setTempContent(e.target.value)} // Update temporary state
+        onBlur={() => onContentChange?.(tempContent)} // Save only on blur
         rows={1}
       />
     );

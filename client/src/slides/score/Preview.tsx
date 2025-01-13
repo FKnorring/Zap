@@ -59,11 +59,26 @@ const mockParticipants: Participant[] = [
   },
 ];
 
-export function Preview({ slide }: { slide: ScoreSlide }) {
+export function Preview({
+  slide,
+  onSlideChange,
+}: {
+  slide: ScoreSlide;
+  onSlideChange: (slide: ScoreSlide) => void;
+}) {
+  const handleTitleChange = (newTitle: string) => {
+    if (onSlideChange) {
+      onSlideChange({ ...slide, title: newTitle });
+    }
+  };
   return (
     <>
-      <div className="space-y-12 w-full">
-        <SlideTitle title={slide.title} />
+      <div className="space-y-12 w-full p-10">
+        <SlideTitle
+          title={slide.title}
+          isEditable
+          onTitleChange={handleTitleChange}
+        />
         <ScoreBoard
           slides={[slide] as Slide[]}
           currentSlide={0}

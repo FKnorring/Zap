@@ -52,22 +52,23 @@ export function Editor({
             >
               {t('general:host')}
             </TabsTrigger>
-            {slide.type !== SlideTypes.info && (
-              <>
-                <TabsTrigger
-                  className={`text-xl font-display ${whichPreview === 'Participant' ? 'bg-primary text-white' : ''}`}
-                  value="Participant"
-                >
-                  {t('general:participant')}
-                </TabsTrigger>
-                <TabsTrigger
-                  className={`text-xl font-display ${whichPreview === 'HostAnswer' ? 'bg-primary text-white' : ''}`}
-                  value="HostAnswer"
-                >
-                  {t('general:hostAnswer')}
-                </TabsTrigger>
-              </>
-            )}
+            {slide.type !== SlideTypes.info &&
+              slide.type !== SlideTypes.bulletPoint && (
+                <>
+                  <TabsTrigger
+                    className={`text-xl font-display ${whichPreview === 'Participant' ? 'bg-primary text-white' : ''}`}
+                    value="Participant"
+                  >
+                    {t('general:participant')}
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={`text-xl font-display ${whichPreview === 'HostAnswer' ? 'bg-primary text-white' : ''}`}
+                    value="HostAnswer"
+                  >
+                    {t('general:hostAnswer')}
+                  </TabsTrigger>
+                </>
+              )}
           </TabsList>
         </Tabs>
       </div>
@@ -76,7 +77,7 @@ export function Editor({
         <div
           className={cn(
             'w-full boarder-2 rounded-lg',
-            whichPreview === 'Participant' ? 'max-w-md' : 'max-w-4xl'
+            whichPreview === 'Participant' ? 'w-fit' : 'max-w-6xl'
           )}
         >
           <SlidePreview

@@ -17,6 +17,7 @@ export const Info: SlideInfo = {
   label: QuestionTypes.MCQSA,
   slideType: SlideTypes.question,
   questionType: QuestionTypes.MCQSA,
+  interactivePreview: true,
   defaults: {
     options: Array.from({ length: 4 }, (_, i) => ({
       id: nanoid(),

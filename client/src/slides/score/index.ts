@@ -12,8 +12,9 @@ import { SlideInfo } from '..';
 export const Info: SlideInfo = {
     value: "score",
     icon: BarChart3Icon,
+    interactivePreview: true,
     iconColor:"#f472b6",
-    label: "Score Slide",
+    label: "ScoreSlide",
     slideType: SlideTypes.score,
     defaults: {
         title: "Current Standings",

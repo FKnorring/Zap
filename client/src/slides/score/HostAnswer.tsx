@@ -19,7 +19,7 @@ export function HostAnswer({
   return (
     <div>
       <Confetti delayProp={5000} />
-      <Preview slide={slide} />
+      <Preview slide={slide} onSlideChange={() => null} />
       <NextSlide
         quizCode={quizCode}
         endQuiz={() => endQuiz(quizCode)} // Corrected here
