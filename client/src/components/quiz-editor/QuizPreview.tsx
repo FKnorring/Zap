@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { SlidePreview } from '../quiz-editor/SlidePreview';
 import { useState } from 'react';
 import { ArrowBigLeft, ArrowBigRight } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface QuizPreviewProps {
   isOpen: boolean;
@@ -22,6 +23,12 @@ interface QuizPreviewProps {
 export function QuizPreview({ isOpen, setIsOpen, quiz }: QuizPreviewProps) {
   const { t } = useTranslation(['quizEditor']);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (!quiz || !quiz.slides) {
+      setIsOpen(false);
+    }
+  }, [quiz, setIsOpen]);
 
   const handleNextSlide = () => {
     if (currentSlideIndex < quiz.slides.length - 1) {
@@ -40,13 +47,12 @@ export function QuizPreview({ isOpen, setIsOpen, quiz }: QuizPreviewProps) {
   };
 
   if (!quiz || !quiz.slides) {
-    setIsOpen(false);
     return null;
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="max-w-[60%] min-w-[60%] h-fit text-black ">
+      <DialogContent className="max-w-[75%] min-w-[75%] h-fit text-black ">
         <DialogHeader>
           <div className="flex justify-between items-center">
             <div>
@@ -62,14 +68,29 @@ export function QuizPreview({ isOpen, setIsOpen, quiz }: QuizPreviewProps) {
             </div>
           </div>
         </DialogHeader>
-        <div className="grid gap-4 text-white pointer-events-none">
-          <SlidePreview
-            slide={quiz.slides[currentSlideIndex]}
-            whichPreview="Host"
-            backgroundColor={quiz.settings.backgroundColor}
-            primaryColor={quiz.settings.primaryColor}
-            secondaryColor={quiz.settings.secondaryColor}
-          />
+        <div className="grid grid-cols-[78%_20%] gap-6 text-white pointer-events-none">
+          <div className="grid gap-2 text-white">
+            <SlidePreview
+              slide={quiz.slides[currentSlideIndex]}
+              whichPreview="Host"
+              backgroundColor={quiz.settings.backgroundColor}
+              primaryColor={quiz.settings.primaryColor}
+              secondaryColor={quiz.settings.secondaryColor}
+            />
+          </div>
+          <div className="grid gap-2 text-white justify-center items-center">
+            <div className="grid rounded-2xl overflow-hidden border-[12px] border-gray-200 bg-gray-200">
+              <div className="grid rounded-xl overflow-hidden">
+                <SlidePreview
+                  slide={quiz.slides[currentSlideIndex]}
+                  whichPreview="Participant"
+                  backgroundColor={quiz.settings.backgroundColor}
+                  primaryColor={quiz.settings.primaryColor}
+                  secondaryColor={quiz.settings.secondaryColor}
+                />
+              </div>
+            </div>
+          </div>
         </div>
         <DialogFooter className="flex justify-between">
           <Button

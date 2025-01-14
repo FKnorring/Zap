@@ -55,8 +55,6 @@ Zap! is built using modern technologies for optimal performance and maintainabil
 
 ## Getting Started
 
-_Note: the repository name is outdated due to a rebranding of the project. It will be updated in the future._
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/FKnorring/Zap.git

@@ -76,7 +76,7 @@ export function SlideList() {
             strategy={verticalListSortingStrategy}
           >
             {slides.map((slide, index) => (
-              <>
+              <div key={`slide-group-${slide.id}`}>
                 <SlideListItem
                   key={slide.id}
                   slide={slide}
@@ -98,7 +98,7 @@ export function SlideList() {
                     onAddSlide={onAddSlide}
                   />
                 )}
-              </>
+              </div>
             ))}
           </SortableContext>
         </DndContext>

@@ -33,6 +33,7 @@ function QuizEdit() {
     setActiveSlideId,
     setShowSettings,
     hasUnsavedChanges,
+    hasOngoingQuiz,
     isSaving,
     handleSlideSwap,
   } = useQuizEditor(id);
@@ -52,6 +53,7 @@ function QuizEdit() {
         onSettingsClick={() => setShowSettings(!showSettings)}
         onSaveClick={handleSave}
         hasUnsavedChanges={hasUnsavedChanges}
+        hasOngoingQuiz={hasOngoingQuiz}
         isSaving={isSaving}
       />
 
@@ -67,10 +69,11 @@ function QuizEdit() {
           style={{ height: 'inherit' }}
         >
           <ResizablePanel
-            defaultSize={12}
+            defaultSize={14}
             minSize={12}
-            maxSize={24}
+            maxSize={16}
             id="quiz-sidebar"
+            order={1}
           >
             <SlideSidebar
               quizName={quiz.quiz_name}
@@ -97,7 +100,11 @@ function QuizEdit() {
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel id="quiz-preview" defaultSize={60}>
+          <ResizablePanel
+            id="quiz-preview"
+            order={2}
+            defaultSize={activeSlide || showSettings ? 66 : 86}
+          >
             <Editor
               slide={activeSlide}
               onSlideUpdate={handleSlideUpdate}
@@ -113,8 +120,9 @@ function QuizEdit() {
             <ResizablePanel
               className="bg-white"
               defaultSize={20}
+              order={3}
               minSize={12}
-              maxSize={30}
+              maxSize={25}
               id="quiz-toolbar"
             >
               {showSettings ? (

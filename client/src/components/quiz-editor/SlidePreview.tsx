@@ -19,7 +19,7 @@ const DESKTOP_WIDTH = 1920;
 const DESKTOP_HEIGHT = 1080;
 
 const PHONE_WIDTH = 414;
-const PHONE_HEIGHT = 914;
+const PHONE_HEIGHT = 875;
 
 export function SlidePreview({
   slide,
@@ -73,7 +73,7 @@ export function SlidePreview({
       ref={containerRef}
       className={cn(
         'relative w-full overflow-hidden',
-        isPhoneView ? 'aspect-[9/16]' : 'aspect-video',
+        isPhoneView ? 'aspect-[9/19]' : 'aspect-video',
         !interactivePreview && 'pointer-events-none',
         className
       )}

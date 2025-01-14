@@ -32,14 +32,15 @@ export function useQuizEditor(quizId: string | undefined) {
       isLoading,
       enrichResource,
     },
+    ongoingQuizzes: { resources: ongoingQuizzes },
   } = useAppContext();
-
   const { t } = useTranslation(['questions']);
 
   // Local state
   const [localQuiz, setLocalQuiz] = useState<Quiz | null>(null);
   const [, setActionCount] = useState(0);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [hasOngoingQuiz, setHasOngoingQuiz] = useState(false);
   const [enriched, setEnriched] = useState(false);
 
   useEffect(() => {
@@ -47,6 +48,12 @@ export function useQuizEditor(quizId: string | undefined) {
       enrichResource(quizId).then(() => setEnriched(true));
     }
   }, [quizId]);
+
+  useEffect(() => {
+    if(ongoingQuizzes.length > 0) {
+      setHasOngoingQuiz(true);
+    }
+  }, [ongoingQuizzes]);
 
   useEffect(() => {
     if (quizId && enriched) {
@@ -326,6 +333,7 @@ export function useQuizEditor(quizId: string | undefined) {
     isLoading,
     isSaving,
     hasUnsavedChanges,
+    hasOngoingQuiz,
     handleAddSlide,
     handleSlideUpdate,
     handleSlideDelete,

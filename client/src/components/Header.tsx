@@ -29,15 +29,13 @@ export function Header() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [isToolsOpen, setIsToolsOpen] = useState(false);
 
-
-
   const inLobby = location.pathname.endsWith('/lobby');
   const inGame = location.pathname.startsWith('/play');
   const inEditor = location.pathname.endsWith('/edit');
 
   const [isLargeScreen] = useState(window.innerWidth >= 1024); // Assuming 1024px is the breakpoint for large screens
 
-  if (inEditor || (inLobby) || inGame) {
+  if (inEditor || inLobby || inGame) {
     return null;
   }
 
@@ -52,7 +50,12 @@ export function Header() {
         )}
       >
         <div className="flex w-full h-16 items-center px-1 overflow-hidden justify-center">
-          <div className={cn('mr-0 ml-2 md:flex w-full max-w-7xl', inGame && 'hidden')}>
+          <div
+            className={cn(
+              'mr-0 ml-2 md:flex w-full max-w-7xl',
+              inGame && 'hidden'
+            )}
+          >
             <nav className="flex items-center space-x-6 font-medium w-full justify-between">
               <Link
                 to="/"
@@ -161,10 +164,7 @@ export function Header() {
               ) : (
                 <>
                   <Link to="/play">
-                    <Button
-                      className="text-lg text-white"
-                      isInteractive
-                    >
+                    <Button className="text-lg text-white" isInteractive>
                       {t('general:play')}
                     </Button>
                   </Link>

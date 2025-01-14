@@ -14,6 +14,7 @@ interface QuizEditorHeaderProps {
   onSettingsClick: () => void;
   onSaveClick: () => void;
   hasUnsavedChanges?: boolean;
+  hasOngoingQuiz?: boolean;
   isSaving?: boolean;
 }
 
@@ -22,6 +23,7 @@ export default function QuizEditorHeader({
   onSettingsClick,
   onSaveClick,
   hasUnsavedChanges,
+  hasOngoingQuiz,
   isSaving,
 }: QuizEditorHeaderProps) {
   const { t } = useTranslation();
@@ -76,6 +78,7 @@ export default function QuizEditorHeader({
         <CustomTooltip content={t('quizEditor:startTheQuiz')}>
           <Button
             variant="outline"
+            disabled={hasOngoingQuiz}
             onClick={handleHostGame}
             className="bg-green-500"
             isInteractive
@@ -85,11 +88,7 @@ export default function QuizEditorHeader({
           </Button>
         </CustomTooltip>
         <CustomTooltip content={t('quizEditor:quizSettings')}>
-          <Button
-            variant="outline"
-            onClick={onSettingsClick}
-            isInteractive
-          >
+          <Button variant="outline" onClick={onSettingsClick} isInteractive>
             {t('general:settings')}
             <WrenchIcon className="w-7 h-7" />
           </Button>
