@@ -1,4 +1,4 @@
-import { database } from "@/firebase";
+import { getFirebaseServices } from "@/firebase";
 import { ref, get, set, update, remove, DatabaseReference, Query } from "firebase/database";
 import { nanoid } from 'nanoid'
 
@@ -15,6 +15,7 @@ export class BaseService<T> {
   }
 
   protected getRef(path?: string): DatabaseReference {
+    const { database } = getFirebaseServices();
     return ref(database, path || this.path);
   }
 

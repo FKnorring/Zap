@@ -1,8 +1,8 @@
 import { quizDefaults } from "@/components/quiz-editor/utils/quiz-defaults";
 import { BaseService, FirebaseResponse } from "./base";
 import Quiz, { SharedQuizzes, UserQuizzes } from "@/models/Quiz";
-import { query, orderByChild, equalTo, get,ref, set, limitToFirst, update, remove } from "firebase/database";
-import { database } from "@/firebase";
+import { query, orderByChild, equalTo, get, ref, set, limitToFirst, update, remove } from "firebase/database";
+import { getFirebaseServices } from "@/firebase";
 import { nanoid } from 'nanoid';
 
 class QuizService extends BaseService<Quiz> {
@@ -16,6 +16,7 @@ class QuizService extends BaseService<Quiz> {
   async create(quiz: Partial<Quiz>, const_id?: string): Promise<FirebaseResponse<Quiz>> {
     if(!quiz.user_id || !quiz.quiz_name) return { data: null, error: new Error('User ID is required') };
     const quizId = const_id || nanoid();
+    const { database } = getFirebaseServices();
 
     const now = new Date().toISOString().toLocaleString();
 
@@ -53,6 +54,7 @@ class QuizService extends BaseService<Quiz> {
   }
 
   async getById(id: string): Promise<FirebaseResponse<Quiz>> {
+    const { database } = getFirebaseServices();
     const quizRef = ref(database, `${this.path}/${id}`);
     
     try {
@@ -67,6 +69,7 @@ class QuizService extends BaseService<Quiz> {
   }
 
   async update(id: string, quiz: Partial<Quiz>): Promise<FirebaseResponse<Quiz>> {
+    const { database } = getFirebaseServices();
     const quizRef = ref(database, `${this.path}/${id}`);
     const userQuizRef = ref(database, `${this.userQuizzesRef}/${id}`);
     
@@ -96,6 +99,7 @@ class QuizService extends BaseService<Quiz> {
   }
 
   async listShared(userId: string): Promise<FirebaseResponse<SharedQuizzes[]>> {
+    const { database } = getFirebaseServices();
     const sharedQuizzesRef = query(
       ref(database, 'sharedQuizzes'),
       orderByChild("userId"),
@@ -121,6 +125,7 @@ class QuizService extends BaseService<Quiz> {
   }
 
   async listUserQuizzes(userId: string): Promise<FirebaseResponse<UserQuizzes[]>> {
+    const { database } = getFirebaseServices();
     const userQuizzesRef = query(
       ref(database, 'userQuizzes'),
       orderByChild("userId"),
@@ -144,6 +149,7 @@ class QuizService extends BaseService<Quiz> {
 
   async getByUserId(userId: string): Promise<FirebaseResponse<Quiz[]>> {
     try {
+      const { database } = getFirebaseServices();
       const userQuizzesRef = query(
         ref(database, this.userQuizzesRef),
         orderByChild("userId"),
@@ -180,6 +186,7 @@ class QuizService extends BaseService<Quiz> {
   }
 
   async deleteQuiz(quizId: string): Promise<FirebaseResponse<void>> {
+    const { database } = getFirebaseServices();
     const userQuizRef = ref(database, `${this.userQuizzesRef}/${quizId}`);
     const quizRef = ref(database, `${this.path}/${quizId}`);
     const sharedQuizRef = ref(database, `sharedQuizzes/${quizId}`);
@@ -198,6 +205,7 @@ class QuizService extends BaseService<Quiz> {
 
   async shareQuiz(quizId: string, user: { id: string, username?: string, avatar?: string }, quizName: string): Promise<FirebaseResponse<boolean>> {
     try {
+      const { database } = getFirebaseServices();
       const sharedQuizRef = ref(database, `sharedQuizzes/${quizId}`);
       const sharedQuizSnap = await get(sharedQuizRef);
 
@@ -229,6 +237,7 @@ class QuizService extends BaseService<Quiz> {
 
   async copyQuiz(quiz: SharedQuizzes, userId: string): Promise<FirebaseResponse<Quiz>> {
     try {
+      const { database } = getFirebaseServices();
       const quizRef = ref(database, `${this.path}/${quiz.quizId}`);
       const quizData = await get(quizRef);
 

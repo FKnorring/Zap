@@ -5,7 +5,7 @@ import Results from './Results';
 import { useTranslation } from 'react-i18next';
 import Stats from './Stats';
 import { useState } from 'react';
-import { flags } from '@/config/features';
+import { flags } from '@/config'
 
 interface EndScreenProps {
   quiz: Quiz;

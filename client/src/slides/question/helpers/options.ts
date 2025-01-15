@@ -1,6 +1,6 @@
 import { MCQMASlide, MCQSASlide } from "@/models/Quiz";
 import { nanoid } from "nanoid";
-import { max_options } from "@/config/max";
+import { max_options } from "@/config/game/limits";
 
 export type OptionSlide = MCQMASlide | MCQSASlide;
 

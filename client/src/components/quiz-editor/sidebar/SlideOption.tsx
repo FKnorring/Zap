@@ -7,6 +7,7 @@ interface SlideOptionProps {
   icon: LucideIcon | IconType;
   iconColor?: string;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 export function SlideOption({
@@ -14,12 +15,14 @@ export function SlideOption({
   icon: Icon,
   onClick,
   iconColor,
+  disabled,
 }: SlideOptionProps) {
   return (
     <Button
       variant="outline"
       className="w-full justify-start"
       onClick={onClick}
+      disabled={disabled}
     >
       <Icon className="mr-1" strokeWidth={3} color={iconColor} />
       {label}

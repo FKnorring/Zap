@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { MCQSASlide } from '@/models/Quiz';
 import { BaseQuestionRender } from '../base/QuestionRender';
 import NextSlide from '@/slides/_components/NextSlide';
-import { global_values } from '@/config/values'; // Make sure you have waiting_time in here
+import { global_values } from '@/config/features/values'; // Make sure you have waiting_time in here
 import RenderOptions from '../base/RenderOptions';
 
 export function Host({

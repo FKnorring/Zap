@@ -1,6 +1,6 @@
 import { MCQSASlide } from "@/models/Quiz";
 import { CalculateScoreProps } from "@/slides";
-import { global_values } from "@/config/values";
+import { global_values } from "@/config";
 
 export function CalculateScore({
   slide,

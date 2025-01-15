@@ -9,28 +9,29 @@ import {
   DataSnapshot,
   serverTimestamp,
 } from 'firebase/database';
-import { database } from '@/firebase';
+import { getFirebaseServices } from '@/firebase';
 import { Participant, QuizSettings, Slide } from '@/models/Quiz';
 import { nanoid } from 'nanoid';
 
+// Helper functions to reduce duplication
+const getQuizRef = (quizCode: string, path = '') => {
+  const { database } = getFirebaseServices();
+  return ref(database, `ongoingQuizzes/${quizCode}${path}`);
+};
+
+const getParticipantRef = (quizCode: string, participantId: string, path = '') => {
+  return getQuizRef(quizCode, `/participants/${participantId}${path}`);
+};
 
 export const ParticipantService = {
   async checkIfGameExists(quizCode: string): Promise<boolean> {
-    const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
-    const quizSnap = await get(quizRef);
-    return quizSnap.exists();
+    const snapshot = await get(getQuizRef(quizCode));
+    return snapshot.exists();
   },
 
-  async participantExists(
-    quizCode: string,
-    participantId: string
-  ): Promise<boolean> {
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const participantSnap = await get(participantRef);
-    return participantSnap.exists();
+  async participantExists(quizCode: string, participantId: string): Promise<boolean> {
+    const snapshot = await get(getParticipantRef(quizCode, participantId));
+    return snapshot.exists();
   },
 
   async addParticipant(
@@ -47,10 +48,6 @@ export const ParticipantService = {
       return null;
     }
 
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
     const payload = {
       score: [0],
       hasAnswered: false,
@@ -63,7 +60,7 @@ export const ParticipantService = {
     };
 
     try {
-      await set(participantRef, payload);
+      await set(getParticipantRef(quizCode, participantId), payload);
       return participantId;
     } catch (error) {
       console.error('Error adding participant:', error);
@@ -77,27 +74,20 @@ export const ParticipantService = {
     answer: string[],
     slideNumber: number
   ): Promise<boolean> {
-    const participantExists = await this.participantExists(
-      quizCode,
-      participantId
-    );
-
+    const participantExists = await this.participantExists(quizCode, participantId);
     if (!participantExists) {
       console.error('Participant does not exist in quiz');
       return false;
     }
 
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const participantSnap = await get(participantRef);
-
-    if (!participantSnap.exists()) {
+    const participantRef = getParticipantRef(quizCode, participantId);
+    const snapshot = await get(participantRef);
+    if (!snapshot.exists()) {
       console.error('Participant data not found');
       return false;
     }
-    const participantData = participantSnap.val();
+
+    const participantData = snapshot.val();
     const updatedAnswers = [
       ...(participantData.answers || []),
       { slideNumber, answer, time: serverTimestamp() },
@@ -115,37 +105,20 @@ export const ParticipantService = {
     }
   },
 
-  // required for bomb slide where we need tempanswer
   async addTempAnswer(
     quizCode: string,
     participantId: string,
     tempAnswer: string
   ): Promise<boolean> {
-    const participantExists = await this.participantExists(
-      quizCode,
-      participantId
-    );
-    console.log('inside add temp answer');
+    const participantExists = await this.participantExists(quizCode, participantId);
     if (!participantExists) {
       console.error('Participant does not exist in quiz');
       return false;
     }
 
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const participantSnap = await get(participantRef);
-
-    if (!participantSnap.exists()) {
-      console.error('Participant data not found');
-      return false;
-    }
-    const updatedTempAnswers = { tempAnswer, time: new Date().toISOString() };
-
     try {
-      await update(participantRef, {
-        tempAnswer: updatedTempAnswers,
+      await update(getParticipantRef(quizCode, participantId), {
+        tempAnswer: { tempAnswer, time: new Date().toISOString() },
         hasAnswered: false,
       });
       return true;
@@ -155,18 +128,9 @@ export const ParticipantService = {
     }
   },
 
-  
-
-  async removeParticipant(
-    quizCode: string,
-    participantId: string
-  ): Promise<boolean> {
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
+  async removeParticipant(quizCode: string, participantId: string): Promise<boolean> {
     try {
-      await set(participantRef, null);
+      await set(getParticipantRef(quizCode, participantId), null);
       return true;
     } catch (error) {
       console.error('Error removing participant:', error);
@@ -174,113 +138,68 @@ export const ParticipantService = {
     }
   },
 
-  async removeTempAnswer(
-    quizCode: string,
-    participantId: string
-  ): Promise<void> {
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}/tempAnswer`
-    );
-
+  async removeTempAnswer(quizCode: string, participantId: string): Promise<void> {
     try {
-      await set(participantRef, '');
-      console.log(`Cleared tempAnswer for participant ${participantId}`);
+      await set(getParticipantRef(quizCode, participantId, '/tempAnswer'), '');
     } catch (error) {
-      console.error(
-        `Failed to clear tempAnswer for participant ${participantId}:`,
-        error
-      );
+      console.error(`Failed to clear tempAnswer for participant ${participantId}:`, error);
       throw error;
     }
   },
 
-  async getParticipant(
-    quizCode: string,
-    participantId: string
-  ): Promise<Participant | null> {
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const participantSnap = await get(participantRef);
-    return participantSnap.exists() ? participantSnap.val() : null;
+  async getParticipant(quizCode: string, participantId: string): Promise<Participant | null> {
+    const snapshot = await get(getParticipantRef(quizCode, participantId));
+    return snapshot.exists() ? snapshot.val() : null;
   },
 
   async getQuizSlides(quizCode: string): Promise<Slide[]> {
-    const slidesRef = ref(database, `ongoingQuizzes/${quizCode}/quiz/slides`);
-    const slidesSnap = await get(slidesRef);
-    return slidesSnap.exists() ? slidesSnap.val() : [];
+    const snapshot = await get(getQuizRef(quizCode, '/quiz/slides'));
+    return snapshot.exists() ? snapshot.val() : [];
   },
 
-  async getQuizSettings(quizCode: string): Promise<QuizSettings> {
-    const settingsRef = ref(database, `ongoingQuizzes/${quizCode}/quiz/settings`);
-    const settingsSnap = await get(settingsRef);
-    return settingsSnap.exists() ? settingsSnap.val() : null;
+  async getQuizSettings(quizCode: string): Promise<QuizSettings | null> {
+    const snapshot = await get(getQuizRef(quizCode, '/quiz/settings'));
+    return snapshot.exists() ? snapshot.val() : null;
   }
-
 };
 
 // Custom Hook: useGameStatus
 export const useGameStatus = (quizCode: string, participantId: string) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
-  const [participantData, setParticipantData] = useState<Participant | null>(
-    null
-  );
-  const [turn,setListenTurn] = useState("")
-  const [currentSlideTime,setCurrentSlideTime] = useState<string>("")
+  const [participantData, setParticipantData] = useState<Participant | null>(null);
+  const [turn, setListenTurn] = useState("");
+  const [currentSlideTime, setCurrentSlideTime] = useState<string>("");
 
   useEffect(() => {
-    const slideRef = ref(database, `ongoingQuizzes/${quizCode}/currentSlide`);
-    const participantRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/participants/${participantId}`
-    );
-    const showAnswerRef = ref(
-      database,
-      `ongoingQuizzes/${quizCode}/isShowingCorrectAnswer`
-    );
-    const turnRef = ref(database,`ongoingQuizzes/${quizCode}/turn`)
-    const slideTimeRef = ref(database,`ongoingQuizzes/${quizCode}/currentSlideTime`)
-    
-
-    const handleSlideChange = (snapshot: DataSnapshot) => {
-      setCurrentSlide(snapshot.exists() ? snapshot.val() : 0);
+    const refs = {
+      slide: getQuizRef(quizCode, '/currentSlide'),
+      participant: getParticipantRef(quizCode, participantId),
+      showAnswer: getQuizRef(quizCode, '/isShowingCorrectAnswer'),
+      turn: getQuizRef(quizCode, '/turn'),
+      slideTime: getQuizRef(quizCode, '/currentSlideTime')
     };
 
-    const handleParticipantChange = (snapshot: DataSnapshot) => {
-      setParticipantData(snapshot.exists() ? snapshot.val() : null);
+    const handlers = {
+      slide: (snapshot: DataSnapshot) => setCurrentSlide(snapshot.exists() ? snapshot.val() : 0),
+      participant: (snapshot: DataSnapshot) => setParticipantData(snapshot.exists() ? snapshot.val() : null),
+      showAnswer: (snapshot: DataSnapshot) => setShowAnswer(snapshot.exists() ? snapshot.val() : false),
+      turn: (snapshot: DataSnapshot) => setListenTurn(snapshot.exists() ? snapshot.val() : false),
+      slideTime: (snapshot: DataSnapshot) => setCurrentSlideTime(snapshot.exists() ? snapshot.val() : false)
     };
 
-    const handleShowAnswerChange = (snapshot: DataSnapshot) => {
-      setShowAnswer(snapshot.exists() ? snapshot.val() : false);
-    };
+    // Set up listeners
+    Object.entries(refs).forEach(([key, ref]) => {
+      onValue(ref, handlers[key as keyof typeof handlers]);
+    });
 
-    const handleTurnChange = (snapshot: DataSnapshot) => {
-      setListenTurn(snapshot.exists() ? snapshot.val() : false);
-    };
-
-    const handleSlideTimeChange = (snapshot: DataSnapshot) => {
-      setCurrentSlideTime(snapshot.exists() ? snapshot.val() : false);
-    };
-
-
-
-    onValue(slideRef, handleSlideChange);
-    onValue(participantRef, handleParticipantChange);
-    onValue(showAnswerRef, handleShowAnswerChange);
-    onValue(turnRef, handleTurnChange);
-    onValue(slideTimeRef,handleSlideTimeChange);
-
+    // Cleanup listeners
     return () => {
-      off(slideRef, 'value', handleSlideChange);
-      off(participantRef, 'value', handleParticipantChange);
-      off(showAnswerRef, 'value', handleShowAnswerChange);
-      off(turnRef,'value', handleTurnChange);
-      off(slideTimeRef,'value',handleSlideTimeChange);
+      Object.entries(refs).forEach(([key, ref]) => {
+        off(ref, 'value', handlers[key as keyof typeof handlers]);
+      });
     };
   }, [quizCode, participantId]);
 
-  return { currentSlide, participantData, showAnswer, turn,currentSlideTime };
+  return { currentSlide, participantData, showAnswer, turn, currentSlideTime };
 };

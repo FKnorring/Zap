@@ -15,7 +15,7 @@ import TeamView from './TeamView';
 import { useTranslation } from 'react-i18next';
 import PlayButton from './PlayButton';
 import EndButton from './EndButton';
-import { flags } from '@/config/features';
+import { flags } from '@/config/features/flags';
 import { serverTimestamp } from 'firebase/database';
 interface Team {
   id: string;

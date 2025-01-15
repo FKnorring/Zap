@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { ListOrdered } from 'lucide-react';
-import { max_options } from '@/config/max';
+import { max_options } from '@/config';
 import { useTranslation } from 'react-i18next';
 
 export function RankOptionsInput({

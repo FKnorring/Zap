@@ -111,7 +111,7 @@ function ParticipantLogic() {
   );
   const [cookies, setCookie, removeCookie] = useCookies(['participantId']);
   const [questions, setQuestions] = useState<Slide[]>();
-  const [quizSettings, setQuizSettings] = useState<QuizSettings>();
+  const [quizSettings, setQuizSettings] = useState<QuizSettings | null>(null);
   const navigate = useNavigate();
 
   const { currentSlide, participantData, showAnswer, turn, currentSlideTime } =

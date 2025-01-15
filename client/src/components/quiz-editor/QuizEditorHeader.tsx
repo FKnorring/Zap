@@ -65,6 +65,7 @@ export default function QuizEditorHeader({
       <div className="flex items-center gap-2">
         <CustomTooltip content={t('quizEditor:preview.tooltip')}>
           <Button
+            id="quiz-preview-button"
             variant="outline"
             disabled={!quiz.slides || quiz.slides.length === 0}
             onClick={() => setPreviewOpen(true)}
@@ -77,6 +78,7 @@ export default function QuizEditorHeader({
         </CustomTooltip>
         <CustomTooltip content={t('quizEditor:startTheQuiz')}>
           <Button
+            id="start-quiz-button"
             variant="outline"
             disabled={hasOngoingQuiz}
             onClick={handleHostGame}
@@ -88,7 +90,12 @@ export default function QuizEditorHeader({
           </Button>
         </CustomTooltip>
         <CustomTooltip content={t('quizEditor:quizSettings')}>
-          <Button variant="outline" onClick={onSettingsClick} isInteractive>
+          <Button
+            id="quiz-settings-button"
+            variant="outline"
+            onClick={onSettingsClick}
+            isInteractive
+          >
             {t('general:settings')}
             <WrenchIcon className="w-7 h-7" />
           </Button>
@@ -104,6 +111,7 @@ export default function QuizEditorHeader({
         </Link>
         <CustomTooltip content={t('quizEditor:saveQuiz')}>
           <Button
+            id="save-quiz-button"
             variant={hasUnsavedChanges ? 'default' : 'outline'}
             onClick={onSaveClick}
             disabled={isSaving || !hasUnsavedChanges}

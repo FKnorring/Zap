@@ -1,10 +1,17 @@
 import { useRef } from 'react';
 import { PopoverContent } from '@/components/ui/popover';
-import { type SlideType, type QuestionType, SlideTypes } from '@/models/Quiz';
+import {
+  type SlideType,
+  type QuestionType,
+  SlideTypes,
+  QuestionTypes,
+} from '@/models/Quiz';
 import * as Slides from '@/slides';
 import { SlideInfo } from '@/slides';
 import { useTranslation } from 'react-i18next';
 import { SlideOption } from './SlideOption';
+import { flags } from '@/config/features/flags';
+import config from '@/config';
 
 interface SlideCreationMenuProps {
   onAddSlide: (
@@ -49,6 +56,10 @@ interface RenderOptionsProps {
   onCloseMenu?: () => void;
 }
 
+const disabledSlides: (QuestionType | SlideType)[] = config.IS_PRODUCTION
+  ? [...(flags.ENABLE_JEOPARDY ? [] : [QuestionTypes.JEOPARDY])]
+  : [];
+
 function RenderOptions({
   options,
   onAddSlide,
@@ -78,6 +89,11 @@ function RenderOptions({
               label={t(option.label)}
               icon={option.icon}
               iconColor={option.iconColor}
+              disabled={
+                disabledSlides.includes(option.slideType) ||
+                (option.questionType &&
+                  disabledSlides.includes(option.questionType))
+              }
               onClick={() => {
                 onAddSlide(option.slideType, option.questionType);
                 onCloseMenu?.();

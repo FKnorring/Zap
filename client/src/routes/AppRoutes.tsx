@@ -3,6 +3,7 @@ import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 import React, { Suspense } from 'react';
 import Spinner from '@/components/Spinner';
 import { useTutorialTrigger } from '@/hooks/useTutorialTrigger';
+import ErrorBoundary from '@/components/errors/ErrorBoundary';
 
 const AboutPage = React.lazy(() => import('@/pages/about/index'));
 const Home = React.lazy(() => import('@/pages/home/Home'));
@@ -21,17 +22,21 @@ export function AppRoutes() {
 
   useTutorialTrigger();
 
+  const wrapInErrorBoundary = (component: React.ReactNode) => (
+    <ErrorBoundary>{component}</ErrorBoundary>
+  );
+
   return (
     <Suspense fallback={<Spinner />}>
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Quizzes /> : <Home />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/play" element={<JoinQuiz />} />
-        <Route path="/quizzes/:id/edit" element={<QuizEdit />} />
-        <Route path="/play/:quizCode/" element={<ParticipantLogic />} />
-        <Route path="/quizzes/:id/lobby" element={<HostLogic />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/tools/:tool" element={<Tools />} />
+        <Route path="/" element={wrapInErrorBoundary(isAuthenticated ? <Quizzes /> : <Home />)} />
+        <Route path="/about" element={wrapInErrorBoundary(<AboutPage />)} />
+        <Route path="/play" element={wrapInErrorBoundary(<JoinQuiz />)} />
+        <Route path="/quizzes/:id/edit" element={wrapInErrorBoundary(<QuizEdit />)} />
+        <Route path="/play/:quizCode/" element={wrapInErrorBoundary(<ParticipantLogic />)} />
+        <Route path="/quizzes/:id/lobby" element={wrapInErrorBoundary(<HostLogic />)} />
+        <Route path="/profile" element={wrapInErrorBoundary(<Profile />)} />
+        <Route path="/tools/:tool" element={wrapInErrorBoundary(<Tools />)} />
       </Routes>
     </Suspense>
   );

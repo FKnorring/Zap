@@ -16,9 +16,9 @@ import {
 } from '@/utils/localstorage';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { global_values } from '@/config/values';
 import { QuizBackground } from '@/components/quiz-editor/QuizBackground';
 import NoSleepComponent from '@/NoSleepComponent';
+import { global_values } from '@/config/features/values';
 
 export default function HostLogicWrapped() {
   return (

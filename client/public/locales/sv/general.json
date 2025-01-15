@@ -66,5 +66,10 @@
   "deletePlayerText": "Det kommer ta bort alla spelardata.",
   "confirm": "Bekräfta",
   "by": "Gjord av",
-  "quizhostedsuccessfully": "Quiz har startat"
+  "quizhostedsuccessfully": "Quiz har startat",
+  "error": {
+    "title": "Oops! Något gick fel",
+    "description": "Vi beklagar att det uppstod ett problem. Vänligen försök igen.",
+    "refresh": "Ladda om sidan"
+  }
 }

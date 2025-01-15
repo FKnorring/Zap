@@ -3,7 +3,7 @@ import Countdown from 'react-countdown';
 import { MCQSASlide } from '@/models/Quiz';
 import { getColor } from '../base/QuizColors';
 import { Button } from '@/components/ui/button';
-import { global_values } from '@/config/values';
+import { global_values } from '@/config/features/values';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 

@@ -6,54 +6,80 @@
 
 ## Table of Contents
 
-- [Features](#features)
-- [Slide Types](#slide-types)
-- [Technologies](#technologies)
-- [Getting Started](#getting-started)
-- [Code Structure](#code-structure)
-- [Developer Documentation](#developer-documentation)
+- [User Guide](#user-guide)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+  - [Hosting a Game](#hosting-a-game)
+  - [Playing a Game](#playing-a-game)
+- [Developer Guide](#developer-guide)
+  - [Technologies and Services](#technologies-and-services)
+  - [Setup](#setup)
+  - [Code Structure](#code-structure)
+  - [Development Guide](#development-guide)
+  - [Internationalization](#internationalization)
+  - [Configuration Structure](#configuration-structure)
 - [Contributors](#contributors)
 
 ---
 
-## Features
+## User Guide
 
-### Slide Types
+### Features
 
-Zap! supports the creation of quizzes with the following slide types:
+Zap! supports the creation of quizzes with various slide types:
 
-1. **Presentation Slides**
-   - Slides that are used to present information to the participants
-      - **Information Slide**: Presents information to players without interaction.
-      - **Bullet Points**: Displays a list of bullet points.
-      - **Score Slide**: Displays the scores and rankings of players.
+#### Presentation Slides
+- **Information Slide**: Presents information to players without interaction
+- **Bullet Points**: Displays a list of bullet points
+- **Score Slide**: Displays the scores and rankings of players
 
-2. **Question Slides**
-   - Interactive slides with the following question types:
-     - **Multiple Choice**: Players select one or more options out of a list of options.
-     - **Too Close To Call**: Players input a number and the closest number to the correct answer wins.
-     - **Ticking Time Bomb**: Players take turns answering questions before the timer runs out.
-     - **Fastest On The Buzzer**: The first player to press the buzzer gets to answer the question first.
-     - **Free Text**: Players can input any text as an answer.
-     - **Jeopardy**: Jeopardy style game where players answer questions to gain points.
-     - **LocateIt**: Players have to find a location on a map.
-     - **Meet Your Match**: Players have to match options to a given category.
-     - **Rank It Right**: Players have to rank options in the correct order.
+#### Question Slides
+- **Multiple Choice**: Single or multiple answers from a list of options
+- **Too Close To Call**: Closest numerical answer wins
+- **Ticking Time Bomb**: Turn-based answers with a timer
+- **Fastest On The Buzzer**: First to buzz gets to answer
+- **Free Text**: Open-ended text answers
+- **Jeopardy**: Classic Jeopardy-style gameplay
+- **LocateIt**: Map-based location finding
+- **Meet Your Match**: Category matching challenge
+- **Rank It Right**: Order-based ranking questions
+
+### Getting Started
+
+1. Visit [Zap's website](https://www.zap-quiz.com/)
+2. Create an account or log in
+3. Choose to host or join a game
+
+### Hosting a Game
+
+1. Click "Create New Quiz"
+2. Add slides using the slide editor
+3. Save your quiz
+4. Start a game session
+5. Share the room code with players
+
+### Playing a Game
+
+1. Visit the join game page
+2. Enter the room code
+3. Choose a nickname
+4. Wait for the host to start
 
 ---
 
-## Technologies
+## Developer Guide
 
-Zap! is built using modern technologies for optimal performance and maintainability:
+### Technologies and Services
 
-- **TypeScript**: Primary programming language.
-- **React**: Frontend framework.
-- **shadcn**: UI component library.
-- **Firebase**: Backend and database solution.
+- **TypeScript**: Primary programming language
+- **React**: Frontend framework
+- **shadcn**: UI component library
+- **Firebase**: Backend and database solution
+- **Vite**: Build tool
+- **Kinde**: Authentication solution
+- **Vercel**: Deployment solution
 
----
-
-## Getting Started
+### Setup
 
 1. Clone the repository:
    ```bash
@@ -64,124 +90,383 @@ Zap! is built using modern technologies for optimal performance and maintainabil
    ```bash
    npm install
    ```
-3. Start the development server:
+3. Configure environment variables (see [Environment Variables](#environment-variables) below)
+4. Start development server:
    ```bash
    npm run dev
    ```
 
-For more details, visit the [Developer Documentation](#developer-documentation).
-
----
-
-## Code Structure
-
-_Note: the repository name (and root directory by extension) is outdated due to a rebranding of the project. It will be updated in the future._
-
-The project is organized into the following directories:
-
-```plaintext
-
-Zap/
-├── src/
-│   ├── components/
-│   ├── hooks/
-│   ├── models/
-│   ├── pages/
-|   ├── routes/
-│   ├── services/
-│   ├── slides/
+#### Environment Variables
+Using the `.env.example` file, you can copy its contents to a new `.env` file with the following command:
+```bash
+cp .env.example .env
 ```
 
-- **components**: Reusable UI components.
-- **hooks**: Custom hooks for state management and side effects.
-- **models**: Data models and interfaces.
-- **pages**: Top-level components for different routes.
-- **routes**: Routing configuration and navigation components.
-- **services**: API services and utilities.
-- **slides**: Slide components and utilities.
+Fill in the variables in your `.env` file:
 
----
+```
+# App Configuration
+VITE_ENVIRONMENT=dev|prod              # Accepts variations like "dev", "development", "prod", "production"
+VITE_PORT=5173                         # Optional: Development server port (default: 5173)
+VITE_URI=https://your-domain.com/      # Optional: Production URI (ignored in dev environment)
+VITE_BASE_URL=/                        # Optional: Base URL for the app (default: /)
+VITE_ROUTER_BASE_NAME=                 # Optional: Router base name (default: "")
+VITE_LOAD_PATH_i18=/locales/{{lng}}/{{ns}}.json  # Optional: i18n load path
 
-## Developer Documentation
+# Kinde Authentication
+VITE_KINDE_CLIENT_ID=your_client_id    # Your Kinde client ID (default provided)
+VITE_KINDE_DOMAIN=your_kinde_domain    # Your Kinde domain (default provided)
+VITE_KINDE_REDIRECT_URI=               # Optional: Override redirect URI (defaults to URI)
+VITE_KINDE_LOGOUT_URI=                 # Optional: Override logout URI (defaults to URI)
 
-### Environment Variables
+# Firebase Configuration
+VITE_FIREBASE_APIKEY=your_api_key
+VITE_FIREBASE_AUTHDOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECTID=your_project_id
+VITE_FIREBASE_STORAGEBUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGINGSENDERID=your_sender_id
+VITE_FIREBASE_APPID=your_app_id
+VITE_FIREBASE_DATABASEURL=your_database_url
+VITE_FIREBASE_MEASUREMENTID=your_measurement_id
+```
 
-- In order to run the application, you need to create a `.env` file in the root directory.
-- The `.env` file should contain the following variables:
-  - `VITE_ENVIRONMENT`: `DEV` or `PROD`
-  - `VITE_FIREBASE_APIKEY`: The API key for the Firebase project.
-  - `VITE_FIREBASE_AUTHDOMAIN`: The auth domain for the Firebase project.
-  - `VITE_FIREBASE_PROJECTID`: The project ID for the Firebase project.
-  - `VITE_FIREBASE_STORAGEBUCKET`: The storage bucket for the Firebase project.
-  - `VITE_FIREBASE_MESSAGINGSENDERID`: The messaging sender ID for the Firebase project.
-  - `VITE_FIREBASE_APPID`: The app ID for the Firebase project.
-  - `VITE_FIREBASE_MEASUREMENTID`: The measurement ID for the Firebase project.
-  - `VITE_FIREBASE_DATABASEURL`: The database URL for the Firebase project.
-  - `VITE_QR_BASE_URL`: The base URL for the QR code generation ([ip]/play/).
+**Important Notes:**
+- In development environment (`VITE_ENVIRONMENT=dev`), the URI will always be "http://localhost:5173" regardless of `VITE_URI`
+- In production environment, if `VITE_URI` is not set, it defaults to "https://www.zap-quiz.com/"
+- The environment variable accepts various formats (e.g., "dev", "DEV", "development", "DEVELOPMENT" for development)
 
-### Hosting a Game
+### Code Structure
 
-- Navigate to the host interface and create a quiz by combining different slide types.
-- Save the game as a reusable template for future sessions.
+```plaintext
+Zap/
+├── src/
+|   ├── config/      # Configuration files
+│   ├── components/  # Reusable UI components
+│   ├── hooks/       # Custom React hooks
+│   ├── contexts/    # Contexts and context providers
+│   ├── models/      # TypeScript interfaces and types
+│   ├── pages/       # Route components
+│   ├── routes/      # Navigation configuration
+│   ├── services/    # API and utility services
+│   ├── slides/      # Slide components and logic
+│   ├── config/      # Configuration files
+│   ├── utils/       # Utility functions
+│   ├── i18n.ts      # Internationalization setup
+│   ├── main.tsx     # Entry point
+│   ├── App.tsx      # Main application component
+│   ├── index.css    # Global styles
+├── public/          # Public assets and locales
+```
 
-### Player Interaction
+### Development Guide
 
-- Players can join the game room using a unique code and interact through an intuitive interface.
+#### Adding New Slide Types
 
-### Adding New Features
+1. Add type declaration in `/src/models/types/slides.ts`:
+   ```typescript
+   // Add to SlideTypes enum
+   export enum SlideTypes {
+     info = "info",
+     score = "score",
+     // your new slide type...
+   }
 
-- To add a new question type or slide type, add the type declaration to /src/models/Quiz.ts
-- Create a new directory in /src/slides/[slide-type]
-- In the new directory create the following files:
-  - Preview.tsx: Renders the slide in the quiz editor.
-  - Host.tsx: Renders the slide for the host.
-  - Participant.tsx: Renders the slide for participants.
-  - ParticipantAnswer.tsx: Renders the slide showing if the participant was correct/incorrect, awarded score etc.
-  - Toolbar.tsx: Renders the form for editing the slide in the toolbar.
-  - index.ts: Exports the slide components and metadata.
-    - Define the slide metadata using the SlideInfo type.
-      - `value` should be the same as the directory name.
-      - `icon` should be a LucideIcon component.
-      - `label` should be the same as the directory name.
-      - `slideType` should be the same as the directory name.
-      - `questionType` is only needed for question slides.
-      - `defaults` should be the default values for the slide when it is created.
-- In /src/slides/index.ts
-  - Import and export the new slide type
-- In /src/slides/utils.ts
-  - Modify getSlideComponents to return the new slide type
+   // Add your slide interface
+   export interface YourNewSlide extends BaseSlide {
+     type: SlideTypes.yourNewType;
+     // additional properties...
+   }
 
-### Adding New Languages
+   // Update the Slide type union
+   export type Slide = InfoSlide | ScoreSlide | ... | YourNewSlide;
+   ```
 
-Follow these steps to add a new language to the application:
+2. Create directory in `/src/slides/[slide-type]` with:
+   - `Preview.tsx`: Quiz editor preview
+   - `Host.tsx`: Host view
+   - `Participant.tsx`: Player view
+   - `ParticipantAnswer.tsx`: Answer feedback view
+   - `index.ts`: Component exports and metadata
 
-#### 1. Create the Language Files
+3. Define slide metadata in `index.ts`:
+   ```typescript
+   import { SlideTypes } from '@/models/Quiz';
+   import { YourIcon } from "lucide-react";
+   import { SlideInfo } from '..';
 
-1. Navigate to the directory: `Zap/public/locales`.
-2. Create a new folder named after the **language code**. Use standard [ISO 639-1] language codes.
-3. Inside the new folder, add the corresponding translation files. Use the existing folders (e.g., `en` or `sv`) as references for structure and content.
+   export const Info: SlideInfo = {
+     value: "your-slide-name",
+     icon: YourIcon,
+     iconColor: "#hexcolor", // optional
+     label: "Your Slide Label",
+     slideType: SlideTypes.yourSlideType,
+     interactivePreview: false, // optional
+     defaults: {
+       title: "Default Title",
+       // other default properties...
+     }
+   } as const;
+   ```
 
-#### 2. Add the Language Name to `general.json` Files
-
-1. Open the `general.json` file for each existing language folder (e.g., `Zap/public/locales/en/general.json`, `Zap/public/locales/sv/general.json`).
-2. Add a new translation entry for the new language. For example, in the `en` `general.json` you would add:
-   ```json
-   {
-     "{New_Language}": "{New_Language_In_English}"
+4. For question slides, implement score calculation:
+   ```typescript
+   interface QuestionSlideInfo<T extends QuestionSlide> extends SlideInfo {
+     calculateScore: (slide: T, answer: string[]) => number;
    }
    ```
 
-#### 3. Add the Language to the Config File
+5. Update `/src/slides/index.ts`:
+   ```typescript
+   import * as YourSlide from './your-slide-type';
+   
+   // Add to exports
+   export {
+     Info,
+     Score,
+     // ...
+     YourSlide,
+   };
+   ```
 
-1. Open the file `Zap/src/config/languages.ts`
-2. Add a new entry in the following way:
+### Internationalization
 
-```ts
-  {
-     name: 'general:{NEW_LANGUAGE}',
-     value: '{LANGUAGE_CODE}',
-   },
+#### Adding a New Language
+
+1. Create translation files in `/public/locales/[language-code]/`:
+   ```plaintext
+   public/locales/
+   ├── en/
+   │   ├── general.json
+   │   ├── quiz.json
+   │   └── tutorial.json
+   ├── sv/
+   │   ├── general.json
+   │   ├── quiz.json
+   │   └── tutorial.json
+   └── your-language/
+       ├── general.json
+       ├── quiz.json
+       └── tutorial.json
+   ```
+
+2. Add translations to each JSON file. For example in `general.json`:
+   ```json
+   {
+     "english": "English",
+     "swedish": "Svenska",
+     "chinese": "中文",
+     "login": "Logga in",
+     "your_language": "Your Language Name"
+   }
+   ```
+
+3. Add language entry in `/src/config/languages.ts`:
+   ```typescript
+   export const languages = [
+     {
+       name: 'general:swedish',
+       value: 'sv',
+     },
+     {
+       name: 'general:english',
+       value: 'en',
+     },
+     {
+       name: 'general:chinese',
+       value: 'cn',
+     },
+     // Add your new language here
+     {
+       name: 'general:your_language',
+       value: 'language_code',
+     },
+   ];
+   ```
+
+#### Adding New Translations
+
+1. Structure your translation files consistently across languages. Example structure:
+
+   `quiz.json`:
+   ```json
+   {
+     "create": {
+       "title": "Create Quiz",
+       "description": "Create a new interactive quiz",
+       "button": "Create"
+     },
+     "join": {
+       "title": "Join Quiz",
+       "enterCode": "Enter room code",
+       "button": "Join"
+     }
+   }
+   ```
+
+2. Use nested keys for better organization. Access them with dot notation:
+   ```typescript
+   import { useTranslation } from 'react-i18next';
+
+   function Component() {
+     const { t } = useTranslation('quiz');
+     
+     return (
+       <button>
+         {t('create.button')} {/* Renders text for "Create" button in currently set language */}
+       </button>
+     );
+   }
+   ```
+
+3. Include placeholders using curly braces:
+   ```json
+   {
+     "welcome": "Welcome, {{username}}!",
+     "score": "You scored {{points}} points"
+   }
+   ```
+
+   Usage:
+   ```typescript
+   t('welcome', { username: 'John' }) // "Welcome, John!"
+   t('score', { points: 100 }) // "You scored 100 points"
+   ```
+
+4. Add the same keys to all language files to ensure full translation coverage.
+
+Note: The `name` property in `languages.ts` should reference a translation key in the `general.json` files, and the `value` should be the ISO language code (e.g., 'en', 'sv', 'cn').
+
+### Configuration Structure
+
+The configuration is organized in a modular structure:
+
+```plaintext
+config/
+├── core/
+│   ├── environment.ts   # Environment detection and variables
+│   ├── types.ts         # Configuration type definitions
+│   └── uri.ts          # URI and base URL handling
+├── features/
+│   ├── flags.ts        # Feature flags
+│   └── values.ts       # Global feature values
+├── game/
+│   ├── languages.ts    # Language configuration
+│   └── limits.ts       # Game limits and maximums
+├── services/
+│   ├── firebase.ts     # Firebase configuration
+│   └── kinde.ts        # Kinde authentication config
+└── index.ts           # Main configuration export
 ```
+
+#### Environment Variables
+
+Environment variables are loaded with development-specific logging:
+
+```typescript
+// In development, missing variables are logged:
+VITE_FIREBASE_APIKEY=missing
+VITE_FIREBASE_DATABASEURL=missing
+
+// Required variables will show validation errors:
+Firebase configuration is missing required fields:
+{
+  apiKey: { status: 'missing', envVar: 'VITE_FIREBASE_APIKEY' },
+  databaseUrl: { status: 'missing', envVar: 'VITE_FIREBASE_DATABASEURL' }
+}
+```
+
+### Adding New Tutorials
+
+Tutorials are defined in `/src/data/tutorials.ts` and follow a structured format for guiding users through the application.
+
+1. Create a new tutorial object:
+   ```typescript
+   const yourTutorial: Tutorial = {
+     id: 'unique-tutorial-id',
+     name: 'Tutorial Display Name',
+     startTriggerId: 'element-id',
+     prerequisites: ['tutorial-id-1', 'tutorial-id-2'], // optional
+     steps: [
+       {
+         id: 'step-1',
+         title: 'Step Title',
+         content: 'Step instructions or information',
+         targetId: 'target-element-id',
+         placement: 'bottom', // 'top' | 'bottom' | 'left' | 'right'
+         nextTrigger: 'next-element-id', // optional
+       },
+       // more steps...
+     ],
+   };
+   ```
+
+2. Add your tutorial to `allTutorials` array:
+   ```typescript
+   export const allTutorials = [
+     quizManagerTutorial,
+     quizEditorTutorial,
+     yourTutorial,
+   ];
+   ```
+
+#### Tutorial Configuration Parameters
+
+- **prerequisites**: (optional) Array of tutorial IDs that must be completed before this tutorial can start
+  ```typescript
+  prerequisites: ['quiz-editor-intro', 'first-slide-tutorial']
+  ```
+
+- **startTriggerId**: ID of the element that must be rendered to trigger the tutorial
+  ```typescript
+  // Tutorial will only start when an element with id="quiz-editor" is present
+  startTriggerId: 'quiz-editor'
+  ```
+
+- **targetId**: ID of the element to highlight during the tutorial step
+  ```typescript
+  // The element with id="create-button" will be highlighted
+  targetId: 'create-button'
+  ```
+
+- **nextTrigger**: (optional) Forces user interaction with specified element to proceed
+  ```typescript
+  // User must interact with the element with id="save-button" to continue
+  nextTrigger: 'save-button'
+  ```
+
+Example tutorial with all features:
+```typescript
+export const editorTutorial: Tutorial = {
+  id: 'editor-tutorial',
+  name: 'Quiz Editor Tutorial',
+  startTriggerId: 'quiz-editor',
+  prerequisites: ['basic-tutorial'],
+  steps: [
+    {
+      id: 'welcome',
+      title: 'Welcome to the Editor',
+      content: 'Click the Create button to start.',
+      targetId: 'create-button',
+      placement: 'bottom',
+      nextTrigger: 'create-button', // User must click the create button
+    },
+    {
+      id: 'edit-title',
+      title: 'Enter a Title',
+      content: 'Type your quiz title here.',
+      targetId: 'title-input',
+      placement: 'right',
+      // No nextTrigger - automatically proceeds
+    },
+  ],
+};
+```
+
+**Important Notes:**
+- Elements referenced by `targetId` and `nextTrigger` must exist in the DOM
+- Use consistent ID naming across your components
+- Consider mobile responsiveness when choosing `placement`
+- Keep tutorial steps concise and focused
 
 ---
 

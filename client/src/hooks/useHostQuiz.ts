@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAppContext } from '@/contexts/App/context';
-import { database } from '@/firebase';
+import { getFirebaseServices } from '@/firebase';
 import { ref, get, serverTimestamp } from 'firebase/database';
 import { quizCodes } from '@/data/quizCodes';
-import { UserQuizzes,Quiz } from '@/models/Quiz';
+import { UserQuizzes, Quiz } from '@/models/Quiz';
 
 export function useHostQuiz() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ export function useHostQuiz() {
   } = useAppContext();
 
   const generateQuizCode = async (): Promise<string> => {
+    const { database } = getFirebaseServices();
     const maxAttempts = 4;
     let attempts = 0;
 
@@ -50,6 +51,7 @@ export function useHostQuiz() {
 
   const hostQuizUser = async (quiz: UserQuizzes) => {
     try {
+      const { database } = getFirebaseServices();
       const quizCode = await generateQuizCode();
       const quizRef = ref(database, `quizzes/${quiz.quizId}`);
       const quizSnapshot = await get(quizRef);
@@ -116,7 +118,7 @@ export function useHostQuiz() {
       console.error('Error creating ongoing quiz:', err);
       toast.error('Failed to host quiz: ' + err);
     }
-  }
+  };
 
-  return {hostQuizUser, hostQuizEditor};
+  return { hostQuizUser, hostQuizEditor };
 }

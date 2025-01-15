@@ -11,7 +11,7 @@ import {
   QuestionTypes,
 } from '@/models/Quiz';
 import { getSlideComponents } from '@/slides/utils';
-import { database } from '@/firebase';
+import { getFirebaseServices } from '@/firebase';
 import { ref, update, serverTimestamp, get } from 'firebase/database';
 
 export interface LatestScore {
@@ -233,6 +233,7 @@ export const useHostLogic = (id: string | undefined) => {
     });
 
     if (!showAnswer) {
+      const { database } = getFirebaseServices();
       const timeRef = ref(
         database,
         `ongoingQuizzes/${ongoingQuiz.id}/currentSlideTime`
@@ -291,6 +292,7 @@ export const useHostLogic = (id: string | undefined) => {
     });
 
     if (!showAnswer) {
+      const { database } = getFirebaseServices();
       const timeRef = ref(
         database,
         `ongoingQuizzes/${ongoingQuiz.id}/currentSlideTime`
@@ -336,10 +338,9 @@ export const useHostLogic = (id: string | undefined) => {
     try {
       console.log(`Updating turn to participant ID: ${participantId}`);
 
-      // Reference the specific quiz path in the database
+      const { database } = getFirebaseServices();
       const quizRef = ref(database, `ongoingQuizzes/${quizCode}`);
 
-      // Update only the 'turn' field
       await update(quizRef, { turn: participantId });
 
       console.log(`Turn successfully updated to participant ${participantId}.`);

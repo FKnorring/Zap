@@ -66,5 +66,10 @@
   "deletePlayerText": "This will remove all player names and team data.",
   "confirm": "Confirm",
   "by": "Made by",
-  "quizhostedsuccessfully": "Quiz hosted successfully"
+  "quizhostedsuccessfully": "Quiz hosted successfully",
+  "error": {
+    "title": "Oops! Something went wrong",
+    "description": "We apologize for the inconvenience. Please try refreshing the page.",
+    "refresh": "Refresh Page"
+  }
 }

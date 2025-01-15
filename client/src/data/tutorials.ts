@@ -68,11 +68,36 @@ export const quizEditorTutorial: Tutorial = {
       placement: 'bottom',
     },
     {
-      id: 'toolbar',
-      title: 'Slide Settings',
-      content: 'Use the toolbar to customize your slide settings and styling.',
-      targetId: 'quiz-toolbar',
-      placement: 'left',
+      id: 'quiz-preview-button',
+      title: 'Quiz Preview',
+      content:
+        'Click the "Preview" button to see your quiz in action. Here you can see how your quiz will look like when you start it.',
+      targetId: 'quiz-preview-button',
+      placement: 'top',
+    },
+    {
+      id: 'quiz-settings-button',
+      title: 'Quiz Settings',
+      content:
+        'Click the "Settings" button to customize your quiz. Here you can customize colors, question behavior, and more.',
+      targetId: 'quiz-settings-button',
+      placement: 'top',
+    },
+    {
+      id: 'save-quiz-button',
+      title: 'Save Quiz',
+      content:
+        'Click the "Save" button to save your quiz. Your quiz will be automatically saved every 30 seconds, but always remember to save before you exit the editor',
+      targetId: 'save-quiz-button',
+      placement: 'top',
+    },
+    {
+      id: 'add-slide-button',
+      title: 'Adding Slides',
+      content:
+        'Hover over the "Add Slide" area to add a new slide to your quiz.',
+      targetId: 'add-slide-button',
+      placement: 'top',
     },
   ],
 };

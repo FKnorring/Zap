@@ -2,7 +2,7 @@ import { CheckCircle2, Plus, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { max_options } from '@/config/max';
+import { max_options } from '@/config';
 import { MCQMASlide } from '@/models/Quiz';
 import { MCQSASlide } from '@/models/Quiz';
 import { getColor } from '../base/QuizColors';

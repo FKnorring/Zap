@@ -1,4 +1,4 @@
-import { database } from "@/firebase";
+import { getFirebaseServices } from "@/firebase";
 import { DataSnapshot, off, onValue, ref } from "firebase/database";
 import { useEffect, useRef } from "react";
 
@@ -10,6 +10,7 @@ export function usePathOnValue<T>(
 
   useEffect(() => {
     if (!path) return;
+    const { database } = getFirebaseServices();
     const pathRef = ref(database, path);
 
     const extractValue = (snapshot: DataSnapshot) => {

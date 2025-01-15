@@ -11,7 +11,7 @@ import {
   removeOption,
   updateOption,
 } from '../../question/helpers/options';
-import { max_options } from '@/config/max';
+import { max_options } from '@/config';
 import { CustomTooltip } from '@/components/ui/custom-tooltip';
 import { useTranslation } from 'react-i18next';
 

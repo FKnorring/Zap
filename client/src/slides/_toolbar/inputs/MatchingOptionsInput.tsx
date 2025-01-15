@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { max_options } from '@/config/max';
+import { max_options } from '@/config';
 import { Check, ChevronDown } from 'lucide-react';
 import {
   Popover,

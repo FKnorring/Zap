@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { SlideTitle } from '@/slides/_components/SlideTitle';
 import { PlusIcon, TrashIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { max_options } from '@/config/max';
+import { max_options } from '@/config';
 import { SlideContent } from '@/slides/_components/SlideContent';
 import { TFunction } from 'i18next';
 
